@@ -19,14 +19,15 @@
             .sidebar-link.active {
                 @apply bg-blue-700;
             }
-            .action-btn {
-                @apply px-3 py-1 rounded text-sm font-medium;
+            .message-bubble {
+                max-width: 80%;
+                word-wrap: break-word;
             }
-            .action-btn-primary {
-                @apply bg-blue-600 text-white hover:bg-blue-700;
+            .message-self {
+                @apply bg-blue-500 text-white rounded-br-none ml-auto;
             }
-            .action-btn-danger {
-                @apply bg-red-600 text-white hover:bg-red-700;
+            .message-other {
+                @apply bg-gray-200 text-gray-800 rounded-bl-none mr-auto;
             }
         }
     </style>
@@ -40,7 +41,7 @@
                     <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/64bfd761e7284e2ca4149d44fd8884b1~tplv-a9rns2rl98-image.image?rcl=2025103114221315A5A8FEF816AE360D6D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1764483800&x-signature=0kXWQWr8BDYT5ou7yQZm938g%2Fyw%3D" 
                          alt="班级管理系统" class="h-20 mx-auto mb-4">
                     <h2 class="text-2xl font-bold text-gray-800">班级管理系统</h2>
-                    <p class="text-gray-600 mt-1">请使用授权账号登录</p>
+                    <p class="text-gray-600 mt-1">请登录您的账户</p>
                 </div>
                 <form id="login-form" class="space-y-6">
                     <div>
@@ -155,12 +156,9 @@
                         <div class="flex items-center">
                             <span id="user-initial" class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">A</span>
                             <div class="ml-3 hidden md:block">
-                                <div id="user-name" class="text-sm font-medium text-gray-700">管理员</div>
-                                <div id="user-role" class="text-xs text-gray-500">admin</div>
+                                <div id="user-name-display" class="text-sm font-medium text-gray-700">管理员</div>
+                                <div id="user-role-display" class="text-xs text-gray-500">admin</div>
                             </div>
-                            <button id="logout-btn" class="ml-4 text-gray-600 hover:text-gray-900">
-                                <i class="fa fa-sign-out"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -224,7 +222,7 @@
                         <div class="p-6">
                             <div class="flex justify-between items-center mb-6">
                                 <h2 class="text-xl font-semibold text-gray-800">班级人员管理</h2>
-                                <button id="add-member-btn" class="action-btn action-btn-primary">
+                                <button id="add-member-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                                     <i class="fa fa-plus mr-1"></i> 添加成员
                                 </button>
                             </div>
@@ -246,8 +244,8 @@
                                             <td class="px-6 py-4 whitespace-nowrap">男</td>
                                             <td class="px-6 py-4 whitespace-nowrap">13800138000</td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <button class="text-blue-600 hover:text-blue-900 mr-3 edit-member">编辑</button>
-                                                <button class="text-red-600 hover:text-red-900 delete-member">删除</button>
+                                                <button class="text-blue-600 hover:text-blue-900 mr-3">编辑</button>
+                                                <button class="text-red-600 hover:text-red-900">删除</button>
                                             </td>
                                         </tr>
                                         <tr>
@@ -256,8 +254,8 @@
                                             <td class="px-6 py-4 whitespace-nowrap">女</td>
                                             <td class="px-6 py-4 whitespace-nowrap">13900139000</td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <button class="text-blue-600 hover:text-blue-900 mr-3 edit-member">编辑</button>
-                                                <button class="text-red-600 hover:text-red-900 delete-member">删除</button>
+                                                <button class="text-blue-600 hover:text-blue-900 mr-3">编辑</button>
+                                                <button class="text-red-600 hover:text-red-900">删除</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -267,7 +265,7 @@
                     </div>
                 </div>
 
-                <!-- 其他页面结构保持不变 -->
+                <!-- 班委会管理页面 -->
                 <div id="committee-page" class="page-content hidden">
                     <div class="bg-white rounded-lg shadow mb-6">
                         <div class="p-6">
@@ -282,31 +280,102 @@
                                     <h3 class="font-medium text-gray-800 mb-3">学习委员</h3>
                                     <p class="text-gray-600">李四 (负责学习相关工作)</p>
                                 </div>
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h3 class="font-medium text-gray-800 mb-3">文艺委员</h3>
+                                    <p class="text-gray-600">王五 (负责文艺活动组织)</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h3 class="font-medium text-gray-800 mb-3">体育委员</h3>
+                                    <p class="text-gray-600">赵六 (负责体育活动组织)</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- 值日安排管理页面 -->
                 <div id="schedule-page" class="page-content hidden">
                     <div class="bg-white rounded-lg shadow mb-6">
                         <div class="p-6">
                             <h2 class="text-xl font-semibold text-gray-800 mb-4">值日安排管理</h2>
-                            <p class="text-gray-600 mb-6">本周值日表安排</p>
+                            
+                            <!-- 时间段查询 -->
+                            <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+                                <h3 class="font-medium text-gray-800 mb-3">按时间段查询</h3>
+                                <div class="flex flex-col sm:flex-row gap-4">
+                                    <div class="flex-1">
+                                        <label for="schedule-start-date" class="block text-sm font-medium text-gray-700 mb-1">开始日期</label>
+                                        <input type="date" id="schedule-start-date" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                                    </div>
+                                    <div class="flex-1">
+                                        <label for="schedule-end-date" class="block text-sm font-medium text-gray-700 mb-1">结束日期</label>
+                                        <input type="date" id="schedule-end-date" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                                    </div>
+                                    <div class="flex items-end">
+                                        <button id="schedule-search-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                            <i class="fa fa-search mr-1"></i> 查询
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 统计结果 -->
+                            <div id="schedule-stats" class="mb-6 bg-gray-50 p-4 rounded-lg hidden">
+                                <h3 class="font-medium text-gray-800 mb-3">统计结果</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="bg-white p-3 rounded border border-gray-200">
+                                        <p class="text-sm text-gray-500">总天数</p>
+                                        <p class="text-xl font-bold text-gray-800" id="total-days">0</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-gray-200">
+                                        <p class="text-sm text-gray-500">已完成</p>
+                                        <p class="text-xl font-bold text-green-600" id="completed-days">0</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-gray-200">
+                                        <p class="text-sm text-gray-500">未完成</p>
+                                        <p class="text-xl font-bold text-yellow-600" id="pending-days">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p class="text-gray-600 mb-6">查询结果</p>
                             <div class="overflow-x-auto">
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日期</th>
                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">星期</th>
                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">值日人员</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">职责</th>
                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
+                                    <tbody id="schedule-table-body" class="bg-white divide-y divide-gray-200">
                                         <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">2023-10-23</td>
                                             <td class="px-6 py-4 whitespace-nowrap">周一</td>
                                             <td class="px-6 py-4 whitespace-nowrap">张三、李四</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">擦黑板、整理卫生</td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">已完成</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">2023-10-24</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">周二</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">王五、赵六</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">擦黑板、整理卫生</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">已完成</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">2023-10-25</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">周三</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">孙七、周八</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">擦黑板、整理卫生</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">进行中</span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -316,11 +385,52 @@
                     </div>
                 </div>
 
+                <!-- 班级活动记录页面 -->
                 <div id="activities-page" class="page-content hidden">
                     <div class="bg-white rounded-lg shadow mb-6">
                         <div class="p-6">
                             <h2 class="text-xl font-semibold text-gray-800 mb-4">班级活动记录</h2>
-                            <div class="space-y-6">
+                            
+                            <!-- 时间段查询 -->
+                            <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+                                <h3 class="font-medium text-gray-800 mb-3">按时间段查询</h3>
+                                <div class="flex flex-col sm:flex-row gap-4">
+                                    <div class="flex-1">
+                                        <label for="activity-start-date" class="block text-sm font-medium text-gray-700 mb-1">开始日期</label>
+                                        <input type="date" id="activity-start-date" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                                    </div>
+                                    <div class="flex-1">
+                                        <label for="activity-end-date" class="block text-sm font-medium text-gray-700 mb-1">结束日期</label>
+                                        <input type="date" id="activity-end-date" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                                    </div>
+                                    <div class="flex items-end">
+                                        <button id="activity-search-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                            <i class="fa fa-search mr-1"></i> 查询
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 统计结果 -->
+                            <div id="activity-stats" class="mb-6 bg-gray-50 p-4 rounded-lg hidden">
+                                <h3 class="font-medium text-gray-800 mb-3">统计结果</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="bg-white p-3 rounded border border-gray-200">
+                                        <p class="text-sm text-gray-500">活动总数</p>
+                                        <p class="text-xl font-bold text-gray-800" id="total-activities">0</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-gray-200">
+                                        <p class="text-sm text-gray-500">体育活动</p>
+                                        <p class="text-xl font-bold text-blue-600" id="sports-activities">0</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-gray-200">
+                                        <p class="text-sm text-gray-500">文艺活动</p>
+                                        <p class="text-xl font-bold text-purple-600" id="cultural-activities">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="activities-list" class="space-y-6">
                                 <div class="border border-gray-200 rounded-lg p-4">
                                     <div class="flex justify-between items-start">
                                         <div>
@@ -330,7 +440,19 @@
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">体育活动</span>
                                     </div>
                                     <p class="text-gray-600 mt-3">
-                                        班级参加学校秋季运动会，获得团体总分第三名
+                                        班级参加学校秋季运动会，获得团体总分第三名，张三获得100米短跑冠军，李四获得跳高亚军。
+                                    </p>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h3 class="font-medium text-gray-800">班级元旦晚会</h3>
+                                            <p class="text-sm text-gray-500 mt-1">2023-12-31</p>
+                                        </div>
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">文艺活动</span>
+                                    </div>
+                                    <p class="text-gray-600 mt-3">
+                                        班级举办元旦晚会，同学们表演了丰富多彩的节目，增强了班级凝聚力。
                                     </p>
                                 </div>
                             </div>
@@ -338,65 +460,171 @@
                     </div>
                 </div>
 
+                <!-- 班级留言簿页面 -->
                 <div id="messages-page" class="page-content hidden">
                     <div class="bg-white rounded-lg shadow mb-6">
                         <div class="p-6">
                             <h2 class="text-xl font-semibold text-gray-800 mb-4">班级留言簿</h2>
+                            <p class="text-gray-600 mb-6">所有班级成员都可以看到这里的留言</p>
+                            
                             <div class="mb-6">
                                 <textarea id="message-input" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="写下你的留言..."></textarea>
                                 <div class="mt-3 flex justify-end">
-                                    <button id="send-message-btn" class="action-btn action-btn-primary">
+                                    <button id="send-message-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                                         发送留言
                                     </button>
                                 </div>
                             </div>
+                            
                             <div id="messages-list" class="space-y-4">
                                 <div class="border-l-4 border-blue-500 pl-4 py-2">
                                     <div class="flex justify-between">
                                         <h4 class="font-medium text-gray-800">张三</h4>
                                         <p class="text-sm text-gray-500">2023-11-01 09:30</p>
                                     </div>
-                                    <p class="text-gray-600 mt-1">下周的班会主题建议讨论学习方法分享</p>
+                                    <p class="text-gray-600 mt-1">下周的班会主题建议讨论学习方法分享，大家觉得怎么样？</p>
+                                </div>
+                                <div class="border-l-4 border-green-500 pl-4 py-2">
+                                    <div class="flex justify-between">
+                                        <h4 class="font-medium text-gray-800">李四</h4>
+                                        <p class="text-sm text-gray-500">2023-11-01 10:15</p>
+                                    </div>
+                                    <p class="text-gray-600 mt-1">这个建议很好，我觉得可以增加一些小组讨论环节。</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- 反射机制演示页面 -->
                 <div id="reflection-page" class="page-content hidden">
                     <div class="bg-white rounded-lg shadow mb-6">
                         <div class="p-6">
                             <h2 class="text-xl font-semibold text-gray-800 mb-4">反射机制演示</h2>
-                            <p class="text-gray-600 mb-6">反射机制允许程序在运行时动态调用函数</p>
-                            <div class="bg-gray-50 p-6 rounded-lg">
+                            <p class="text-gray-600 mb-6">
+                                反射机制允许程序在运行时动态地调用函数、访问属性或创建对象。在JavaScript中，可以通过eval()函数或Function构造函数实现这一功能。
+                                以下演示了如何使用反射机制将字符串作为函数名进行调用。
+                            </p>
+                            
+                            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                                <h3 class="text-lg font-medium text-gray-800 mb-4">反射机制示例</h3>
                                 <div class="mb-4">
-                                    <input type="text" id="function-name" value="greet" class="w-full p-2 border rounded mb-2" placeholder="函数名">
-                                    <input type="text" id="function-args" value="'班级管理系统'" class="w-full p-2 border rounded mb-2" placeholder="参数">
-                                    <button id="invoke-function-btn" class="action-btn action-btn-primary">调用函数</button>
-                                    <pre id="reflection-result" class="mt-4 p-3 bg-white border rounded">> greet('班级管理系统')
+                                    <label for="function-name" class="block text-sm font-medium text-gray-700 mb-1">函数名称</label>
+                                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                                        <input type="text" id="function-name" 
+                                               class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                               placeholder="例如: add, multiply, greet" value="greet">
+                                        <label for="function-args" class="block text-sm font-medium text-gray-700 mb-1">参数</label>
+                                        <input type="text" id="function-args" 
+                                               class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                               placeholder="例如: '参数1', 2, true" value="'班级管理系统'">
+                                        <button id="invoke-function-btn" 
+                                                class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            调用函数
+                                        </button>
+                                    </div>
+                                    <div class="mt-4">
+                                        <p class="text-sm font-medium text-gray-700 mb-2">可用函数:</p>
+                                        <ul class="list-disc pl-5 text-sm text-gray-600">
+                                            <li><code>add(a, b)</code> - 计算两个数的和</li>
+                                            <li><code>multiply(a, b)</code> - 计算两个数的积</li>
+                                            <li><code>greet(name)</code> - 向指定名称的人打招呼</li>
+                                            <li><code>reverseString(str)</code> - 反转字符串</li>
+                                            <li><code>getCurrentTime()</code> - 获取当前时间</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="mt-6 p-4 bg-white rounded-md border border-gray-200">
+                                        <h4 class="text-sm font-medium text-gray-800 mb-2">结果:</h4>
+                                        <pre id="reflection-result" class="text-sm text-gray-600 p-3 bg-gray-50 rounded-md overflow-x-auto">
+> greet('班级管理系统')
 欢迎使用班级管理系统!</pre>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- 映射应用演示页面 -->
                 <div id="map-page" class="page-content hidden">
                     <div class="bg-white rounded-lg shadow mb-6">
                         <div class="p-6">
                             <h2 class="text-xl font-semibold text-gray-800 mb-4">映射应用演示</h2>
-                            <div class="bg-gray-50 p-6 rounded-lg">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            
+                            <p class="text-gray-600 mb-6">
+                                映射（Map）是一种键值对数据结构，类似于对象，但具有更多的功能和灵活性。
+                                在JavaScript中，Map对象可以使用任意类型作为键，并且提供了丰富的方法来操作数据。
+                                以下演示了如何使用Map实现用户数据的管理功能。
+                            </p>
+                            
+                            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                                <h3 class="text-lg font-medium text-gray-800 mb-4">用户数据管理系统</h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                    <!-- 添加用户表单 -->
                                     <div>
-                                        <h4 class="font-medium mb-3">添加用户</h4>
-                                        <input type="text" id="user-id" placeholder="用户ID" class="w-full p-2 border rounded mb-2">
-                                        <input type="text" id="user-name-map" placeholder="姓名" class="w-full p-2 border rounded mb-2">
-                                        <button id="add-user-btn" class="action-btn action-btn-primary">添加</button>
+                                        <h4 class="text-md font-medium text-gray-800 mb-3">添加新用户</h4>
+                                        <div class="space-y-4">
+                                            <div>
+                                                <label for="user-id" class="block text-sm font-medium text-gray-700 mb-1">用户ID</label>
+                                                <input type="text" id="user-id" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                                            </div>
+                                            <div>
+                                                <label for="map-user-name" class="block text-sm font-medium text-gray-700 mb-1">姓名</label>
+                                                <input type="text" id="map-user-name" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                                            </div>
+                                            <div>
+                                                <label for="user-email" class="block text-sm font-medium text-gray-700 mb-1">邮箱</label>
+                                                <input type="email" id="user-email" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                                            </div>
+                                            <button id="add-user-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                                添加用户
+                                            </button>
+                                        </div>
                                     </div>
+                                    
+                                    <!-- 用户查询 -->
                                     <div>
-                                        <h4 class="font-medium mb-3">查询用户</h4>
-                                        <input type="text" id="search-user-id" placeholder="用户ID" class="w-full p-2 border rounded mb-2">
-                                        <button id="search-user-btn" class="action-btn action-btn-primary">查询</button>
+                                        <h4 class="text-md font-medium text-gray-800 mb-3">查询/删除用户</h4>
+                                        <div class="space-y-4">
+                                            <div>
+                                                <label for="search-user-id" class="block text-sm font-medium text-gray-700 mb-1">用户ID</label>
+                                                <div class="flex space-x-2">
+                                                    <input type="text" id="search-user-id" class="flex-1 px-4 py-2 border border-gray-300 rounded-md">
+                                                    <button id="search-user-btn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                                        查询
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div id="user-details" class="p-4 bg-white rounded-md border border-gray-200 hidden">
+                                                <h5 class="font-medium text-gray-800 mb-2">用户信息</h5>
+                                                <p><span class="text-gray-500">ID:</span> <span id="detail-id">-</span></p>
+                                                <p><span class="text-gray-500">姓名:</span> <span id="detail-name">-</span></p>
+                                                <p><span class="text-gray-500">邮箱:</span> <span id="detail-email">-</span></p>
+                                                <button id="delete-user-btn" class="mt-3 px-4 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm">
+                                                    删除用户
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-md font-medium text-gray-800 mb-3">用户列表</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full border border-gray-200">
+                                            <thead class="bg-gray-50">
+                                                <tr>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">用户ID</th>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">姓名</th>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">邮箱</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="users-table-body" class="bg-white divide-y divide-gray-200">
+                                                <!-- 用户数据将通过JavaScript动态添加 -->
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -404,40 +632,54 @@
                     </div>
                 </div>
 
+                <!-- Socket通信页面 -->
                 <div id="socket-page" class="page-content hidden">
                     <div class="bg-white rounded-lg shadow mb-6">
                         <div class="p-6">
-                            <h2 class="text-xl font-semibold text-gray-800 mb-4">Socket通信演示</h2>
-                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                <div class="lg:col-span-1">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">Socket通信</h2>
+                            <p class="text-gray-600 mb-6">与其他用户进行实时通信</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                <!-- 连接设置 -->
+                                <div class="md:col-span-1">
                                     <div class="bg-gray-50 p-4 rounded-lg">
-                                        <h3 class="font-medium mb-4">在线用户</h3>
-                                        <ul id="online-users" class="space-y-2">
-                                            <li class="flex items-center p-2 bg-white rounded border">
-                                                <span class="h-2 w-2 rounded-full bg-green-500 mr-2"></span>
-                                                <span>系统管理员</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="lg:col-span-2">
-                                    <div class="bg-gray-50 p-4 rounded-lg h-[400px] flex flex-col">
-                                        <div id="chat-messages" class="flex-1 overflow-y-auto mb-4 space-y-3">
-                                            <div class="text-center">
-                                                <span class="text-xs bg-gray-200 text-gray-600 px-3 py-1 rounded-full">今天 14:30</span>
+                                        <h3 class="font-medium text-gray-800 mb-3">连接设置</h3>
+                                        <div class="space-y-4">
+                                            <div>
+                                                <label for="socket-ip" class="block text-sm font-medium text-gray-700 mb-1">IP地址</label>
+                                                <input type="text" id="socket-ip" value="localhost" class="w-full px-4 py-2 border border-gray-300 rounded-md">
                                             </div>
-                                            <div class="flex items-start">
-                                                <span class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm mr-2">系</span>
-                                                <div>
-                                                    <div class="bg-blue-100 rounded-lg rounded-tl-none px-4 py-2 text-sm">
-                                                        欢迎来到班级聊天系统！
-                                                    </div>
-                                                </div>
+                                            <div>
+                                                <label for="socket-port" class="block text-sm font-medium text-gray-700 mb-1">端口号</label>
+                                                <input type="number" id="socket-port" value="8080" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                                            </div>
+                                            <div class="flex space-x-2">
+                                                <button id="connect-btn" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                                    连接
+                                                </button>
+                                                <button id="disconnect-btn" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700" disabled>
+                                                    断开
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <p id="connection-status" class="text-sm text-gray-500">未连接</p>
                                             </div>
                                         </div>
-                                        <div class="flex space-x-2">
-                                            <input type="text" id="chat-input" placeholder="输入消息..." class="flex-1 px-4 py-2 border rounded">
-                                            <button id="send-chat-btn" class="action-btn action-btn-primary">发送</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- 聊天区域 -->
+                                <div class="md:col-span-2">
+                                    <div class="bg-gray-50 p-4 rounded-lg h-full flex flex-col">
+                                        <h3 class="font-medium text-gray-800 mb-3">聊天窗口</h3>
+                                        <div id="chat-messages" class="flex-1 overflow-y-auto mb-4 space-y-3 p-2 bg-white rounded border border-gray-200">
+                                            <!-- 消息将在这里显示 -->
+                                        </div>
+                                        <div class="flex">
+                                            <input type="text" id="chat-input" placeholder="输入消息..." class="flex-1 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                            <button id="send-chat-btn" class="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700" disabled>
+                                                发送
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -450,223 +692,606 @@
     </div>
 
     <script>
-        // 1. 系统核心配置
-        // 授权用户列表（实际项目中应存储在后端数据库）
-        const authorizedUsers = [
-            { username: 'admin', password: 'admin123', role: 'admin', name: '系统管理员' },
-            { username: 'teacher', password: 'teacher123', role: 'teacher', name: '王老师' },
-            { username: 'student', password: 'student123', role: 'student', name: '张三同学' }
+        // 全局变量
+        let currentUser = null;
+        let webSocket = null;
+        let userMap = new Map();
+        let activitiesData = [
+            { name: "秋季运动会", date: "2023-10-26", type: "体育活动", description: "班级参加学校秋季运动会，获得团体总分第三名，张三获得100米短跑冠军，李四获得跳高亚军。" },
+            { name: "班级元旦晚会", date: "2023-12-31", type: "文艺活动", description: "班级举办元旦晚会，同学们表演了丰富多彩的节目，增强了班级凝聚力。" },
+            { name: "学雷锋活动", date: "2023-03-05", type: "公益活动", description: "班级组织前往社区开展学雷锋志愿服务活动。" },
+            { name: "篮球赛", date: "2023-11-15", type: "体育活动", description: "与三班进行篮球友谊赛，以68:62获胜。" }
+        ];
+        
+        let scheduleData = [
+            { date: "2023-10-23", weekday: "周一", person: "张三、李四", duty: "擦黑板、整理卫生", status: "已完成" },
+            { date: "2023-10-24", weekday: "周二", person: "王五、赵六", duty: "擦黑板、整理卫生", status: "已完成" },
+            { date: "2023-10-25", weekday: "周三", person: "孙七、周八", duty: "擦黑板、整理卫生", status: "进行中" },
+            { date: "2023-10-26", weekday: "周四", person: "吴九、郑十", duty: "擦黑板、整理卫生", status: "未开始" },
+            { date: "2023-10-27", weekday: "周五", person: "钱十一、孙十二", duty: "擦黑板、整理卫生", status: "未开始" }
         ];
 
-        // 角色权限配置（页面访问权限）
-        const rolePagePermissions = {
-            admin: [
-                'dashboard', 'members', 'committee', 
-                'schedule', 'activities', 'messages',
-                'reflection', 'map', 'socket'
-            ],
-            teacher: [
-                'dashboard', 'members', 'committee', 
-                'schedule', 'activities', 'messages'
-            ],
-            student: [
-                'dashboard', 'schedule', 'activities', 'messages'
-            ]
-        };
-
-        // 角色操作权限配置（功能按钮权限）
-        const roleActionPermissions = {
-            admin: [
-                'addMember', 'editMember', 'deleteMember',
-                'manageCommittee', 'manageSchedule', 'manageActivities'
-            ],
-            teacher: [
-                'addMember', 'editMember', 'manageSchedule', 'manageActivities'
-            ],
-            student: [
-                'viewContent', 'sendMessage'
-            ]
-        };
-
-        // 2. DOM元素初始化
-        const loginForm = document.getElementById('login-form');
-        const loginPage = document.getElementById('login-page');
-        const app = document.getElementById('app');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const pageTitle = document.getElementById('page-title');
-        const pageContents = document.querySelectorAll('.page-content');
-        const logoutBtn = document.getElementById('logout-btn');
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-
-        // 3. 登录验证逻辑
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化登录表单
+            initLoginForm();
             
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const role = document.getElementById('user-role').value;
+            // 初始化导航
+            initNavigation();
             
-            // 验证用户身份
-            const validUser = authorizedUsers.find(user => 
-                user.username === username && 
-                user.password === password && 
-                user.role === role
-            );
+            // 初始化活动图表
+            initActivityChart();
             
-            if (validUser) {
-                // 登录成功 - 保存用户信息
-                localStorage.setItem('currentUser', JSON.stringify(validUser));
-                initApp(validUser);
-            } else {
-                // 登录失败提示
-                alert('用户名、密码或角色不匹配，请重新输入');
-            }
+            // 初始化留言功能
+            initMessageBoard();
+            
+            // 初始化Socket通信
+            initSocketCommunication();
+            
+            // 初始化时间段查询功能
+            initDateRangeQueries();
+            
+            // 初始化用户映射功能
+            initUserMap();
+            
+            // 初始化反射机制演示
+            initReflectionDemo();
         });
-
-        // 4. 初始化应用
-        function initApp(user) {
-            // 切换页面显示
-            loginPage.classList.add('hidden');
-            app.classList.remove('hidden');
-            
-            // 更新用户信息展示
-            document.getElementById('user-initial').textContent = user.name.charAt(0).toUpperCase();
-            document.getElementById('user-name').textContent = user.name;
-            document.getElementById('user-role').textContent = 
-                user.role === 'admin' ? '管理员' : 
-                user.role === 'teacher' ? '教师' : '学生';
-            
-            // 设置权限
-            setupPermissions(user.role);
-            
-            // 初始化默认页面
-            showPage('dashboard');
-            initDashboardChart();
-        }
-
-        // 5. 权限设置
-        function setupPermissions(role) {
-            // 页面访问权限控制
-            const allowedPages = rolePagePermissions[role];
-            navLinks.forEach(link => {
-                const page = link.getAttribute('data-page');
-                if (allowedPages.includes(page)) {
-                    link.classList.remove('hidden');
-                } else {
-                    link.classList.add('hidden');
+        
+        // 初始化登录表单
+        function initLoginForm() {
+            const loginForm = document.getElementById('login-form');
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const role = document.getElementById('user-role').value;
+                
+                // 简单验证
+                if (username && password && role) {
+                    currentUser = {
+                        name: username,
+                        role: role,
+                        initial: username.charAt(0).toUpperCase()
+                    };
+                    
+                    // 更新用户信息显示
+                    document.getElementById('user-initial').textContent = currentUser.initial;
+                    document.getElementById('user-name-display').textContent = currentUser.name;
+                    document.getElementById('user-role-display').textContent = currentUser.role;
+                    
+                    // 切换到应用界面
+                    document.getElementById('login-page').classList.add('hidden');
+                    document.getElementById('app').classList.remove('hidden');
                 }
             });
-
-            // 操作按钮权限控制
-            const allowedActions = roleActionPermissions[role];
-            
-            // 成员管理操作权限
-            document.getElementById('add-member-btn')?.classList.toggle('hidden', 
-                !allowedActions.includes('addMember'));
-            
-            document.querySelectorAll('.edit-member').forEach(btn => {
-                btn.classList.toggle('hidden', !allowedActions.includes('editMember'));
-            });
-            
-            document.querySelectorAll('.delete-member').forEach(btn => {
-                btn.classList.toggle('hidden', !allowedActions.includes('deleteMember'));
-            });
         }
-
-        // 6. 页面切换功能
-        function showPage(pageId) {
-            // 权限检查
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            if (!rolePagePermissions[currentUser.role].includes(pageId)) {
-                alert('您没有访问该页面的权限');
-                return;
-            }
-            
-            // 切换页面显示
-            pageContents.forEach(page => page.classList.add('hidden'));
-            document.getElementById(`${pageId}-page`).classList.remove('hidden');
-            
-            // 更新标题和导航状态
-            const pageTitleText = document.querySelector(`.nav-link[data-page="${pageId}"] span`).textContent;
-            pageTitle.textContent = pageTitleText;
+        
+        // 初始化导航
+        function initNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pageTitle = document.getElementById('page-title');
             
             navLinks.forEach(link => {
-                link.classList.toggle('active', link.getAttribute('data-page') === pageId);
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 移除所有激活状态
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // 添加当前激活状态
+                    this.classList.add('active');
+                    
+                    // 获取目标页面
+                    const targetPage = this.getAttribute('data-page');
+                    
+                    // 更新页面标题
+                    pageTitle.textContent = this.querySelector('span').textContent;
+                    
+                    // 隐藏所有页面
+                    document.querySelectorAll('.page-content').forEach(page => {
+                        page.classList.add('hidden');
+                    });
+                    
+                    // 显示目标页面
+                    document.getElementById(`${targetPage}-page`).classList.remove('hidden');
+                });
             });
+            
+            // 默认激活仪表盘
+            document.querySelector('[data-page="dashboard"]').classList.add('active');
         }
-
-        // 7. 登出功能
-        logoutBtn.addEventListener('click', function() {
-            if (confirm('确定要退出登录吗？')) {
-                localStorage.removeItem('currentUser');
-                app.classList.add('hidden');
-                loginPage.classList.remove('hidden');
-                loginForm.reset();
-            }
-        });
-
-        // 8. 导航点击事件
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const pageId = this.getAttribute('data-page');
-                showPage(pageId);
-            });
-        });
-
-        // 9. 其他功能初始化
-        function initDashboardChart() {
+        
+        // 初始化活动图表
+        function initActivityChart() {
             const ctx = document.getElementById('activity-chart').getContext('2d');
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['一月', '二月', '三月', '四月', '五月', '六月'],
+                    labels: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
                     datasets: [{
                         label: '班级活动数量',
-                        data: [2, 3, 1, 4, 2, 3],
-                        backgroundColor: 'rgba(59, 130, 246, 0.5)'
+                        data: [1, 0, 2, 1, 3, 2, 4, 0, 2, 3, 1, 2],
+                        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
             });
         }
-
-        // 10. 页面加载时检查登录状态
-        window.addEventListener('load', function() {
-            const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
-                initApp(JSON.parse(savedUser));
+        
+        // 初始化留言功能
+        function initMessageBoard() {
+            const messageInput = document.getElementById('message-input');
+            const sendBtn = document.getElementById('send-message-btn');
+            const messagesList = document.getElementById('messages-list');
+            
+            sendBtn.addEventListener('click', function() {
+                sendMessage();
+            });
+            
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            function sendMessage() {
+                const message = messageInput.value.trim();
+                if (message && currentUser) {
+                    const now = new Date();
+                    const dateString = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+                    
+                    // 创建新留言元素
+                    const messageEl = document.createElement('div');
+                    messageEl.className = 'border-l-4 border-purple-500 pl-4 py-2';
+                    messageEl.innerHTML = `
+                        <div class="flex justify-between">
+                            <h4 class="font-medium text-gray-800">${currentUser.name}</h4>
+                            <p class="text-sm text-gray-500">${dateString}</p>
+                        </div>
+                        <p class="text-gray-600 mt-1">${message}</p>
+                    `;
+                    
+                    // 添加到留言列表
+                    messagesList.appendChild(messageEl);
+                    
+                    // 滚动到底部
+                    messagesList.scrollTop = messagesList.scrollHeight;
+                    
+                    // 清空输入框
+                    messageInput.value = '';
+                }
             }
-        });
-
-        // 11. 移动端菜单切换
-        mobileMenuBtn.addEventListener('click', function() {
-            const sidebar = document.querySelector('aside');
-            sidebar.classList.toggle('hidden');
-        });
-
-        // 12. 留言功能
-        document.getElementById('send-message-btn').addEventListener('click', function() {
-            const input = document.getElementById('message-input');
-            const message = input.value.trim();
-            if (!message) return;
+        }
+        
+        // 初始化Socket通信
+        function initSocketCommunication() {
+            const ipInput = document.getElementById('socket-ip');
+            const portInput = document.getElementById('socket-port');
+            const connectBtn = document.getElementById('connect-btn');
+            const disconnectBtn = document.getElementById('disconnect-btn');
+            const statusEl = document.getElementById('connection-status');
+            const chatInput = document.getElementById('chat-input');
+            const sendChatBtn = document.getElementById('send-chat-btn');
+            const chatMessages = document.getElementById('chat-messages');
             
-            const user = JSON.parse(localStorage.getItem('currentUser'));
-            const now = new Date().toLocaleString();
+            // 连接按钮点击事件
+            connectBtn.addEventListener('click', function() {
+                const ip = ipInput.value.trim();
+                const port = portInput.value.trim();
+                
+                if (ip && port) {
+                    try {
+                        // 连接WebSocket服务器
+                        webSocket = new WebSocket(`ws://${ip}:${port}`);
+                        
+                        // 连接成功
+                        webSocket.onopen = function() {
+                            statusEl.textContent = '已连接';
+                            statusEl.className = 'text-sm text-green-600';
+                            connectBtn.disabled = true;
+                            disconnectBtn.disabled = false;
+                            sendChatBtn.disabled = false;
+                            
+                            addChatMessage('系统消息', '连接成功，可以开始聊天了');
+                        };
+                        
+                        // 收到消息
+                        webSocket.onmessage = function(event) {
+                            try {
+                                const data = JSON.parse(event.data);
+                                addChatMessage(data.user, data.message, false);
+                            } catch (e) {
+                                addChatMessage('未知用户', event.data, false);
+                            }
+                        };
+                        
+                        // 连接关闭
+                        webSocket.onclose = function() {
+                            statusEl.textContent = '已断开连接';
+                            statusEl.className = 'text-sm text-gray-500';
+                            connectBtn.disabled = false;
+                            disconnectBtn.disabled = true;
+                            sendChatBtn.disabled = true;
+                            
+                            addChatMessage('系统消息', '连接已断开');
+                        };
+                        
+                        // 连接错误
+                        webSocket.onerror = function(error) {
+                            statusEl.textContent = '连接错误';
+                            statusEl.className = 'text-sm text-red-600';
+                            
+                            addChatMessage('系统消息', `连接错误: ${error.message}`);
+                        };
+                    } catch (error) {
+                        statusEl.textContent = '连接失败';
+                        statusEl.className = 'text-sm text-red-600';
+                        
+                        addChatMessage('系统消息', `连接失败: ${error.message}`);
+                    }
+                }
+            });
             
-            const messageEl = document.createElement('div');
-            messageEl.className = 'border-l-4 border-blue-500 pl-4 py-2';
-            messageEl.innerHTML = `
-                <div class="flex justify-between">
-                    <h4 class="font-medium">${user.name}</h4>
-                    <p class="text-sm text-gray-500">${now}</p>
-                </div>
-                <p class="text-gray-600 mt-1">${message}</p>
-            `;
+            // 断开连接按钮点击事件
+            disconnectBtn.addEventListener('click', function() {
+                if (webSocket) {
+                    webSocket.close();
+                    webSocket = null;
+                }
+            });
             
-            document.getElementById('messages-list').prepend(messageEl);
-            input.value = '';
-        });
+            // 发送消息按钮点击事件
+            sendChatBtn.addEventListener('click', function() {
+                sendChatMessage();
+            });
+            
+            // 回车发送消息
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendChatMessage();
+                }
+            });
+            
+            // 发送聊天消息
+            function sendChatMessage() {
+                const message = chatInput.value.trim();
+                if (message && webSocket && webSocket.readyState === WebSocket.OPEN && currentUser) {
+                    const data = {
+                        user: currentUser.name,
+                        message: message
+                    };
+                    
+                    webSocket.send(JSON.stringify(data));
+                    addChatMessage(currentUser.name, message, true);
+                    
+                    // 清空输入框
+                    chatInput.value = '';
+                }
+            }
+            
+            // 添加聊天消息到界面
+            function addChatMessage(user, message, isSelf = false) {
+                const messageEl = document.createElement('div');
+                messageEl.className = `flex ${isSelf ? 'justify-end' : 'justify-start'} mb-2`;
+                
+                const bubbleEl = document.createElement('div');
+                bubbleEl.className = `message-bubble p-3 rounded-lg ${isSelf ? 'message-self' : 'message-other'}`;
+                
+                bubbleEl.innerHTML = `
+                    <div class="font-medium text-xs mb-1">${user}</div>
+                    <div>${message}</div>
+                `;
+                
+                messageEl.appendChild(bubbleEl);
+                chatMessages.appendChild(messageEl);
+                
+                // 滚动到底部
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+        
+        // 初始化时间段查询功能
+        function initDateRangeQueries() {
+            // 活动查询
+            const activitySearchBtn = document.getElementById('activity-search-btn');
+            activitySearchBtn.addEventListener('click', function() {
+                const startDate = document.getElementById('activity-start-date').value;
+                const endDate = document.getElementById('activity-end-date').value;
+                
+                if (startDate && endDate) {
+                    // 过滤符合条件的活动
+                    const filteredActivities = activitiesData.filter(activity => {
+                        return activity.date >= startDate && activity.date <= endDate;
+                    });
+                    
+                    // 显示查询结果
+                    displayActivities(filteredActivities);
+                    
+                    // 显示统计结果
+                    showActivityStats(filteredActivities);
+                }
+            });
+            
+            // 值日查询
+            const scheduleSearchBtn = document.getElementById('schedule-search-btn');
+            scheduleSearchBtn.addEventListener('click', function() {
+                const startDate = document.getElementById('schedule-start-date').value;
+                const endDate = document.getElementById('schedule-end-date').value;
+                
+                if (startDate && endDate) {
+                    // 过滤符合条件的值日安排
+                    const filteredSchedule = scheduleData.filter(item => {
+                        return item.date >= startDate && item.date <= endDate;
+                    });
+                    
+                    // 显示查询结果
+                    displaySchedule(filteredSchedule);
+                    
+                    // 显示统计结果
+                    showScheduleStats(filteredSchedule);
+                }
+            });
+            
+            // 显示活动查询结果
+            function displayActivities(activities) {
+                const activitiesList = document.getElementById('activities-list');
+                activitiesList.innerHTML = '';
+                
+                if (activities.length === 0) {
+                    activitiesList.innerHTML = '<p class="text-gray-500 text-center py-4">没有找到符合条件的活动</p>';
+                    return;
+                }
+                
+                activities.forEach(activity => {
+                    const activityEl = document.createElement('div');
+                    activityEl.className = 'border border-gray-200 rounded-lg p-4';
+                    
+                    let typeClass = '';
+                    if (activity.type === '体育活动') {
+                        typeClass = 'bg-blue-100 text-blue-800';
+                    } else if (activity.type === '文艺活动') {
+                        typeClass = 'bg-purple-100 text-purple-800';
+                    } else {
+                        typeClass = 'bg-green-100 text-green-800';
+                    }
+                    
+                    activityEl.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-medium text-gray-800">${activity.name}</h3>
+                                <p class="text-sm text-gray-500 mt-1">${activity.date}</p>
+                            </div>
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${typeClass}">${activity.type}</span>
+                        </div>
+                        <p class="text-gray-600 mt-3">${activity.description}</p>
+                    `;
+                    
+                    activitiesList.appendChild(activityEl);
+                });
+            }
+            
+            // 显示活动统计结果
+            function showActivityStats(activities) {
+                const statsEl = document.getElementById('activity-stats');
+                const totalEl = document.getElementById('total-activities');
+                const sportsEl = document.getElementById('sports-activities');
+                const culturalEl = document.getElementById('cultural-activities');
+                
+                const total = activities.length;
+                const sports = activities.filter(a => a.type === '体育活动').length;
+                const cultural = activities.filter(a => a.type === '文艺活动').length;
+                
+                totalEl.textContent = total;
+                sportsEl.textContent = sports;
+                culturalEl.textContent = cultural;
+                
+                statsEl.classList.remove('hidden');
+            }
+            
+            // 显示值日查询结果
+            function displaySchedule(schedule) {
+                const tableBody = document.getElementById('schedule-table-body');
+                tableBody.innerHTML = '';
+                
+                if (schedule.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">没有找到符合条件的值日安排</td></tr>';
+                    return;
+                }
+                
+                schedule.forEach(item => {
+                    const row = document.createElement('tr');
+                    
+                    let statusClass = '';
+                    if (item.status === '已完成') {
+                        statusClass = 'bg-green-100 text-green-800';
+                    } else if (item.status === '进行中') {
+                        statusClass = 'bg-yellow-100 text-yellow-800';
+                    } else {
+                        statusClass = 'bg-gray-100 text-gray-800';
+                    }
+                    
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">${item.date}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${item.weekday}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${item.person}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${item.duty}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">${item.status}</span>
+                        </td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // 显示值日统计结果
+            function showScheduleStats(schedule) {
+                const statsEl = document.getElementById('schedule-stats');
+                const totalEl = document.getElementById('total-days');
+                const completedEl = document.getElementById('completed-days');
+                const pendingEl = document.getElementById('pending-days');
+                
+                const total = schedule.length;
+                const completed = schedule.filter(s => s.status === '已完成').length;
+                const pending = total - completed;
+                
+                totalEl.textContent = total;
+                completedEl.textContent = completed;
+                pendingEl.textContent = pending;
+                
+                statsEl.classList.remove('hidden');
+            }
+        }
+        
+        // 初始化用户映射功能
+        function initUserMap() {
+            const addUserBtn = document.getElementById('add-user-btn');
+            const searchUserBtn = document.getElementById('search-user-btn');
+            const deleteUserBtn = document.getElementById('delete-user-btn');
+            const userIdInput = document.getElementById('user-id');
+            const userNameInput = document.getElementById('map-user-name');
+            const userEmailInput = document.getElementById('user-email');
+            const searchUserIdInput = document.getElementById('search-user-id');
+            const userDetailsEl = document.getElementById('user-details');
+            const detailIdEl = document.getElementById('detail-id');
+            const detailNameEl = document.getElementById('detail-name');
+            const detailEmailEl = document.getElementById('detail-email');
+            const usersTableBody = document.getElementById('users-table-body');
+            
+            // 添加用户
+            addUserBtn.addEventListener('click', function() {
+                const userId = userIdInput.value.trim();
+                const userName = userNameInput.value.trim();
+                const userEmail = userEmailInput.value.trim();
+                
+                if (userId && userName && userEmail) {
+                    userMap.set(userId, {
+                        id: userId,
+                        name: userName,
+                        email: userEmail
+                    });
+                    
+                    // 清空输入框
+                    userIdInput.value = '';
+                    userNameInput.value = '';
+                    userEmailInput.value = '';
+                    
+                    // 更新用户列表
+                    updateUserTable();
+                }
+            });
+            
+            // 查询用户
+            searchUserBtn.addEventListener('click', function() {
+                const userId = searchUserIdInput.value.trim();
+                
+                if (userId) {
+                    const user = userMap.get(userId);
+                    
+                    if (user) {
+                        detailIdEl.textContent = user.id;
+                        detailNameEl.textContent = user.name;
+                        detailEmailEl.textContent = user.email;
+                        userDetailsEl.classList.remove('hidden');
+                    } else {
+                        alert('未找到该用户');
+                        userDetailsEl.classList.add('hidden');
+                    }
+                }
+            });
+            
+            // 删除用户
+            deleteUserBtn.addEventListener('click', function() {
+                const userId = detailIdEl.textContent;
+                
+                if (userId && confirm('确定要删除该用户吗？')) {
+                    userMap.delete(userId);
+                    userDetailsEl.classList.add('hidden');
+                    searchUserIdInput.value = '';
+                    
+                    // 更新用户列表
+                    updateUserTable();
+                }
+            });
+            
+            // 更新用户表格
+            function updateUserTable() {
+                usersTableBody.innerHTML = '';
+                
+                if (userMap.size === 0) {
+                    usersTableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">暂无用户数据</td></tr>';
+                    return;
+                }
+                
+                for (const [id, user] of userMap) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">${user.id}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${user.name}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${user.email}</td>
+                    `;
+                    usersTableBody.appendChild(row);
+                }
+            }
+            
+            // 初始化表格
+            updateUserTable();
+        }
+        
+        // 初始化反射机制演示
+        function initReflectionDemo() {
+            const functionNameInput = document.getElementById('function-name');
+            const functionArgsInput = document.getElementById('function-args');
+            const invokeBtn = document.getElementById('invoke-function-btn');
+            const resultEl = document.getElementById('reflection-result');
+            
+            // 示例函数
+            const functions = {
+                add: (a, b) => a + b,
+                multiply: (a, b) => a * b,
+                greet: (name) => `欢迎使用${name}!`,
+                reverseString: (str) => str.split('').reverse().join(''),
+                getCurrentTime: () => new Date().toLocaleTimeString()
+            };
+            
+            // 调用函数按钮点击事件
+            invokeBtn.addEventListener('click', function() {
+                const functionName = functionNameInput.value.trim();
+                const argsStr = functionArgsInput.value.trim();
+                
+                if (functionName && functions[functionName]) {
+                    try {
+                        // 使用反射机制解析参数并调用函数
+                        const args = argsStr ? eval(`[${argsStr}]`) : [];
+                        const result = functions[functionName](...args);
+                        
+                        // 显示结果
+                        resultEl.textContent = `> ${functionName}(${argsStr})\n${result}`;
+                    } catch (error) {
+                        resultEl.textContent = `错误: ${error.message}`;
+                    }
+                } else {
+                    resultEl.textContent = `错误: 函数 ${functionName} 不存在`;
+                }
+            });
+        }
     </script>
 </body>
 </html>
