@@ -315,8 +315,6 @@
                     listEl.appendChild(itemEl);
                 });
                 
-                // 更新仪表盘统计
-                document.getElementById('dashboard-schedules')?.textContent = schedules.length;
             } catch (err) {
                 console.error('加载值日安排失败:', err);
                 listEl.innerHTML = '<div class="text-red-500 text-center py-8">加载失败，请重试</div>';
