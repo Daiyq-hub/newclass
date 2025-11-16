@@ -90,10 +90,10 @@
                     </div>
                     <div class="category-content pl-4 pr-2 overflow-hidden max-h-0 transition-height">
                         <a href="#" data-page="class-members" class="sidebar-link nav-item block">
-                            <i class="fa fa-user-circle w-5 mr-3"></i>班级人员管理
+                            <i class="fa fa-user-circle w-5 mr-3"></i>班级成员
                         </a>
                         <a href="#" data-page="committee" class="sidebar-link nav-item block">
-                            <i class="fa fa-star w-5 mr-3"></i>班委会管理
+                            <i class="fa fa-star w-5 mr-3"></i>班委会
                         </a>
                     </div>
                 </div>
@@ -105,11 +105,11 @@
                         <i class="fa fa-chevron-down text-xs transition-transform duration-200"></i>
                     </div>
                     <div class="category-content pl-4 pr-2 overflow-hidden max-h-0 transition-height">
-                        <a href="#" data-page="schedule" class="sidebar-link nav-item block">
-                            <i class="fa fa-calendar-check-o w-5 mr-3"></i>值日安排管理
+                        <a href="#" data-page="schedules" class="sidebar-link nav-item block">
+                            <i class="fa fa-list-alt w-5 mr-3"></i>值日安排
                         </a>
                         <a href="#" data-page="activities" class="sidebar-link nav-item block">
-                            <i class="fa fa-calendar-plus-o w-5 mr-3"></i>班级活动记录
+                            <i class="fa fa-flag w-5 mr-3"></i>班级活动
                         </a>
                     </div>
                 </div>
@@ -122,10 +122,10 @@
                     </div>
                     <div class="category-content pl-4 pr-2 overflow-hidden max-h-0 transition-height">
                         <a href="#" data-page="messages" class="sidebar-link nav-item block">
-                            <i class="fa fa-book w-5 mr-3"></i>班级留言簿
+                            <i class="fa fa-envelope w-5 mr-3"></i>留言簿
                         </a>
-                        <a href="#" data-page="socket" class="sidebar-link nav-item block">
-                            <i class="fa fa-exchange w-5 mr-3"></i>实时聊天
+                        <a href="#" data-page="chat" class="sidebar-link nav-item block">
+                            <i class="fa fa-comments-o w-5 mr-3"></i>实时聊天
                         </a>
                     </div>
                 </div>
@@ -134,152 +134,174 @@
 
         <!-- 主内容区 -->
         <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- 顶部导航 -->
-            <header class="bg-white shadow-sm px-6 py-3 flex justify-between items-center border-b border-gray-200">
-                <h2 id="page-title" class="text-xl font-semibold">仪表盘</h2>
+            <!-- 顶部导航栏 -->
+            <header class="bg-white shadow-sm px-6 py-3 flex justify-between items-center">
+                <h2 id="page-title" class="text-lg font-semibold text-gray-800">仪表盘</h2>
                 <div class="flex items-center">
-                    <span id="user-info" class="mr-4 text-gray-700"></span>
-                    <button id="logout-btn" class="text-red-500 hover:text-red-700">
+                    <span id="user-info" class="mr-4 text-gray-600"></span>
+                    <button id="logout-btn" class="text-red-500 hover:text-red-700 transition-colors">
                         <i class="fa fa-sign-out mr-1"></i>退出
                     </button>
                 </div>
             </header>
 
-            <!-- 页面内容 -->
-            <main class="flex-1 overflow-y-auto bg-gray-50">
+            <!-- 页面内容容器 -->
+            <main class="flex-1 overflow-y-auto bg-gray-50 p-4">
                 <!-- 仪表盘页面 -->
                 <div id="dashboard-page" class="page-content">
-                    <div class="content-card">
-                        <h2 class="text-xl font-semibold mb-4">班级概览</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                            <div class="stat-card border-blue-500">
-                                <div class="text-sm text-gray-500">当前用户</div>
-                                <div id="dashboard-username" class="text-xl font-medium mt-1">--</div>
-                            </div>
-                            <div class="stat-card border-green-500">
-                                <div class="text-sm text-gray-500">班级总人数</div>
-                                <div id="dashboard-total-students" class="text-xl font-medium mt-1">0</div>
-                            </div>
-                            <div class="stat-card border-purple-500">
-                                <div class="text-sm text-gray-500">本周活动</div>
-                                <div id="dashboard-activities" class="text-xl font-medium mt-1">0</div>
-                            </div>
-                            <div class="stat-card border-yellow-500">
-                                <div class="text-sm text-gray-500">最新留言</div>
-                                <div id="dashboard-messages" class="text-xl font-medium mt-1">0</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                        <div class="stat-card border-blue-500">
+                            <div class="text-sm text-gray-500">当前用户</div>
+                            <div class="text-xl font-bold mt-1" id="stat-current-user">-</div>
+                        </div>
+                        <div class="stat-card border-green-500">
+                            <div class="text-sm text-gray-500">班级总人数</div>
+                            <div class="text-xl font-bold mt-1" id="stat-total-members">0</div>
+                        </div>
+                        <div class="stat-card border-yellow-500">
+                            <div class="text-sm text-gray-500">本月活动</div>
+                            <div class="text-xl font-bold mt-1" id="stat-monthly-activities">0</div>
+                        </div>
+                        <div class="stat-card border-purple-500">
+                            <div class="text-sm text-gray-500">最新留言</div>
+                            <div class="text-xl font-bold mt-1" id="stat-recent-messages">0</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="content-card">
+                            <h3 class="text-lg font-semibold mb-4">本月班级活动统计</h3>
+                            <div id="activities-chart" class="h-64 flex items-center justify-center">
+                                <p class="text-gray-500">加载统计数据中...</p>
                             </div>
                         </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-white rounded-lg shadow p-4">
-                                <h3 class="font-semibold mb-3">本月班级活动统计</h3>
-                                <div id="monthly-activities-chart" class="h-64">
-                                    <!-- 活动统计图表将在这里显示 -->
-                                    <div class="flex items-center justify-center h-full text-gray-500">加载统计数据中...</div>
-                                </div>
-                            </div>
-                            <div class="bg-white rounded-lg shadow p-4">
-                                <h3 class="font-semibold mb-3">值日完成情况</h3>
-                                <div id="duty-completion-chart" class="h-64">
-                                    <!-- 值日完成情况图表将在这里显示 -->
-                                    <div class="flex items-center justify-center h-full text-gray-500">加载统计数据中...</div>
-                                </div>
+                        <div class="content-card">
+                            <h3 class="text-lg font-semibold mb-4">值日完成情况</h3>
+                            <div id="schedules-chart" class="h-64 flex items-center justify-center">
+                                <p class="text-gray-500">加载统计数据中...</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 班级人员管理页面 -->
+                <!-- 班级成员页面 -->
                 <div id="class-members-page" class="page-content hidden">
                     <div class="content-card">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold">班级人员管理</h2>
-                            <button id="add-member-btn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-semibold">班级成员管理</h3>
+                            <button id="add-member-btn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
                                 <i class="fa fa-plus mr-1"></i>添加成员
                             </button>
                         </div>
-                        
+
                         <div class="mb-4 flex flex-col md:flex-row gap-4">
                             <div class="flex-1">
-                                <input type="text" id="member-search" 
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" 
-                                    placeholder="搜索成员...">
+                                <input type="text" id="member-search" placeholder="搜索姓名或学号..."
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md">
                             </div>
-                            <div class="flex gap-2">
-                                <select id="member-filter-role" 
-                                    class="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                            <div class="w-full md:w-40">
+                                <select id="member-role-filter" class="w-full px-4 py-2 border border-gray-300 rounded-md">
                                     <option value="">所有角色</option>
                                     <option value="teacher">教师</option>
                                     <option value="student">学生</option>
                                 </select>
-                                <button id="search-member-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                                    <i class="fa fa-search mr-1"></i>搜索
-                                </button>
                             </div>
                         </div>
-                        
-                        <div id="class-members-list" class="space-y-4">
-                            <!-- 成员数据将在这里渲染 -->
-                            <div class="text-gray-500 text-center py-8">加载中...</div>
+
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">学号/工号</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">姓名</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">角色</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">联系电话</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="members-table-body" class="bg-white divide-y divide-gray-200">
+                                    <!-- 成员数据将通过JS动态加载 -->
+                                    <tr>
+                                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">加载成员数据中...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- 班委会管理页面 -->
+                <!-- 班委会页面 -->
                 <div id="committee-page" class="page-content hidden">
                     <div class="content-card">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold">班委会人员管理</h2>
-                            <button id="add-committee-btn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-                                <i class="fa fa-plus mr-1"></i>添加委员
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-semibold">班委会管理</h3>
+                            <button id="add-committee-btn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
+                                <i class="fa fa-plus mr-1"></i>添加成员
                             </button>
                         </div>
-                        
-                        <div id="committee-list" class="space-y-4">
-                            <!-- 班委会数据将在这里渲染 -->
-                            <div class="text-gray-500 text-center py-8">加载中...</div>
+
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">学号</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">姓名</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">职务</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">职责</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="committee-table-body" class="bg-white divide-y divide-gray-200">
+                                    <!-- 班委会数据将通过JS动态加载 -->
+                                    <tr>
+                                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">加载班委会数据中...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
                 <!-- 值日安排页面 -->
-                <div id="schedule-page" class="page-content hidden">
+                <div id="schedules-page" class="page-content hidden">
                     <div class="content-card">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold">值日安排管理</h2>
-                            <button id="add-schedule-btn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-                                <i class="fa fa-plus mr-1"></i>添加安排
-                            </button>
-                        </div>
-                        
-                        <div class="mb-4 flex flex-wrap gap-4">
-                            <div class="flex gap-2">
-                                <input type="date" id="schedule-start-date" 
-                                    class="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                <span class="flex items-center">至</span>
-                                <input type="date" id="schedule-end-date" 
-                                    class="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <div class="flex gap-2">
-                                <select id="schedule-status" 
-                                    class="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                            <h3 class="text-lg font-semibold">值日安排管理</h3>
+                            <div class="flex gap-4 w-full md:w-auto">
+                                <div class="flex gap-2">
+                                    <input type="date" id="schedule-start-date" class="px-4 py-2 border border-gray-300 rounded-md">
+                                    <span class="flex items-center">至</span>
+                                    <input type="date" id="schedule-end-date" class="px-4 py-2 border border-gray-300 rounded-md">
+                                </div>
+                                <select id="schedule-status-filter" class="px-4 py-2 border border-gray-300 rounded-md">
                                     <option value="">所有状态</option>
                                     <option value="未开始">未开始</option>
                                     <option value="进行中">进行中</option>
                                     <option value="已完成">已完成</option>
                                 </select>
-                                <button id="filter-schedules-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                                <button id="filter-schedules-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
                                     <i class="fa fa-filter mr-1"></i>筛选
-                                </button>
-                                <button id="export-schedules-btn" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
-                                    <i class="fa fa-download mr-1"></i>导出
                                 </button>
                             </div>
                         </div>
-                        
-                        <div id="schedule-list" class="space-y-4">
-                            <!-- 值日数据将在这里渲染 -->
-                            <div class="text-gray-500 text-center py-8">加载中...</div>
+
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日期</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">值日人员</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">任务描述</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="schedules-table-body" class="bg-white divide-y divide-gray-200">
+                                    <!-- 值日数据将通过JS动态加载 -->
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-4 text-center text-gray-500">加载值日数据中...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -287,42 +309,45 @@
                 <!-- 班级活动页面 -->
                 <div id="activities-page" class="page-content hidden">
                     <div class="content-card">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold">班级活动记录</h2>
-                            <button id="add-activity-btn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-                                <i class="fa fa-plus mr-1"></i>添加活动
-                            </button>
-                        </div>
-                        
-                        <div class="mb-4 flex flex-wrap gap-4">
-                            <div class="flex gap-2">
-                                <input type="date" id="activity-start-date" 
-                                    class="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                <span class="flex items-center">至</span>
-                                <input type="date" id="activity-end-date" 
-                                    class="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <div class="flex gap-2">
-                                <select id="activity-type" 
-                                    class="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                            <h3 class="text-lg font-semibold">班级活动管理</h3>
+                            <div class="flex gap-4 w-full md:w-auto">
+                                <div class="flex gap-2">
+                                    <input type="date" id="activity-start-date" class="px-4 py-2 border border-gray-300 rounded-md">
+                                    <span class="flex items-center">至</span>
+                                    <input type="date" id="activity-end-date" class="px-4 py-2 border border-gray-300 rounded-md">
+                                </div>
+                                <select id="activity-type-filter" class="px-4 py-2 border border-gray-300 rounded-md">
                                     <option value="">所有类型</option>
-                                    <option value="班会">班会</option>
-                                    <option value="文体活动">文体活动</option>
-                                    <option value="志愿服务">志愿服务</option>
+                                    <option value="会议">会议</option>
+                                    <option value="比赛">比赛</option>
+                                    <option value="志愿活动">志愿活动</option>
                                     <option value="其他">其他</option>
                                 </select>
-                                <button id="filter-activities-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                                <button id="filter-activities-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
                                     <i class="fa fa-filter mr-1"></i>筛选
-                                </button>
-                                <button id="stats-activities-btn" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors">
-                                    <i class="fa fa-bar-chart mr-1"></i>统计
                                 </button>
                             </div>
                         </div>
-                        
-                        <div id="activities-list" class="space-y-4">
-                            <!-- 活动数据将在这里渲染 -->
-                            <div class="text-gray-500 text-center py-8">加载中...</div>
+
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日期</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">活动名称</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">类型</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">负责人</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">详情</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="activities-table-body" class="bg-white divide-y divide-gray-200">
+                                    <!-- 活动数据将通过JS动态加载 -->
+                                    <tr>
+                                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">加载活动数据中...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -330,92 +355,54 @@
                 <!-- 留言簿页面 -->
                 <div id="messages-page" class="page-content hidden">
                     <div class="content-card">
-                        <h2 class="text-xl font-semibold mb-4">班级留言簿</h2>
+                        <h3 class="text-lg font-semibold mb-6">班级留言簿</h3>
                         
-                        <div class="mb-4 flex flex-wrap gap-4">
-                            <div class="flex gap-2">
-                                <input type="date" id="message-start-date" 
-                                    class="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                <span class="flex items-center">至</span>
-                                <input type="date" id="message-end-date" 
-                                    class="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        <div class="mb-6">
+                            <textarea id="new-message" rows="3" placeholder="输入留言内容..."
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"></textarea>
+                            <div class="mt-2 flex justify-end">
+                                <button id="send-message-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+                                    <i class="fa fa-paper-plane mr-1"></i>发送留言
+                                </button>
                             </div>
-                            <button id="filter-messages-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                                <i class="fa fa-filter mr-1"></i>筛选
-                            </button>
-                        </div>
-                        
-                        <textarea id="message-input" rows="3" 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md mb-3 focus:ring-2 focus:ring-blue-500" 
-                            placeholder="写下你的留言..."></textarea>
-                        <div class="flex justify-end">
-                            <button id="send-message-btn" 
-                                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                                发送留言
-                            </button>
                         </div>
 
-                        <div id="messages-list" class="mt-6 space-y-4">
-                            <!-- 留言将在这里显示 -->
-                            <div class="text-gray-500 text-center py-8">加载中...</div>
+                        <div id="messages-list">
+                            <!-- 留言数据将通过JS动态加载 -->
+                            <p class="text-center text-gray-500 py-6">加载留言数据中...</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Socket通信页面 -->
-                <div id="socket-page" class="page-content hidden">
-                    <div class="content-card">
-                        <h2 class="text-xl font-semibold mb-4">实时聊天</h2>
-                        
-                        <!-- WebSocket连接设置 -->
-                        <div class="mb-4 p-3 bg-gray-50 rounded-md">
-                            <div class="flex flex-wrap gap-3 items-center">
-                                <div class="flex-1 min-w-[200px]">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">服务器地址</label>
-                                    <input type="text" id="socket-server" value="101.35.129.174"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                </div>
-                                <div class="w-[120px]">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">端口号</label>
-                                    <input type="number" id="socket-port" value="3000"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                </div>
-                                <div class="flex items-end">
-                                    <button id="socket-connect" 
-                                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                                        <i class="fa fa-connectdevelop mr-1"></i>连接
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="mt-2 text-sm text-gray-600">
-                                连接状态: <span id="socket-status" class="text-red-500">未连接</span>
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- 实时聊天页面 -->
+                <div id="chat-page" class="page-content hidden">
+                    <div class="content-card h-[calc(100vh-12rem)] flex flex-col">
+                        <div class="flex-1 flex">
                             <!-- 在线用户列表 -->
-                            <div class="md:col-span-1">
-                                <div class="bg-gray-50 rounded-md p-3 border border-gray-200">
-                                    <h3 class="font-medium mb-2">在线用户</h3>
-                                    <div id="online-users" class="max-h-80 overflow-y-auto space-y-1">
-                                        <!-- 在线用户将在这里显示 -->
-                                    </div>
+                            <div class="w-64 border-r border-gray-200 p-4">
+                                <h4 class="font-medium mb-3">在线用户</h4>
+                                <div id="online-users-list" class="space-y-2">
+                                    <!-- 在线用户将通过WebSocket动态加载 -->
+                                    <p class="text-sm text-gray-500">加载在线用户中...</p>
                                 </div>
                             </div>
                             
-                            <!-- 聊天消息区域 -->
-                            <div class="md:col-span-3">
-                                <div id="socket-messages" class="border border-gray-200 rounded-md h-80 overflow-y-auto p-4 mb-4 bg-gray-50">
-                                    <!-- 实时消息将在这里显示 -->
+                            <!-- 聊天内容 -->
+                            <div class="flex-1 flex flex-col">
+                                <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4">
+                                    <!-- 聊天消息将通过WebSocket动态加载 -->
+                                    <p class="text-center text-gray-500 py-6">等待连接...</p>
                                 </div>
-                                <div class="flex gap-2">
-                                    <input type="text" id="socket-input" 
-                                        class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" 
-                                        placeholder="输入消息...">
-                                    <button id="socket-send" 
-                                        class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors" disabled>
-                                        发送
-                                    </button>
+                                
+                                <!-- 发送消息框 -->
+                                <div class="border-t border-gray-200 p-4">
+                                    <div class="flex gap-2">
+                                        <input type="text" id="chat-input" placeholder="输入消息..."
+                                            class="flex-1 px-4 py-2 border border-gray-300 rounded-md">
+                                        <button id="send-chat-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+                                            <i class="fa fa-paper-plane"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -425,46 +412,88 @@
         </div>
     </div>
 
-    <!-- 模态框通用结构 -->
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
-                <h3 id="modal-title" class="text-lg font-semibold">模态框标题</h3>
-                <button id="close-modal" class="text-gray-500 hover:text-gray-700">
-                    <i class="fa fa-times"></i>
-                </button>
-            </div>
-            <div id="modal-content" class="p-6">
-                <!-- 模态框内容将在这里动态加载 -->
-            </div>
+    <!-- 添加成员模态框 -->
+    <div id="add-member-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-md p-6">
+            <h3 class="text-lg font-semibold mb-4">添加班级成员</h3>
+            <form id="add-member-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">学号/工号</label>
+                    <input type="text" id="member-id" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">姓名</label>
+                    <input type="text" id="member-name" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">角色</label>
+                    <select id="member-role" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                        <option value="teacher">教师</option>
+                        <option value="student">学生</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">联系电话</label>
+                    <input type="text" id="member-phone"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">邮箱</label>
+                    <input type="email" id="member-email"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" id="cancel-add-member" class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
+                        取消
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors">
+                        保存
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script>
+        // 全局变量
         let currentUser = null;
         let ws = null;
-        let API_BASE_URL = 'http://101.35.129.174:3000/api';
-        let onlineUsers = [];
 
-        // 初始化
+        // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', () => {
+            // 初始化侧边栏折叠/展开
             initSidebar();
-            initLogin();
+            
+            // 初始化导航切换
             initNavigation();
+            
+            // 初始化登录表单
+            initLoginForm();
+            
+            // 初始化退出功能
             initLogout();
-            initMessages();
-            initModal();
-            initSocketControls();
+
+            // 检查本地存储中的登录状态
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showApp();
+                loadDashboardData();
+            }
         });
 
-        // 初始化侧边栏折叠功能
+        // 初始化侧边栏折叠/展开
         function initSidebar() {
             document.querySelectorAll('.sidebar-category').forEach(category => {
                 category.addEventListener('click', () => {
-                    const categoryId = category.getAttribute('data-category');
-                    const content = document.querySelector(`.category-content:nth-of-type(${Array.from(document.querySelectorAll('.sidebar-category')).indexOf(category) + 1})`);
+                    const categoryName = category.getAttribute('data-category');
+                    const content = category.nextElementSibling;
                     const icon = category.querySelector('.fa-chevron-down');
                     
+                    // 切换内容高度
                     if (content.style.maxHeight) {
                         content.style.maxHeight = null;
                         icon.style.transform = 'rotate(0deg)';
@@ -474,691 +503,120 @@
                     }
                 });
             });
-            
+
             // 默认展开第一个分类
-            setTimeout(() => {
-                document.querySelector('.sidebar-category').click();
-            }, 100);
+            const firstCategory = document.querySelector('.sidebar-category');
+            if (firstCategory) {
+                firstCategory.click();
+            }
         }
 
-        // 登录功能
-        function initLogin() {
-            document.getElementById('login-form').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-                const role = document.getElementById('user-role').value;
-
-                try {
-                    const res = await fetch(`${API_BASE_URL}/login`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username, password, role })
-                    });
-                    const data = await res.json();
-
-                    if (data.success) {
-                        currentUser = data.user;
-                        document.getElementById('user-info').textContent = `${currentUser.username} (${getRoleText(currentUser.role)})`;
-                        document.getElementById('dashboard-username').textContent = `${currentUser.username} (${getRoleText(currentUser.role)})`;
-                        
-                        // 切换页面
-                        document.getElementById('login-page').classList.add('hidden');
-                        document.getElementById('app').classList.remove('hidden');
-                        
-                        // 加载各模块数据
-                        loadDashboardData();
-                        loadClassMembers();
-                        loadCommitteeMembers();
-                        loadSchedules();
-                        loadActivities();
-                        loadMessages();
-                    } else {
-                        alert('登录失败: ' + data.message);
-                    }
-                } catch (err) {
-                    console.error('登录失败:', err);
-                    alert('登录失败，请检查服务器是否运行');
-                }
-            });
-        }
-
-        // 导航切换
+        // 初始化导航切换
         function initNavigation() {
-            document.querySelectorAll('.nav-item').forEach(link => {
+            document.querySelectorAll('.sidebar-link.nav-item').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const targetPage = link.getAttribute('data-page');
                     
                     // 更新活跃状态
-                    document.querySelectorAll('.nav-item').forEach(item => {
+                    document.querySelectorAll('.sidebar-link.nav-item').forEach(item => {
                         item.classList.remove('active');
                     });
                     link.classList.add('active');
                     
                     // 切换页面
+                    const targetPage = link.getAttribute('data-page');
                     document.querySelectorAll('.page-content').forEach(page => {
                         page.classList.add('hidden');
                     });
                     document.getElementById(`${targetPage}-page`).classList.remove('hidden');
-                    document.getElementById('page-title').textContent = link.textContent.trim();
+                    
+                    // 更新页面标题
+                    const pageTitle = link.textContent.trim();
+                    document.getElementById('page-title').textContent = pageTitle;
+
+                    // 加载对应页面数据
+                    if (targetPage === 'class-members') {
+                        loadClassMembers();
+                    } else if (targetPage === 'committee') {
+                        loadCommitteeMembers();
+                    } else if (targetPage === 'schedules') {
+                        loadSchedules();
+                    } else if (targetPage === 'activities') {
+                        loadActivities();
+                    } else if (targetPage === 'messages') {
+                        loadMessages();
+                    } else if (targetPage === 'chat') {
+                        initWebSocket();
+                    }
                 });
             });
         }
 
-        // 退出登录
+        // 初始化登录表单
+        function initLoginForm() {
+            const form = document.getElementById('login-form');
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const role = document.getElementById('user-role').value;
+                
+                try {
+                    const response = await fetch('http://101.35.129.174:3000/api/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username, password, role })
+                    });
+                    
+                    const data = await response.json();
+                    if (data.success) {
+                        currentUser = data.user;
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        showApp();
+                        loadDashboardData();
+                    } else {
+                        alert(data.message || '登录失败');
+                    }
+                } catch (err) {
+                    console.error('登录错误:', err);
+                    alert('登录失败，请重试');
+                }
+            });
+        }
+
+        // 初始化退出功能
         function initLogout() {
             document.getElementById('logout-btn').addEventListener('click', () => {
+                localStorage.removeItem('currentUser');
                 currentUser = null;
+                // 关闭WebSocket连接
                 if (ws && ws.readyState === WebSocket.OPEN) {
                     ws.close();
                 }
-                document.getElementById('app').classList.add('hidden');
-                document.getElementById('login-page').classList.remove('hidden');
-                document.getElementById('login-form').reset();
-                onlineUsers = [];
-                updateOnlineUsersList();
+                showLoginPage();
             });
         }
 
-        // 模态框控制
-        function initModal() {
-            document.getElementById('close-modal').addEventListener('click', () => {
-                document.getElementById('modal').classList.add('hidden');
-                document.getElementById('modal-content').innerHTML = '';
-            });
+        // 显示应用界面
+        function showApp() {
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            document.getElementById('user-info').textContent = `${currentUser.username} (${getRoleText(currentUser.role)})`;
+            document.getElementById('stat-current-user').textContent = `${currentUser.username} (${getRoleText(currentUser.role)})`;
             
-            // 点击模态框外部关闭
-            document.getElementById('modal').addEventListener('click', (e) => {
-                if (e.target === document.getElementById('modal')) {
-                    document.getElementById('modal').classList.add('hidden');
-                    document.getElementById('modal-content').innerHTML = '';
-                }
-            });
+            // 初始化功能按钮事件
+            initFeatureEvents();
         }
 
-        // 显示模态框
-        function showModal(title, content) {
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-content').innerHTML = content;
-            document.getElementById('modal').classList.remove('hidden');
+        // 显示登录页面
+        function showLoginPage() {
+            document.getElementById('app').classList.add('hidden');
+            document.getElementById('login-page').classList.remove('hidden');
+            document.getElementById('login-form').reset();
         }
 
-        // 仪表盘数据加载
-        async function loadDashboardData() {
-            try {
-                // 加载班级总人数
-                const membersRes = await fetch(`${API_BASE_URL}/class-members`);
-                const members = await membersRes.json();
-                document.getElementById('dashboard-total-students').textContent = members.length;
-                
-                // 加载本周活动
-                const activitiesRes = await fetch(`${API_BASE_URL}/activities`);
-                const activities = await activitiesRes.json();
-                const today = new Date();
-                const weekStart = new Date(today.setDate(today.getDate() - today.getDay()));
-                const weeklyActivities = activities.filter(item => new Date(item.date) >= weekStart);
-                document.getElementById('dashboard-activities').textContent = weeklyActivities.length;
-                
-                // 加载留言数量
-                const messagesRes = await fetch(`${API_BASE_URL}/messages`);
-                const messages = await messagesRes.json();
-                document.getElementById('dashboard-messages').textContent = messages.length;
-                
-                // 加载统计图表数据
-                loadActivityStats();
-                loadDutyStats();
-                
-            } catch (err) {
-                console.error('加载仪表盘数据失败:', err);
-            }
-        }
-
-        // 班级人员管理
-        async function loadClassMembers(filters = {}) {
-            const listEl = document.getElementById('class-members-list');
-            listEl.innerHTML = '<div class="text-gray-500 text-center py-8">加载中...</div>';
-            
-            try {
-                let url = `${API_BASE_URL}/class-members`;
-                const params = new URLSearchParams();
-                if (filters.search) params.append('search', filters.search);
-                if (filters.role) params.append('role', filters.role);
-                
-                if (params.toString()) url += `?${params.toString()}`;
-                
-                const res = await fetch(url);
-                const members = await res.json();
-                
-                if (members.length === 0) {
-                    listEl.innerHTML = '<div class="text-gray-500 text-center py-8">暂无班级成员数据</div>';
-                    return;
-                }
-                
-                listEl.innerHTML = '';
-                members.forEach(member => {
-                    const itemEl = document.createElement('div');
-                    itemEl.className = 'border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow';
-                    itemEl.innerHTML = `
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="font-medium text-gray-800">${member.name}</h4>
-                                <p class="text-sm text-gray-600 mt-1">
-                                    学号/工号：${member.id} | 角色：${getRoleText(member.role)}
-                                </p>
-                            </div>
-                            <div class="flex gap-2">
-                                <button class="edit-member-btn text-blue-500 hover:text-blue-700" data-id="${member.id}">
-                                    <i class="fa fa-edit"></i>
-                                </button>
-                                <button class="delete-member-btn text-red-500 hover:text-red-700" data-id="${member.id}">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="mt-3">
-                            <p class="text-sm text-gray-700"><span class="font-medium">联系电话：</span>${member.phone || '未填写'}</p>
-                            <p class="text-sm text-gray-700 mt-1"><span class="font-medium">邮箱：</span>${member.email || '未填写'}</p>
-                        </div>
-                    `;
-                    listEl.appendChild(itemEl);
-                });
-                
-                // 添加编辑和删除事件监听
-                document.querySelectorAll('.edit-member-btn').forEach(btn => {
-                    btn.addEventListener('click', () => editClassMember(btn.getAttribute('data-id')));
-                });
-                document.querySelectorAll('.delete-member-btn').forEach(btn => {
-                    btn.addEventListener('click', () => deleteClassMember(btn.getAttribute('data-id')));
-                });
-                
-            } catch (err) {
-                console.error('加载班级成员失败:', err);
-                listEl.innerHTML = '<div class="text-red-500 text-center py-8">加载失败，请重试</div>';
-            }
-        }
-
-        // 班委会管理
-        async function loadCommitteeMembers() {
-            const listEl = document.getElementById('committee-list');
-            listEl.innerHTML = '<div class="text-gray-500 text-center py-8">加载中...</div>';
-            
-            try {
-                const res = await fetch(`${API_BASE_URL}/committee`);
-                const committee = await res.json();
-                
-                if (committee.length === 0) {
-                    listEl.innerHTML = '<div class="text-gray-500 text-center py-8">暂无班委会成员数据</div>';
-                    return;
-                }
-                
-                listEl.innerHTML = '';
-                committee.forEach(member => {
-                    const itemEl = document.createElement('div');
-                    itemEl.className = 'border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow';
-                    itemEl.innerHTML = `
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="font-medium text-gray-800">${member.name}</h4>
-                                <p class="text-sm text-gray-600 mt-1">
-                                    职务：${member.position} | 学号：${member.studentId}
-                                </p>
-                            </div>
-                            <div class="flex gap-2">
-                                <button class="edit-committee-btn text-blue-500 hover:text-blue-700" data-id="${member.id}">
-                                    <i class="fa fa-edit"></i>
-                                </button>
-                                <button class="delete-committee-btn text-red-500 hover:text-red-700" data-id="${member.id}">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="mt-3">
-                            <p class="text-sm text-gray-700"><span class="font-medium">职责：</span>${member.responsibilities || '未填写'}</p>
-                        </div>
-                    `;
-                    listEl.appendChild(itemEl);
-                });
-                
-                // 添加编辑和删除事件监听
-                document.querySelectorAll('.edit-committee-btn').forEach(btn => {
-                    btn.addEventListener('click', () => editCommitteeMember(btn.getAttribute('data-id')));
-                });
-                document.querySelectorAll('.delete-committee-btn').forEach(btn => {
-                    btn.addEventListener('click', () => deleteCommitteeMember(btn.getAttribute('data-id')));
-                });
-                
-            } catch (err) {
-                console.error('加载班委会成员失败:', err);
-                listEl.innerHTML = '<div class="text-red-500 text-center py-8">加载失败，请重试</div>';
-            }
-        }
-
-        // 值日安排功能
-        async function loadSchedules(filters = {}) {
-            const listEl = document.getElementById('schedule-list');
-            listEl.innerHTML = '<div class="text-gray-500 text-center py-8">加载中...</div>';
-            
-            try {
-                let url = `${API_BASE_URL}/schedules`;
-                const params = new URLSearchParams();
-                if (filters.startDate) params.append('startDate', filters.startDate);
-                if (filters.endDate) params.append('endDate', filters.endDate);
-                if (filters.status) params.append('status', filters.status);
-                
-                if (params.toString()) url += `?${params.toString()}`;
-                
-                const res = await fetch(url);
-                const schedules = await res.json();
-                
-                if (schedules.length === 0) {
-                    listEl.innerHTML = '<div class="text-gray-500 text-center py-8">暂无值日安排</div>';
-                    return;
-                }
-                
-                listEl.innerHTML = '';
-                schedules.forEach(item => {
-                    const itemEl = document.createElement('div');
-                    itemEl.className = 'border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow';
-                    itemEl.innerHTML = `
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="font-medium text-gray-800">${item.date}（${item.weekday}）</h4>
-                                <p class="text-sm text-gray-600 mt-1">值日人员：${item.person}</p>
-                            </div>
-                            <div class="flex gap-2">
-                                <span class="px-2 py-1 text-xs rounded-full ${
-                                    item.status === '已完成' ? 'bg-green-100 text-green-800' :
-                                    item.status === '进行中' ? 'bg-yellow-100 text-yellow-800' :
-                                    'bg-gray-100 text-gray-800'
-                                }">${item.status}</span>
-                                <button class="edit-schedule-btn text-blue-500 hover:text-blue-700" data-id="${item.id}">
-                                    <i class="fa fa-edit"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="mt-3">
-                            <p class="text-sm text-gray-700"><span class="font-medium">任务：</span>${item.duty || '无具体任务'}</p>
-                        </div>
-                    `;
-                    listEl.appendChild(itemEl);
-                });
-                
-                // 添加编辑事件监听
-                document.querySelectorAll('.edit-schedule-btn').forEach(btn => {
-                    btn.addEventListener('click', () => editSchedule(btn.getAttribute('data-id')));
-                });
-                
-            } catch (err) {
-                console.error('加载值日安排失败:', err);
-                listEl.innerHTML = '<div class="text-red-500 text-center py-8">加载失败，请重试</div>';
-            }
-        }
-
-        // 班级活动功能
-        async function loadActivities(filters = {}) {
-            const listEl = document.getElementById('activities-list');
-            listEl.innerHTML = '<div class="text-gray-500 text-center py-8">加载中...</div>';
-            
-            try {
-                let url = `${API_BASE_URL}/activities`;
-                const params = new URLSearchParams();
-                if (filters.startDate) params.append('startDate', filters.startDate);
-                if (filters.endDate) params.append('endDate', filters.endDate);
-                if (filters.type) params.append('type', filters.type);
-                
-                if (params.toString()) url += `?${params.toString()}`;
-                
-                const res = await fetch(url);
-                const activities = await res.json();
-                
-                if (activities.length === 0) {
-                    listEl.innerHTML = '<div class="text-gray-500 text-center py-8">暂无班级活动</div>';
-                    return;
-                }
-                
-                listEl.innerHTML = '';
-                activities.forEach(item => {
-                    const itemEl = document.createElement('div');
-                    itemEl.className = 'border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow';
-                    itemEl.innerHTML = `
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-medium text-gray-800">${item.name}</h4>
-                            <div class="flex gap-2">
-                                <span class="text-sm text-gray-500">${item.date}</span>
-                                <button class="edit-activity-btn text-blue-500 hover:text-blue-700" data-id="${item.id}">
-                                    <i class="fa fa-edit"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <p class="text-sm text-gray-600 mt-1">类型：${item.type} | 发起人：${item.creator}</p>
-                        <div class="mt-2 p-3 bg-gray-50 rounded-md">
-                            <p class="text-sm text-gray-700">${item.description || '无活动描述'}</p>
-                        </div>
-                    `;
-                    listEl.appendChild(itemEl);
-                });
-                
-                // 添加编辑事件监听
-                document.querySelectorAll('.edit-activity-btn').forEach(btn => {
-                    btn.addEventListener('click', () => editActivity(btn.getAttribute('data-id')));
-                });
-                
-                // 更新仪表盘统计
-                const today = new Date();
-                const weekStart = new Date(today.setDate(today.getDate() - today.getDay()));
-                const weeklyActivities = activities.filter(item => new Date(item.date) >= weekStart);
-                document.getElementById('dashboard-activities').textContent = weeklyActivities.length;
-                
-            } catch (err) {
-                console.error('加载班级活动失败:', err);
-                listEl.innerHTML = '<div class="text-red-500 text-center py-8">加载失败，请重试</div>';
-            }
-        }
-
-        // 留言功能
-        function initMessages() {
-            // 发送留言
-            document.getElementById('send-message-btn').addEventListener('click', sendMessage);
-            document.getElementById('message-input').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-            
-            // 筛选留言
-            document.getElementById('filter-messages-btn').addEventListener('click', () => {
-                const startDate = document.getElementById('message-start-date').value;
-                const endDate = document.getElementById('message-end-date').value;
-                loadMessages({ startDate, endDate });
-            });
-        }
-
-        async function sendMessage() {
-            const content = document.getElementById('message-input').value.trim();
-            if (!content || !currentUser) return;
-            
-            try {
-                const res = await fetch(`${API_BASE_URL}/messages`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content, userId: currentUser.id, username: currentUser.username })
-                });
-                
-                if (res.ok) {
-                    document.getElementById('message-input').value = '';
-                    loadMessages(); // 重新加载留言
-                } else {
-                    alert('发送失败，请重试');
-                }
-            } catch (err) {
-                console.error('发送留言失败:', err);
-                alert('发送失败，请检查网络');
-            }
-        }
-
-        async function loadMessages(filters = {}) {
-            const listEl = document.getElementById('messages-list');
-            listEl.innerHTML = '<div class="text-gray-500 text-center py-8">加载中...</div>';
-            
-            try {
-                let url = `${API_BASE_URL}/messages`;
-                const params = new URLSearchParams();
-                if (filters.startDate) params.append('startDate', filters.startDate);
-                if (filters.endDate) params.append('endDate', filters.endDate);
-                
-                if (params.toString()) url += `?${params.toString()}`;
-                
-                const res = await fetch(url);
-                const messages = await res.json();
-                
-                if (messages.length === 0) {
-                    listEl.innerHTML = '<div class="text-gray-500 text-center py-8">暂无留言，快来发表第一条留言吧～</div>';
-                    return;
-                }
-                
-                // 按时间倒序排列
-                messages.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                
-                listEl.innerHTML = '';
-                messages.forEach(msg => {
-                    const msgEl = document.createElement('div');
-                    msgEl.className = 'message-item bg-gray-50 rounded-r-md';
-                    msgEl.innerHTML = `
-                        <div class="flex justify-between items-center">
-                            <h4 class="font-medium text-gray-800">${msg.username}</h4>
-                            <p class="text-sm text-gray-500">${new Date(msg.created_at).toLocaleString()}</p>
-                        </div>
-                        <p class="mt-1 text-gray-700">${msg.content}</p>
-                    `;
-                    listEl.appendChild(msgEl);
-                });
-                
-                // 更新仪表盘统计
-                document.getElementById('dashboard-messages').textContent = messages.length;
-                
-            } catch (err) {
-                console.error('加载留言失败:', err);
-                listEl.innerHTML = '<div class="text-red-500 text-center py-8">加载失败，请重试</div>';
-            }
-        }
-
-        // WebSocket 实时通信控制
-        function initSocketControls() {
-            document.getElementById('socket-connect').addEventListener('click', connectWebSocket);
-            document.getElementById('socket-send').addEventListener('click', sendSocketMessage);
-            document.getElementById('socket-input').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    sendSocketMessage();
-                }
-            });
-        }
-
-        function connectWebSocket() {
-            // 关闭现有连接
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                ws.close();
-            }
-            
-            const server = document.getElementById('socket-server').value;
-            const port = document.getElementById('socket-port').value;
-            
-            if (!server || !port) {
-                alert('请输入服务器地址和端口号');
-                return;
-            }
-            
-            // 更新API地址
-            API_BASE_URL = `http://${server}:${port}/api`;
-            
-            // 建立新连接
-            const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            ws = new WebSocket(`${wsProtocol}//${server}:${port}`);
-            
-            // 更新连接状态
-            document.getElementById('socket-status').textContent = '连接中...';
-            document.getElementById('socket-status').className = 'text-yellow-500';
-            document.getElementById('socket-send').disabled = true;
-            
-            // 连接成功
-            ws.onopen = () => {
-                console.log('WebSocket 连接成功');
-                document.getElementById('socket-status').textContent = '已连接';
-                document.getElementById('socket-status').className = 'text-green-500';
-                document.getElementById('socket-send').disabled = false;
-                addSocketMessage('系统提示', '已连接到实时聊天');
-                
-                // 发送当前用户信息
-                if (currentUser) {
-                    ws.send(JSON.stringify({
-                        type: 'login',
-                        username: currentUser.username,
-                        userId: currentUser.id
-                    }));
-                }
-            };
-            
-            // 接收消息
-            ws.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                
-                // 处理用户列表更新
-                if (data.type === 'userList') {
-                    onlineUsers = data.users;
-                    updateOnlineUsersList();
-                    return;
-                }
-                
-                // 处理普通消息
-                if (data.type === 'message') {
-                    addSocketMessage(data.username, data.content);
-                }
-                
-                // 处理系统消息
-                if (data.type === 'system') {
-                    addSocketMessage('系统提示', data.content);
-                }
-            };
-            
-            // 连接关闭
-            ws.onclose = () => {
-                console.log('WebSocket 连接关闭');
-                document.getElementById('socket-status').textContent = '已断开';
-                document.getElementById('socket-status').className = 'text-red-500';
-                document.getElementById('socket-send').disabled = true;
-                addSocketMessage('系统提示', '聊天连接已断开');
-            };
-            
-            // 连接错误
-            ws.onerror = (err) => {
-                console.error('WebSocket 错误:', err);
-                document.getElementById('socket-status').textContent = '连接错误';
-                document.getElementById('socket-status').className = 'text-red-500';
-                document.getElementById('socket-send').disabled = true;
-                addSocketMessage('系统提示', '连接出错，请检查地址和端口');
-            };
-        }
-
-        // 更新在线用户列表
-        function updateOnlineUsersList() {
-            const listEl = document.getElementById('online-users');
-            listEl.innerHTML = '';
-            
-            if (onlineUsers.length === 0) {
-                listEl.innerHTML = '<div class="text-sm text-gray-500 italic">暂无在线用户</div>';
-                return;
-            }
-            
-            onlineUsers.forEach(user => {
-                const userEl = document.createElement('div');
-                userEl.className = `text-sm p-2 rounded ${user.id === currentUser?.id ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`;
-                userEl.innerHTML = `
-                    <div class="flex items-center">
-                        <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                        <span>${user.username}</span>
-                    </div>
-                `;
-                listEl.appendChild(userEl);
-            });
-        }
-
-        function sendSocketMessage() {
-            const input = document.getElementById('socket-input');
-            const content = input.value.trim();
-            if (!content || !ws || ws.readyState !== WebSocket.OPEN || !currentUser) return;
-            
-            ws.send(JSON.stringify({
-                type: 'message',
-                username: currentUser.username,
-                userId: currentUser.id,
-                content: content
-            }));
-            input.value = '';
-        }
-
-        function addSocketMessage(username, content) {
-            const listEl = document.getElementById('socket-messages');
-            const msgEl = document.createElement('div');
-            msgEl.className = 'mb-3 pb-3 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0';
-            msgEl.innerHTML = `
-                <div class="flex items-start">
-                    <span class="font-medium text-gray-800 mr-2">${username}：</span>
-                    <span class="text-gray-700">${content}</span>
-                </div>
-                <div class="text-xs text-gray-400 mt-1">${new Date().toLocaleTimeString()}</div>
-            `;
-            listEl.appendChild(msgEl);
-            // 滚动到底部
-            listEl.scrollTop = listEl.scrollHeight;
-        }
-
-        // 活动统计
-        async function loadActivityStats() {
-            try {
-                const res = await fetch(`${API_BASE_URL}/activities/stats`);
-                const stats = await res.json();
-                
-                // 这里可以使用Chart.js等库绘制图表
-                const chartEl = document.getElementById('monthly-activities-chart');
-                chartEl.innerHTML = `
-                    <div class="grid grid-cols-6 gap-2 h-full">
-                        ${stats.map(month => `
-                            <div class="flex flex-col items-center justify-end">
-                                <div class="w-full bg-blue-500 rounded-t-md transition-all duration-500" 
-                                    style="height: ${Math.max(10, month.count * 10)}%; min-height: 10px"></div>
-                                <span class="text-xs mt-1">${month.month}</span>
-                                <span class="text-xs">${month.count}次</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            } catch (err) {
-                console.error('加载活动统计失败:', err);
-                document.getElementById('monthly-activities-chart').innerHTML = 
-                    '<div class="flex items-center justify-center h-full text-red-500">统计数据加载失败</div>';
-            }
-        }
-
-        // 值日统计
-        async function loadDutyStats() {
-            try {
-                const res = await fetch(`${API_BASE_URL}/schedules/stats`);
-                const stats = await res.json();
-                
-                // 这里可以使用Chart.js等库绘制图表
-                const chartEl = document.getElementById('duty-completion-chart');
-                chartEl.innerHTML = `
-                    <div class="flex items-center justify-center h-full gap-8">
-                        <div class="text-center">
-                            <div class="w-32 h-32 rounded-full border-8 border-green-500 flex items-center justify-center text-2xl font-bold">
-                                ${stats.completedPercentage}%
-                            </div>
-                            <span class="text-sm mt-2 block">已完成</span>
-                        </div>
-                        <div class="text-center">
-                            <div class="w-32 h-32 rounded-full border-8 border-yellow-500 flex items-center justify-center text-2xl font-bold">
-                                ${stats.inProgressPercentage}%
-                            </div>
-                            <span class="text-sm mt-2 block">进行中</span>
-                        </div>
-                        <div class="text-center">
-                            <div class="w-32 h-32 rounded-full border-8 border-gray-300 flex items-center justify-center text-2xl font-bold">
-                                ${stats.notStartedPercentage}%
-                            </div>
-                            <span class="text-sm mt-2 block">未开始</span>
-                        </div>
-                    </div>
-                `;
-            } catch (err) {
-                console.error('加载值日统计失败:', err);
-                document.getElementById('duty-completion-chart').innerHTML = 
-                    '<div class="flex items-center justify-center h-full text-red-500">统计数据加载失败</div>';
-            }
-        }
-
-        // 工具函数：获取角色文本
+        // 转换角色文本
         function getRoleText(role) {
             const roleMap = {
                 'admin': '管理员',
@@ -1168,223 +626,543 @@
             return roleMap[role] || role;
         }
 
-        // 初始化各种筛选和添加按钮事件
-        document.addEventListener('DOMContentLoaded', () => {
-            // 班级成员搜索
-            document.getElementById('search-member-btn').addEventListener('click', () => {
-                const search = document.getElementById('member-search').value.trim();
-                const role = document.getElementById('member-filter-role').value;
-                loadClassMembers({ search, role });
-            });
-            
-            // 添加班级成员
+        // 初始化功能按钮事件
+        function initFeatureEvents() {
+            // 班级成员相关
             document.getElementById('add-member-btn').addEventListener('click', () => {
-                showModal('添加班级成员', `
-                    <form id="add-member-form" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">姓名</label>
-                            <input type="text" name="name" required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">学号/工号</label>
-                            <input type="text" name="id" required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">角色</label>
-                            <select name="role" required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                <option value="teacher">教师</option>
-                                <option value="student">学生</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">联系电话</label>
-                            <input type="text" name="phone"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">邮箱</label>
-                            <input type="email" name="email"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div class="flex justify-end">
-                            <button type="submit" 
-                                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                                保存
-                            </button>
-                        </div>
-                    </form>
-                `);
+                document.getElementById('add-member-modal').classList.remove('hidden');
+                document.getElementById('add-member-form').reset();
+            });
+            
+            document.getElementById('cancel-add-member').addEventListener('click', () => {
+                document.getElementById('add-member-modal').classList.add('hidden');
+            });
+            
+            document.getElementById('add-member-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const memberData = {
+                    id: document.getElementById('member-id').value,
+                    name: document.getElementById('member-name').value,
+                    role: document.getElementById('member-role').value,
+                    phone: document.getElementById('member-phone').value,
+                    email: document.getElementById('member-email').value
+                };
                 
-                document.getElementById('add-member-form').addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.target);
-                    const memberData = Object.fromEntries(formData.entries());
+                try {
+                    const response = await fetch('http://101.35.129.174:3000/api/class-members', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(memberData)
+                    });
                     
-                    try {
-                        const res = await fetch(`${API_BASE_URL}/class-members`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(memberData)
-                        });
-                        
-                        if (res.ok) {
-                            document.getElementById('modal').classList.add('hidden');
-                            loadClassMembers();
-                            loadDashboardData();
-                        } else {
-                            alert('添加失败，请重试');
-                        }
-                    } catch (err) {
-                        console.error('添加班级成员失败:', err);
-                        alert('添加失败，请检查网络');
+                    const data = await response.json();
+                    if (data.success) {
+                        document.getElementById('add-member-modal').classList.add('hidden');
+                        loadClassMembers(); // 重新加载成员列表
+                        loadDashboardData(); // 更新仪表盘统计
+                    } else {
+                        alert('添加失败: ' + (data.error || '未知错误'));
                     }
-                });
+                } catch (err) {
+                    console.error('添加成员错误:', err);
+                    alert('添加失败，请重试');
+                }
             });
-            
-            // 值日安排筛选
-            document.getElementById('filter-schedules-btn').addEventListener('click', () => {
-                const startDate = document.getElementById('schedule-start-date').value;
-                const endDate = document.getElementById('schedule-end-date').value;
-                const status = document.getElementById('schedule-status').value;
-                loadSchedules({ startDate, endDate, status });
-            });
-            
-            // 活动筛选
-            document.getElementById('filter-activities-btn').addEventListener('click', () => {
-                const startDate = document.getElementById('activity-start-date').value;
-                const endDate = document.getElementById('activity-end-date').value;
-                const type = document.getElementById('activity-type').value;
-                loadActivities({ startDate, endDate, type });
-            });
-            
-            // 活动统计
-            document.getElementById('stats-activities-btn').addEventListener('click', () => {
-                showModal('班级活动统计', `
-                    <div id="activities-stats-content" class="py-4">
-                        <div class="text-center text-gray-500">加载统计数据中...</div>
-                    </div>
-                `);
-                
-                // 加载活动统计数据
-                loadActivityStatsModal();
-            });
-        });
 
-        // 模态框中的活动统计
-        async function loadActivityStatsModal() {
+            // 成员搜索和筛选
+            document.getElementById('member-search').addEventListener('input', debounce(loadClassMembers, 300));
+            document.getElementById('member-role-filter').addEventListener('change', loadClassMembers);
+
+            // 值日安排筛选
+            document.getElementById('filter-schedules-btn').addEventListener('click', loadSchedules);
+
+            // 班级活动筛选
+            document.getElementById('filter-activities-btn').addEventListener('click', loadActivities);
+
+            // 发送留言
+            document.getElementById('send-message-btn').addEventListener('click', sendMessage);
+
+            // 发送聊天消息
+            document.getElementById('send-chat-btn').addEventListener('click', sendChatMessage);
+            document.getElementById('chat-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendChatMessage();
+            });
+        }
+
+        // 加载仪表盘数据
+        async function loadDashboardData() {
             try {
-                const res = await fetch(`${API_BASE_URL}/activities/stats/detailed`);
-                const stats = await res.json();
+                // 加载班级成员总数
+                const membersResponse = await fetch('http://101.35.129.174:3000/api/class-members');
+                const membersData = await membersResponse.json();
+                document.getElementById('stat-total-members').textContent = membersData.length;
+
+                // 加载本月活动数
+                const today = new Date();
+                const monthStart = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-01`;
+                const activitiesResponse = await fetch(`http://101.35.129.174:3000/api/activities?startDate=${monthStart}`);
+                const activitiesData = await activitiesResponse.json();
+                document.getElementById('stat-monthly-activities').textContent = activitiesData.length;
+
+                // 加载最新留言数
+                const messagesResponse = await fetch('http://101.35.129.174:3000/api/messages');
+                const messagesData = await messagesResponse.json();
+                document.getElementById('stat-recent-messages').textContent = messagesData.length;
+
+                // 加载活动统计图表
+                loadActivitiesStats();
+
+                // 加载值日统计图表
+                loadSchedulesStats();
+            } catch (err) {
+                console.error('加载仪表盘数据错误:', err);
+            }
+        }
+
+        // 加载班级成员列表
+        async function loadClassMembers() {
+            const search = document.getElementById('member-search').value;
+            const role = document.getElementById('member-role-filter').value;
+            
+            try {
+                let url = 'http://101.35.129.174:3000/api/class-members';
+                const params = new URLSearchParams();
+                if (search) params.append('search', search);
+                if (role) params.append('role', role);
+                if (params.toString()) url += '?' + params.toString();
                 
-                const contentEl = document.getElementById('activities-stats-content');
-                contentEl.innerHTML = `
-                    <div class="mb-6">
-                        <h4 class="font-medium mb-2">活动类型分布</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            ${Object.entries(stats.byType).map(([type, count]) => `
-                                <div class="bg-gray-50 p-3 rounded-md">
-                                    <div class="flex justify-between">
-                                        <span>${type}</span>
-                                        <span class="font-medium">${count}次</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                                        <div class="bg-blue-500 h-2 rounded-full" 
-                                            style="width: ${Math.min(100, (count / stats.total) * 100)}%"></div>
-                                    </div>
-                                </div>
-                            `).join('')}
+                const response = await fetch(url);
+                const members = await response.json();
+                const tableBody = document.getElementById('members-table-body');
+                
+                if (members.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">没有找到成员数据</td></tr>';
+                    return;
+                }
+                
+                tableBody.innerHTML = members.map(member => `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">${member.id}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${member.name}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${getRoleText(member.role)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${member.phone || '-'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <button class="text-red-500 hover:text-red-700 transition-colors" 
+                                onclick="deleteClassMember('${member.id}')">
+                                <i class="fa fa-trash"></i> 删除
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                console.error('加载班级成员错误:', err);
+                document.getElementById('members-table-body').innerHTML = 
+                    '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">加载失败，请重试</td></tr>';
+            }
+        }
+
+        // 删除班级成员
+        async function deleteClassMember(memberId) {
+            if (!confirm('确定要删除这个成员吗？')) return;
+            
+            try {
+                const response = await fetch(`http://101.35.129.174:3000/api/class-members/${memberId}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    loadClassMembers();
+                    loadDashboardData();
+                } else {
+                    alert('删除失败: ' + (data.error || '未知错误'));
+                }
+            } catch (err) {
+                console.error('删除成员错误:', err);
+                alert('删除失败，请重试');
+            }
+        }
+
+        // 加载班委会成员
+        async function loadCommitteeMembers() {
+            try {
+                const response = await fetch('http://101.35.129.174:3000/api/committee');
+                const members = await response.json();
+                const tableBody = document.getElementById('committee-table-body');
+                
+                if (members.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">没有班委会数据</td></tr>';
+                    return;
+                }
+                
+                tableBody.innerHTML = members.map(member => `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">${member.student_id}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${member.name || '-'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${member.position}</td>
+                        <td class="px-6 py-4">${member.responsibilities || '-'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <button class="text-red-500 hover:text-red-700 transition-colors" 
+                                onclick="deleteCommitteeMember(${member.id})">
+                                <i class="fa fa-trash"></i> 删除
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                console.error('加载班委会成员错误:', err);
+                document.getElementById('committee-table-body').innerHTML = 
+                    '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">加载失败，请重试</td></tr>';
+            }
+        }
+
+        // 删除班委会成员
+        async function deleteCommitteeMember(id) {
+            if (!confirm('确定要删除这个班委会成员吗？')) return;
+            
+            try {
+                const response = await fetch(`http://101.35.129.174:3000/api/committee/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    loadCommitteeMembers();
+                } else {
+                    alert('删除失败: ' + (data.error || '未知错误'));
+                }
+            } catch (err) {
+                console.error('删除班委会成员错误:', err);
+                alert('删除失败，请重试');
+            }
+        }
+
+        // 加载值日安排
+        async function loadSchedules() {
+            const startDate = document.getElementById('schedule-start-date').value;
+            const endDate = document.getElementById('schedule-end-date').value;
+            const status = document.getElementById('schedule-status-filter').value;
+            
+            try {
+                let url = 'http://101.35.129.174:3000/api/schedules';
+                const params = new URLSearchParams();
+                if (startDate) params.append('startDate', startDate);
+                if (endDate) params.append('endDate', endDate);
+                if (status) params.append('status', status);
+                if (params.toString()) url += '?' + params.toString();
+                
+                const response = await fetch(url);
+                const schedules = await response.json();
+                const tableBody = document.getElementById('schedules-table-body');
+                
+                if (schedules.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">没有找到值日数据</td></tr>';
+                    return;
+                }
+                
+                tableBody.innerHTML = schedules.map(schedule => `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">${schedule.date}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${schedule.personnel}</td>
+                        <td class="px-6 py-4">${schedule.task}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 py-1 rounded text-xs ${getStatusClass(schedule.status)}">
+                                ${schedule.status}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                console.error('加载值日安排错误:', err);
+                document.getElementById('schedules-table-body').innerHTML = 
+                    '<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">加载失败，请重试</td></tr>';
+            }
+        }
+
+        // 获取状态样式
+        function getStatusClass(status) {
+            const statusMap = {
+                '未开始': 'bg-yellow-100 text-yellow-800',
+                '进行中': 'bg-blue-100 text-blue-800',
+                '已完成': 'bg-green-100 text-green-800'
+            };
+            return statusMap[status] || 'bg-gray-100 text-gray-800';
+        }
+
+        // 加载班级活动
+        async function loadActivities() {
+            const startDate = document.getElementById('activity-start-date').value;
+            const endDate = document.getElementById('activity-end-date').value;
+            const type = document.getElementById('activity-type-filter').value;
+            
+            try {
+                let url = 'http://101.35.129.174:3000/api/activities';
+                const params = new URLSearchParams();
+                if (startDate) params.append('startDate', startDate);
+                if (endDate) params.append('endDate', endDate);
+                if (type) params.append('type', type);
+                if (params.toString()) url += '?' + params.toString();
+                
+                const response = await fetch(url);
+                const activities = await response.json();
+                const tableBody = document.getElementById('activities-table-body');
+                
+                if (activities.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">没有找到活动数据</td></tr>';
+                    return;
+                }
+                
+                tableBody.innerHTML = activities.map(activity => `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">${activity.date}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${activity.name}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${activity.type}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${activity.creator || '-'}</td>
+                        <td class="px-6 py-4">${activity.description || '-'}</td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                console.error('加载班级活动错误:', err);
+                document.getElementById('activities-table-body').innerHTML = 
+                    '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">加载失败，请重试</td></tr>';
+            }
+        }
+
+        // 加载留言
+        async function loadMessages() {
+            try {
+                const response = await fetch('http://101.35.129.174:3000/api/messages');
+                const messages = await response.json();
+                const messagesList = document.getElementById('messages-list');
+                
+                if (messages.length === 0) {
+                    messagesList.innerHTML = '<p class="text-center text-gray-500 py-6">暂无留言</p>';
+                    return;
+                }
+                
+                messagesList.innerHTML = messages.map(msg => `
+                    <div class="message-item">
+                        <div class="flex justify-between items-start">
+                            <span class="font-medium">${msg.username}</span>
+                            <span class="text-xs text-gray-500">${formatDate(msg.created_at)}</span>
                         </div>
+                        <p class="mt-1 text-gray-700">${msg.content}</p>
                     </div>
+                `).join('');
+            } catch (err) {
+                console.error('加载留言错误:', err);
+                document.getElementById('messages-list').innerHTML = 
+                    '<p class="text-center text-red-500 py-6">加载失败，请重试</p>';
+            }
+        }
+
+        // 发送留言
+        async function sendMessage() {
+            const content = document.getElementById('new-message').value.trim();
+            if (!content) return;
+            
+            try {
+                const response = await fetch('http://101.35.129.174:3000/api/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content, userId: currentUser.id })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('new-message').value = '';
+                    loadMessages();
+                    loadDashboardData();
+                } else {
+                    alert('发送失败: ' + (data.error || '未知错误'));
+                }
+            } catch (err) {
+                console.error('发送留言错误:', err);
+                alert('发送失败，请重试');
+            }
+        }
+
+        // 初始化WebSocket连接（实时聊天）
+        function initWebSocket() {
+            if (ws && ws.readyState === WebSocket.OPEN) return;
+            
+            // 连接WebSocket服务器
+            ws = new WebSocket(`ws://101.35.129.174:3000`);
+            
+            // 连接成功
+            ws.onopen = () => {
+                console.log('WebSocket连接成功');
+                // 发送登录信息
+                ws.send(JSON.stringify({
+                    type: 'login',
+                    userId: currentUser.id,
+                    username: currentUser.username
+                }));
+                document.getElementById('chat-messages').innerHTML = '<p class="text-center text-green-500 py-6">已连接，可以开始聊天</p>';
+            };
+            
+            // 接收消息
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    const chatMessages = document.getElementById('chat-messages');
                     
-                    <div>
-                        <h4 class="font-medium mb-2">月度活动统计</h4>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full">
-                                <thead>
-                                    <tr class="bg-gray-50">
-                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-600">月份</th>
-                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-600">活动数量</th>
-                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-600">主要类型</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${stats.byMonth.map(month => `
-                                        <tr class="border-b border-gray-100">
-                                            <td class="py-2 px-4 text-sm">${month.month}</td>
-                                            <td class="py-2 px-4 text-sm">${month.count}</td>
-                                            <td class="py-2 px-4 text-sm">${month.topType || '-'}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
+                    // 处理在线用户列表
+                    if (data.type === 'userList') {
+                        const onlineUsersList = document.getElementById('online-users-list');
+                        onlineUsersList.innerHTML = data.users.map(user => `
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                                <span>${user.username}</span>
+                            </div>
+                        `).join('');
+                        return;
+                    }
+                    
+                    // 处理聊天消息
+                    if (data.type === 'message') {
+                        const isCurrentUser = data.username === currentUser.username;
+                        const messageHtml = `
+                            <div class="flex ${isCurrentUser ? 'justify-end' : 'justify-start'}">
+                                <div class="${isCurrentUser ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'} px-4 py-2 rounded-md max-w-xs">
+                                    <div class="font-medium text-sm">${data.username}</div>
+                                    <div class="mt-1">${data.content}</div>
+                                </div>
+                            </div>
+                        `;
+                        chatMessages.innerHTML += messageHtml;
+                        // 滚动到底部
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
+                } catch (err) {
+                    console.error('处理WebSocket消息错误:', err);
+                }
+            };
+            
+            // 连接关闭
+            ws.onclose = () => {
+                console.log('WebSocket连接关闭');
+                document.getElementById('chat-messages').innerHTML = '<p class="text-center text-red-500 py-6">连接已关闭，请刷新页面重试</p>';
+                document.getElementById('online-users-list').innerHTML = '<p class="text-sm text-gray-500">已断开连接</p>';
+            };
+            
+            // 连接错误
+            ws.onerror = (err) => {
+                console.error('WebSocket错误:', err);
+                document.getElementById('chat-messages').innerHTML = '<p class="text-center text-red-500 py-6">连接错误，请重试</p>';
+            };
+        }
+
+        // 发送聊天消息
+        function sendChatMessage() {
+            const content = document.getElementById('chat-input').value.trim();
+            if (!content || !ws || ws.readyState !== WebSocket.OPEN) return;
+            
+            // 发送消息
+            ws.send(JSON.stringify({
+                type: 'message',
+                username: currentUser.username,
+                content: content
+            }));
+            
+            // 清空输入框
+            document.getElementById('chat-input').value = '';
+        }
+
+        // 加载活动统计图表
+        async function loadActivitiesStats() {
+            try {
+                const response = await fetch('http://101.35.129.174:3000/api/activities/stats');
+                const stats = await response.json();
+                const chartContainer = document.getElementById('activities-chart');
+                
+                if (stats.length === 0) {
+                    chartContainer.innerHTML = '<p class="text-gray-500">暂无活动数据</p>';
+                    return;
+                }
+                
+                // 简单的文本图表展示
+                let chartHtml = '<div class="space-y-2">';
+                stats.forEach(item => {
+                    const barWidth = Math.min(item.count * 50, 400); // 最大宽度400px
+                    chartHtml += `
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">${item.month}</span>
+                                <span class="text-sm font-medium">${item.count}个活动</span>
+                            </div>
+                            <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-500" style="width: ${barWidth}px"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+                chartHtml += '</div>';
+                chartContainer.innerHTML = chartHtml;
+            } catch (err) {
+                console.error('加载活动统计错误:', err);
+                document.getElementById('activities-chart').innerHTML = '<p class="text-red-500">加载统计失败</p>';
+            }
+        }
+
+        // 加载值日统计图表
+        async function loadSchedulesStats() {
+            try {
+                const response = await fetch('http://101.35.129.174:3000/api/schedules/stats');
+                const stats = await response.json();
+                const chartContainer = document.getElementById('schedules-chart');
+                
+                // 简单的文本图表展示
+                chartContainer.innerHTML = `
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                            <div class="text-3xl font-bold text-green-500 mb-1">${stats.completedPercentage}%</div>
+                            <div class="text-sm text-gray-600">已完成</div>
+                            <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-green-500" style="width: ${stats.completedPercentage}%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-blue-500 mb-1">${stats.inProgressPercentage}%</div>
+                            <div class="text-sm text-gray-600">进行中</div>
+                            <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-500" style="width: ${stats.inProgressPercentage}%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-yellow-500 mb-1">${stats.notStartedPercentage}%</div>
+                            <div class="text-sm text-gray-600">未开始</div>
+                            <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-yellow-500" style="width: ${stats.notStartedPercentage}%"></div>
+                            </div>
                         </div>
                     </div>
                 `;
             } catch (err) {
-                console.error('加载活动详细统计失败:', err);
-                document.getElementById('activities-stats-content').innerHTML = 
-                    '<div class="text-center text-red-500">统计数据加载失败</div>';
+                console.error('加载值日统计错误:', err);
+                document.getElementById('schedules-chart').innerHTML = '<p class="text-red-500">加载统计失败</p>';
             }
         }
 
-        // 编辑和删除函数（仅作为示例，完整实现需根据后端API调整）
-        async function editClassMember(id) {
-            // 实际实现应先获取成员数据，再显示编辑表单
-            alert(`编辑班级成员 ID: ${id}`);
+        // 工具函数：日期格式化
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('zh-CN', { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
 
-        async function deleteClassMember(id) {
-            if (confirm('确定要删除该成员吗？')) {
-                try {
-                    const res = await fetch(`${API_BASE_URL}/class-members/${id}`, {
-                        method: 'DELETE'
-                    });
-                    
-                    if (res.ok) {
-                        loadClassMembers();
-                        loadDashboardData();
-                    } else {
-                        alert('删除失败，请重试');
-                    }
-                } catch (err) {
-                    console.error('删除班级成员失败:', err);
-                    alert('删除失败，请检查网络');
-                }
-            }
-        }
-
-        async function editCommitteeMember(id) {
-            alert(`编辑班委会成员 ID: ${id}`);
-        }
-
-        async function deleteCommitteeMember(id) {
-            if (confirm('确定要删除该委员吗？')) {
-                try {
-                    const res = await fetch(`${API_BASE_URL}/committee/${id}`, {
-                        method: 'DELETE'
-                    });
-                    
-                    if (res.ok) {
-                        loadCommitteeMembers();
-                    } else {
-                        alert('删除失败，请重试');
-                    }
-                } catch (err) {
-                    console.error('删除班委会成员失败:', err);
-                    alert('删除失败，请检查网络');
-                }
-            }
-        }
-
-        async function editSchedule(id) {
-            alert(`编辑值日安排 ID: ${id}`);
-        }
-
-        async function editActivity(id) {
-            alert(`编辑班级活动 ID: ${id}`);
+        // 工具函数：防抖
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
         }
     </script>
 </body>
