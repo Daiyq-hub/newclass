@@ -1,311 +1,990 @@
-<!-- 修改登录表单及权限验证相关代码 -->
-<div id="login-page" class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-    <div class="bg-white rounded-lg shadow-xl overflow-hidden w-full max-w-md">
-        <div class="p-6 sm:p-8">
-            <div class="text-center mb-8">
-                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/64bfd761e7284e2ca4149d44fd8884b1~tplv-a9rns2rl98-image.image?rcl=2025103114221315A5A8FEF816AE360D6D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1764483800&x-signature=0kXWQWr8BDYT5ou7yQZm938g%2Fyw%3D" alt="班级管理系统" class="h-20 mx-auto mb-4">
-                <h2 class="text-2xl font-bold text-gray-800">班级管理系统</h2>
-                <p class="text-gray-600 mt-1">请登录您的账户</p>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>班级管理系统</title>
+    <!-- 外部资源引入 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .sidebar-link {
+                @apply flex items-center px-4 py-3 text-gray-200 hover:bg-blue-700 transition-colors duration-200 rounded-md;
+            }
+            .sidebar-link.active {
+                @apply bg-blue-700;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen">
+    <!-- 登录页面 -->
+    <div id="login-page" class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+        <div class="bg-white rounded-lg shadow-xl overflow-hidden w-full max-w-md">
+            <div class="p-6 sm:p-8">
+                <div class="text-center mb-8">
+                    <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/64bfd761e7284e2ca4149d44fd8884b1~tplv-a9rns2rl98-image.image?rcl=2025103114221315A5A8FEF816AE360D6D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1764483800&x-signature=0kXWQWr8BDYT5ou7yQZm938g%2Fyw%3D" 
+                         alt="班级管理系统" class="h-20 mx-auto mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">班级管理系统</h2>
+                    <p class="text-gray-600 mt-1">请登录您的账户</p>
+                </div>
+                <form id="login-form" class="space-y-6">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">用户名</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                                <i class="fa fa-user"></i>
+                            </span>
+                            <input type="text" id="username" name="username" 
+                                   class="pl-10 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                   placeholder="请输入用户名" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">密码</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                                <i class="fa fa-lock"></i>
+                            </span>
+                            <input type="password" id="password" name="password" 
+                                   class="pl-10 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                   placeholder="请输入密码" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="user-role" class="block text-sm font-medium text-gray-700 mb-1">角色</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                                <i class="fa fa-users"></i>
+                            </span>
+                            <select id="user-role" name="userRole" 
+                                    class="pl-10 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                    required>
+                                <option value="">请选择角色</option>
+                                <option value="admin">管理员</option>
+                                <option value="teacher">教师</option>
+                                <option value="student">学生</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" 
+                                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            登录
+                        </button>
+                    </div>
+                </form>
             </div>
-            <form id="login-form" class="space-y-6">
-                <div>
-                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1">用户名</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                            <i class="fa fa-user"></i>
-                        </span>
-                        <input type="text" id="username" name="username" class="pl-10 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="请输入用户名" required>
-                    </div>
-                </div>
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">密码</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                            <i class="fa fa-lock"></i>
-                        </span>
-                        <input type="password" id="password" name="password" class="pl-10 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="请输入密码" required>
-                    </div>
-                </div>
-                <div>
-                    <label for="user-role" class="block text-sm font-medium text-gray-700 mb-1">角色</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                            <i class="fa fa-users"></i>
-                        </span>
-                        <select id="user-role" name="userRole" class="pl-10 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
-                            <option value="">请选择角色</option>
-                            <option value="admin">管理员</option>
-                            <option value="teacher">教师</option>
-                            <option value="student">学生</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        登录
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
-</div>
 
-<!-- 修改登录处理逻辑 -->
-<script>
-    // 用户角色权限配置
-    const rolePermissions = {
-        admin: {
-            pages: ['dashboard', 'members', 'committee', 'schedule', 'activities', 'messages', 'reflection', 'map', 'socket'],
-            actions: ['addMember', 'deleteMember', 'editMember', 'manageCommittee', 'manageSchedule', 'manageActivities', 'manageMessages']
-        },
-        teacher: {
-            pages: ['dashboard', 'members', 'committee', 'schedule', 'activities', 'messages', 'reflection', 'map', 'socket'],
-            actions: ['addMember', 'editMember', 'manageCommittee', 'manageSchedule', 'manageActivities', 'manageMessages']
-        },
-        student: {
-            pages: ['dashboard', 'members', 'schedule', 'activities', 'messages', 'reflection', 'map', 'socket'],
-            actions: ['viewMessages', 'addMessage']
+    <!-- 主应用界面（默认隐藏） -->
+    <div id="app" class="hidden flex h-screen overflow-hidden">
+        <!-- 侧边栏导航 -->
+        <aside class="bg-blue-800 text-white w-64 flex-shrink-0 hidden md:block">
+            <div class="p-6">
+                <h1 class="text-xl font-bold flex items-center">
+                    <i class="fa fa-graduation-cap mr-2"></i>
+                    班级管理系统
+                </h1>
+            </div>
+            <nav class="px-2 py-4 space-y-1">
+                <a href="#" data-page="dashboard" class="sidebar-link nav-link">
+                    <i class="fa fa-dashboard w-5 mr-3"></i>
+                    <span>仪表盘</span>
+                </a>
+                <a href="#" data-page="members" class="sidebar-link nav-link">
+                    <i class="fa fa-user-circle w-5 mr-3"></i>
+                    <span>班级人员管理</span>
+                </a>
+                <a href="#" data-page="committee" class="sidebar-link nav-link">
+                    <i class="fa fa-users w-5 mr-3"></i>
+                    <span>班委会管理</span>
+                </a>
+                <a href="#" data-page="schedule" class="sidebar-link nav-link">
+                    <i class="fa fa-calendar w-5 mr-3"></i>
+                    <span>值日安排管理</span>
+                </a>
+                <a href="#" data-page="activities" class="sidebar-link nav-link">
+                    <i class="fa fa-calendar-check-o w-5 mr-3"></i>
+                    <span>班级活动记录</span>
+                </a>
+                <a href="#" data-page="messages" class="sidebar-link nav-link">
+                    <i class="fa fa-comments w-5 mr-3"></i>
+                    <span>班级留言簿</span>
+                </a>
+                <a href="#" data-page="reflection" class="sidebar-link nav-link">
+                    <i class="fa fa-code w-5 mr-3"></i>
+                    <span>反射机制演示</span>
+                </a>
+                <a href="#" data-page="map" class="sidebar-link nav-link">
+                    <i class="fa fa-map w-5 mr-3"></i>
+                    <span>映射应用演示</span>
+                </a>
+                <a href="#" data-page="socket" class="sidebar-link nav-link">
+                    <i class="fa fa-exchange w-5 mr-3"></i>
+                    <span>Socket通信</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- 主内容区域 -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- 顶部导航栏 -->
+            <header class="bg-white shadow-sm px-6 py-3 flex justify-between items-center">
+                <button id="mobile-menu-btn" class="md:hidden text-gray-600 focus:outline-none">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+                <h2 id="page-title" class="text-xl font-semibold">仪表盘</h2>
+                <div class="flex items-center">
+                    <div class="relative ml-3">
+                        <div class="flex items-center">
+                            <span id="user-initial" class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">A</span>
+                            <div class="ml-3 hidden md:block">
+                                <div id="user-name" class="text-sm font-medium text-gray-700">管理员</div>
+                                <div id="user-role" class="text-xs text-gray-500">admin</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容区域 -->
+            <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+                <!-- 仪表盘页面 -->
+                <div id="dashboard-page" class="page-content">
+                    <div class="bg-white rounded-lg shadow mb-6">
+                        <div class="p-6">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">班级概览</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                <div class="bg-blue-50 p-6 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-blue-600">总人数</p>
+                                            <h3 class="text-2xl font-bold text-gray-800 mt-1">45</h3>
+                                        </div>
+                                        <div class="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                            <i class="fa fa-users text-blue-600 text-xl"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-green-50 p-6 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-green-600">本月活动</p>
+                                            <h3 class="text-2xl font-bold text-gray-800 mt-1">3</h3>
+                                        </div>
+                                        <div class="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center">
+                                            <i class="fa fa-calendar-check-o text-green-600 text-xl"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-purple-50 p-6 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-purple-600">留言数</p>
+                                            <h3 class="text-2xl font-bold text-gray-800 mt-1">28</h3>
+                                        </div>
+                                        <div class="h-12 w-12 bg-purple-100 rounded-full flex items-center justify-center">
+                                            <i class="fa fa-comments text-purple-600 text-xl"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-800 mb-4">班级活动统计</h3>
+                                <div class="h-64">
+                                    <canvas id="activity-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 班级人员管理页面 -->
+                <div id="members-page" class="page-content hidden">
+                    <div class="bg-white rounded-lg shadow mb-6">
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-xl font-semibold text-gray-800">班级人员管理</h2>
+                                <button id="add-member-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                    <i class="fa fa-plus mr-1"></i> 添加成员
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">姓名</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">学号</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">性别</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">联系方式</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">张三</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">2023001</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">男</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">13800138000</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <button class="text-blue-600 hover:text-blue-900 mr-3">编辑</button>
+                                                <button class="text-red-600 hover:text-red-900">删除</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">李四</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">2023002</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">女</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">13900139000</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <button class="text-blue-600 hover:text-blue-900 mr-3">编辑</button>
+                                                <button class="text-red-600 hover:text-red-900">删除</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 班委会管理页面 -->
+                <div id="committee-page" class="page-content hidden">
+                    <div class="bg-white rounded-lg shadow mb-6">
+                        <div class="p-6">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">班委会管理</h2>
+                            <p class="text-gray-600 mb-6">当前班委会成员及职责管理</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h3 class="font-medium text-gray-800 mb-3">班长</h3>
+                                    <p class="text-gray-600">张三 (负责班级全面工作)</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h3 class="font-medium text-gray-800 mb-3">学习委员</h3>
+                                    <p class="text-gray-600">李四 (负责学习相关工作)</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h3 class="font-medium text-gray-800 mb-3">文艺委员</h3>
+                                    <p class="text-gray-600">王五 (负责文艺活动组织)</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h3 class="font-medium text-gray-800 mb-3">体育委员</h3>
+                                    <p class="text-gray-600">赵六 (负责体育活动组织)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 值日安排管理页面 -->
+                <div id="schedule-page" class="page-content hidden">
+                    <div class="bg-white rounded-lg shadow mb-6">
+                        <div class="p-6">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">值日安排管理</h2>
+                            <p class="text-gray-600 mb-6">本周值日表安排</p>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">星期</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">值日人员</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">职责</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">周一</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">张三、李四</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">擦黑板、整理卫生</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">已完成</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">周二</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">王五、赵六</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">擦黑板、整理卫生</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">已完成</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">周三</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">孙七、周八</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">擦黑板、整理卫生</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">进行中</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 班级活动记录页面 -->
+                <div id="activities-page" class="page-content hidden">
+                    <div class="bg-white rounded-lg shadow mb-6">
+                        <div class="p-6">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">班级活动记录</h2>
+                            <div class="space-y-6">
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h3 class="font-medium text-gray-800">秋季运动会</h3>
+                                            <p class="text-sm text-gray-500 mt-1">2023-10-26</p>
+                                        </div>
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">体育活动</span>
+                                    </div>
+                                    <p class="text-gray-600 mt-3">
+                                        班级参加学校秋季运动会，获得团体总分第三名，张三获得100米短跑冠军，李四获得跳高亚军。
+                                    </p>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h3 class="font-medium text-gray-800">班级元旦晚会</h3>
+                                            <p class="text-sm text-gray-500 mt-1">2023-12-31</p>
+                                        </div>
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">文艺活动</span>
+                                    </div>
+                                    <p class="text-gray-600 mt-3">
+                                        班级举办元旦晚会，同学们表演了丰富多彩的节目，增强了班级凝聚力。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 班级留言簿页面 -->
+                <div id="messages-page" class="page-content hidden">
+                    <div class="bg-white rounded-lg shadow mb-6">
+                        <div class="p-6">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">班级留言簿</h2>
+                            <div class="mb-6">
+                                <textarea id="message-input" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="写下你的留言..."></textarea>
+                                <div class="mt-3 flex justify-end">
+                                    <button id="send-message-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                        发送留言
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="messages-list" class="space-y-4">
+                                <div class="border-l-4 border-blue-500 pl-4 py-2">
+                                    <div class="flex justify-between">
+                                        <h4 class="font-medium text-gray-800">张三</h4>
+                                        <p class="text-sm text-gray-500">2023-11-01 09:30</p>
+                                    </div>
+                                    <p class="text-gray-600 mt-1">下周的班会主题建议讨论学习方法分享，大家觉得怎么样？</p>
+                                </div>
+                                <div class="border-l-4 border-green-500 pl-4 py-2">
+                                    <div class="flex justify-between">
+                                        <h4 class="font-medium text-gray-800">李四</h4>
+                                        <p class="text-sm text-gray-500">2023-11-01 10:15</p>
+                                    </div>
+                                    <p class="text-gray-600 mt-1">这个建议很好，我觉得可以增加一些小组讨论环节。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 反射机制演示页面 -->
+                <div id="reflection-page" class="page-content hidden">
+                    <div class="bg-white rounded-lg shadow mb-6">
+                        <div class="p-6">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">反射机制演示</h2>
+                            <p class="text-gray-600 mb-6">
+                                反射机制允许程序在运行时动态地调用函数、访问属性或创建对象。在JavaScript中，可以通过eval()函数或Function构造函数实现这一功能。
+                                以下演示了如何使用反射机制将字符串作为函数名进行调用。
+                            </p>
+                            
+                            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                                <h3 class="text-lg font-medium text-gray-800 mb-4">反射机制示例</h3>
+                                <div class="mb-4">
+                                    <label for="function-name" class="block text-sm font-medium text-gray-700 mb-1">函数名称</label>
+                                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                                        <input type="text" id="function-name" 
+                                               class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                               placeholder="例如: add, multiply, greet" value="greet">
+                                        <label for="function-args" class="block text-sm font-medium text-gray-700 mb-1">参数</label>
+                                        <input type="text" id="function-args" 
+                                               class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                               placeholder="例如: '参数1', 2, true" value="'班级管理系统'">
+                                        <button id="invoke-function-btn" 
+                                                class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            调用函数
+                                        </button>
+                                    </div>
+                                    <div class="mt-4">
+                                        <p class="text-sm font-medium text-gray-700 mb-2">可用函数:</p>
+                                        <ul class="list-disc pl-5 text-sm text-gray-600">
+                                            <li><code>add(a, b)</code> - 计算两个数的和</li>
+                                            <li><code>multiply(a, b)</code> - 计算两个数的积</li>
+                                            <li><code>greet(name)</code> - 向指定名称的人打招呼</li>
+                                            <li><code>reverseString(str)</code> - 反转字符串</li>
+                                            <li><code>getCurrentTime()</code> - 获取当前时间</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="mt-6 p-4 bg-white rounded-md border border-gray-200">
+                                        <h4 class="text-sm font-medium text-gray-800 mb-2">结果:</h4>
+                                        <pre id="reflection-result" class="text-sm text-gray-600 p-3 bg-gray-50 rounded-md overflow-x-auto">
+> greet('班级管理系统')
+欢迎使用班级管理系统!</pre>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 隐藏代码展示区域 -->
+                            <div style="display: none;">
+                                <h3 class="text-lg font-medium text-gray-800 mb-4">实现代码</h3>
+                                <div class="bg-gray-900 rounded-lg p-6">
+                                    <pre class="text-gray-300 overflow-x-auto">
+                                    <!-- 代码内容已隐藏 -->
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 映射应用演示页面 -->
+                <div id="map-page" class="page-content hidden">
+                    <div class="bg-white rounded-lg shadow mb-6">
+                        <div class="p-6">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">映射应用演示</h2>
+                            
+                            <p class="text-gray-600 mb-6">
+                                映射（Map）是一种键值对数据结构，类似于对象，但具有更多的功能和灵活性。
+                                在JavaScript中，Map对象可以使用任意类型作为键，并且提供了丰富的方法来操作数据。
+                                以下演示了如何使用Map实现用户数据的管理功能。
+                            </p>
+                            
+                            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                                <h3 class="text-lg font-medium text-gray-800 mb-4">用户数据管理系统</h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                    <!-- 添加用户表单 -->
+                                    <div>
+                                        <h4 class="text-md font-medium text-gray-800 mb-3">添加新用户</h4>
+                                        <div class="space-y-4">
+                                            <div>
+                                                <label for="user-id" class="block text-sm font-medium text-gray-700 mb-1">用户ID</label>
+                                                <input type="text" id="user-id" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                                            </div>
+                                            <div>
+                                                <label for="user-name" class="block text-sm font-medium text-gray-700 mb-1">姓名</label>
+                                                <input type="text" id="user-name" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                                            </div>
+                                            <div>
+                                                <label for="user-email" class="block text-sm font-medium text-gray-700 mb-1">邮箱</label>
+                                                <input type="email" id="user-email" class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                                            </div>
+                                            <button id="add-user-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                                添加用户
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 用户查询 -->
+                                    <div>
+                                        <h4 class="text-md font-medium text-gray-800 mb-3">查询/删除用户</h4>
+                                        <div class="space-y-4">
+                                            <div>
+                                                <label for="search-user-id" class="block text-sm font-medium text-gray-700 mb-1">用户ID</label>
+                                                <div class="flex space-x-2">
+                                                    <input type="text" id="search-user-id" class="flex-1 px-4 py-2 border border-gray-300 rounded-md">
+                                                    <button id="search-user-btn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                                        查询
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div id="user-details" class="p-4 bg-white rounded-md border border-gray-200 hidden">
+                                                <h5 class="font-medium text-gray-800 mb-2">用户信息</h5>
+                                                <p><span class="text-gray-500">ID:</span> <span id="detail-id">-</span></p>
+                                                <p><span class="text-gray-500">姓名:</span> <span id="detail-name">-</span></p>
+                                                <p><span class="text-gray-500">邮箱:</span> <span id="detail-email">-</span></p>
+                                                <button id="delete-user-btn" class="mt-3 px-4 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm">
+                                                    删除用户
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-md font-medium text-gray-800 mb-3">用户列表</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full border border-gray-200">
+                                            <thead>
+                                                <tr class="bg-gray-50">
+                                                    <th class="px-4 py-2 border-b">用户ID</th>
+                                                    <th class="px-4 py-2 border-b">姓名</th>
+                                                    <th class="px-4 py-2 border-b">邮箱</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="user-list" class="bg-white">
+                                                <!-- 用户数据会动态添加 -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 隐藏代码展示区域 -->
+                            <div style="display: none;">
+                                <h3 class="text-lg font-medium text-gray-800 mb-4">实现代码</h3>
+                                <div class="bg-gray-900 rounded-lg p-6">
+                                    <pre class="text-gray-300 overflow-x-auto">
+                                    <!-- 代码内容已隐藏 -->
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Socket通信页面 -->
+                <div id="socket-page" class="page-content hidden">
+                    <div class="bg-white rounded-lg shadow mb-6">
+                        <div class="p-6">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">Socket通信演示</h2>
+                            <p class="text-gray-600 mb-6">
+                                Socket通信允许在不同设备之间进行实时数据交换。在Web应用中，可以使用WebSocket API实现浏览器与服务器之间的全双工通信。
+                                以下演示了如何使用WebSocket实现两个用户之间的在线聊天功能。
+                            </p>
+                            
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <!-- 在线用户列表 -->
+                                <div class="lg:col-span-1">
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h3 class="text-lg font-medium text-gray-800 mb-4">在线用户</h3>
+                                        <ul id="online-users" class="space-y-2">
+                                            <li class="flex items-center p-2 bg-white rounded border border-gray-200">
+                                                <span class="h-2 w-2 rounded-full bg-green-500 mr-2"></span>
+                                                <span>系统管理员</span>
+                                            </li>
+                                            <!-- 动态添加在线用户 -->
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <!-- 聊天区域 -->
+                                <div class="lg:col-span-2">
+                                    <div class="bg-gray-50 p-4 rounded-lg h-[400px] flex flex-col">
+                                        <div id="chat-messages" class="flex-1 overflow-y-auto mb-4 space-y-3">
+                                            <!-- 系统消息 -->
+                                            <div class="text-center">
+                                                <span class="text-xs bg-gray-200 text-gray-600 px-3 py-1 rounded-full">今天 14:30</span>
+                                            </div>
+                                            <!-- 示例消息 -->
+                                            <div class="flex items-start">
+                                                <span class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm mr-2">系</span>
+                                                <div>
+                                                    <div class="bg-blue-100 rounded-lg rounded-tl-none px-4 py-2 text-sm">
+                                                        欢迎来到班级聊天系统！
+                                                    </div>
+                                                    <span class="text-xs text-gray-500 ml-2">14:30</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- 聊天输入框 -->
+                                        <div class="flex space-x-2">
+                                            <input type="text" id="chat-input" placeholder="输入消息..." 
+                                                   class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                            <button id="send-chat-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                                发送
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 隐藏代码展示区域 -->
+                            <div style="display: none;">
+                                <h3 class="text-lg font-medium text-gray-800 mb-4">实现代码</h3>
+                                <div class="bg-gray-900 rounded-lg p-6">
+                                    <pre class="text-gray-300 overflow-x-auto">
+                                    <!-- 代码内容已隐藏 -->
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 核心交互脚本 -->
+    <script>
+        // DOM元素初始化
+        const loginForm = document.getElementById('login-form');
+        const loginPage = document.getElementById('login-page');
+        const app = document.getElementById('app');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pageTitle = document.getElementById('page-title');
+        const pageContents = document.querySelectorAll('.page-content');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        
+        // 用户角色权限配置
+        const rolePermissions = {
+            admin: {
+                pages: ['dashboard', 'members', 'committee', 'schedule', 'activities', 'messages', 'reflection', 'map', 'socket'],
+                actions: ['addMember', 'deleteMember', 'editMember', 'manageCommittee', 'manageSchedule', 'manageActivities', 'manageMessages']
+            },
+            teacher: {
+                pages: ['dashboard', 'members', 'committee', 'schedule', 'activities', 'messages', 'reflection', 'map', 'socket'],
+                actions: ['addMember', 'editMember', 'manageCommittee', 'manageSchedule', 'manageActivities', 'manageMessages']
+            },
+            student: {
+                pages: ['dashboard', 'members', 'schedule', 'activities', 'messages', 'reflection', 'map', 'socket'],
+                actions: ['viewMessages', 'addMessage']
+            }
+        };
+
+        // 当前登录用户信息
+        let currentUser = {
+            username: '',
+            role: '',
+            permissions: {}
+        };
+
+        // 初始化仪表盘图表
+        function initDashboardChart() {
+            const ctx = document.getElementById('activity-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['一月', '二月', '三月', '四月', '五月', '六月'],
+                    datasets: [{
+                        label: '班级活动数量',
+                        data: [2, 3, 1, 4, 2, 3],
+                        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                        borderColor: 'rgb(59, 130, 246)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, ticks: { precision: 0 } }
+                    }
+                }
+            });
         }
-    };
 
-    // 当前登录用户信息
-    let currentUser = {
-        username: '',
-        role: '',
-        permissions: {}
-    };
+        // 反射机制演示函数
+        function add(a, b) { return a + b; }
+        function multiply(a, b) { return a * b; }
+        function greet(name) { return `欢迎使用${name}!`; }
+        function reverseString(str) { return str.split('').reverse().join(''); }
+        function getCurrentTime() { return new Date().toLocaleString(); }
 
-    // 登录表单提交
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const role = document.getElementById('user-role').value;
-        
-        // 简单验证
-        if (!username || !password || !role) {
-            alert('请填写完整登录信息');
-            return;
+        // 初始化映射管理（用户数据）
+        const userMap = new Map();
+        function initUserMap() {
+            userMap.set('u001', { id: 'u001', name: '张三', email: 'zhangsan@example.com' });
+            userMap.set('u002', { id: 'u002', name: '李四', email: 'lisi@example.com' });
+            renderUserList();
         }
-        
-        // 模拟用户验证（实际应用中应该与后端交互）
-        const isValidUser = true; // 这里应该是实际的验证逻辑
-        
-        if (isValidUser) {
-            // 设置当前用户信息
+
+        function renderUserList() {
+            const userListEl = document.getElementById('user-list');
+            userListEl.innerHTML = '';
+            userMap.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-4 py-2 border-b">${user.id}</td>
+                    <td class="px-4 py-2 border-b">${user.name}</td>
+                    <td class="px-4 py-2 border-b">${user.email}</td>
+                `;
+                userListEl.appendChild(row);
+            });
+        }
+
+        // 初始化Socket模拟通信
+        function initSocketSimulation() {
+            // 模拟在线用户
+            const onlineUsers = ['张三', '李四', '王五'];
+            const usersListEl = document.getElementById('online-users');
+            onlineUsers.forEach(user => {
+                const li = document.createElement('li');
+                li.className = 'flex items-center p-2 bg-white rounded border border-gray-200';
+                li.innerHTML = `
+                    <span class="h-2 w-2 rounded-full bg-green-500 mr-2"></span>
+                    <span>${user}</span>
+                `;
+                usersListEl.appendChild(li);
+            });
+        }
+
+        // 登录表单提交
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('user-role').value;
+            
+            if (!username || !password || !role) {
+                alert('请填写完整登录信息');
+                return;
+            }
+            
+            // 模拟登录验证
             currentUser = {
                 username,
                 role,
                 permissions: rolePermissions[role] || {}
             };
             
-            // 显示主应用界面
+            // 切换到主界面
             loginPage.classList.add('hidden');
             app.classList.remove('hidden');
             
-            // 更新用户信息
+            // 更新用户信息展示
             document.getElementById('user-initial').textContent = username.charAt(0);
             document.getElementById('user-name').textContent = username;
             document.getElementById('user-role').textContent = 
-                role === 'admin' ? '管理员' : 
-                role === 'teacher' ? '教师' : '学生';
+                role === 'admin' ? '管理员' : role === 'teacher' ? '教师' : '学生';
             
-            // 根据权限过滤导航菜单
+            // 初始化功能模块
+            initDashboardChart();
+            initUserMap();
+            initSocketSimulation();
+            
+            // 过滤导航菜单
             filterNavByPermissions();
-            
-            // 默认显示仪表盘页面
             showPage('dashboard');
-        } else {
-            alert('用户名或密码错误');
-        }
-    });
+        });
 
-    // 根据权限过滤导航菜单
-    function filterNavByPermissions() {
-        const allowedPages = currentUser.permissions.pages || [];
+        // 根据权限过滤导航
+        function filterNavByPermissions() {
+            const allowedPages = currentUser.permissions.pages || [];
+            navLinks.forEach(link => {
+                const page = link.getAttribute('data-page');
+                if (!allowedPages.includes(page)) {
+                    link.style.display = 'none';
+                } else {
+                    link.style.display = 'flex';
+                }
+            });
+            
+            // 隐藏无权限操作按钮
+            if (!currentUser.permissions.actions?.includes('addMember')) {
+                document.getElementById('add-member-btn')?.classList.add('hidden');
+            }
+        }
+
+        // 显示指定页面
+        function showPage(pageId) {
+            // 权限检查
+            if (!currentUser.permissions.pages?.includes(pageId)) {
+                alert('您没有访问该页面的权限');
+                return;
+            }
+            
+            // 更新标题
+            const pageTitleMap = {
+                'dashboard': '仪表盘',
+                'members': '班级人员管理',
+                'committee': '班委会管理',
+                'schedule': '值日安排管理',
+                'activities': '班级活动记录',
+                'messages': '班级留言簿',
+                'reflection': '反射机制演示',
+                'map': '映射应用演示',
+                'socket': 'Socket通信'
+            };
+            pageTitle.textContent = pageTitleMap[pageId] || '仪表盘';
+            
+            // 切换页面显示
+            pageContents.forEach(page => page.classList.add('hidden'));
+            document.getElementById(`${pageId}-page`).classList.remove('hidden');
+            
+            // 更新导航激活状态
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('data-page') === pageId);
+            });
+        }
+
+        // 绑定导航点击事件
         navLinks.forEach(link => {
-            const page = link.getAttribute('data-page');
-            if (!allowedPages.includes(page)) {
-                link.style.display = 'none';
-            } else {
-                link.style.display = 'flex';
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                showPage(pageId);
+            });
+        });
+
+        // 反射机制演示 - 调用函数
+        document.getElementById('invoke-function-btn').addEventListener('click', () => {
+            const funcName = document.getElementById('function-name').value;
+            const argsStr = document.getElementById('function-args').value;
+            const resultEl = document.getElementById('reflection-result');
+            
+            try {
+                const args = eval(`[${argsStr}]`); // 简单参数解析（实际场景需更安全处理）
+                const result = window[funcName](...args);
+                resultEl.textContent = `> ${funcName}(${argsStr})\n${result}`;
+            } catch (err) {
+                resultEl.textContent = `错误：${err.message}`;
             }
         });
-        
-        // 根据权限隐藏特定操作按钮
-        if (!currentUser.permissions.actions?.includes('addMember')) {
-            document.getElementById('add-member-btn')?.classList.add('hidden');
-        }
-        
-        if (currentUser.role === 'student') {
-            document.getElementById('clear-all-btn')?.classList.add('hidden');
-        }
-    }
 
-    // 修改显示页面函数，增加权限检查
-    function showPage(pageId) {
-        // 检查权限
-        if (!currentUser.permissions.pages?.includes(pageId)) {
-            alert('您没有访问该页面的权限');
-            return;
-        }
-        
-        // 更新页面标题
-        const pageTitleMap = {
-            'dashboard': '仪表盘',
-            'members': '班级人员管理',
-            'committee': '班委会管理',
-            'schedule': '值日安排管理',
-            'activities': '班级活动记录',
-            'messages': '班级留言簿',
-            'reflection': '反射机制演示',
-            'map': '映射应用演示',
-            'socket': 'Socket通信'
-        };
-        
-        pageTitle.textContent = pageTitleMap[pageId] || '仪表盘';
-        
-        // 隐藏所有页面内容
-        pageContents.forEach(page => {
-            page.classList.add('hidden');
+        // 映射应用 - 添加用户
+        document.getElementById('add-user-btn').addEventListener('click', () => {
+            const userId = document.getElementById('user-id').value;
+            const userName = document.getElementById('user-name').value;
+            const userEmail = document.getElementById('user-email').value;
+            
+            if (!userId || !userName || !userEmail) {
+                alert('请填写完整用户信息');
+                return;
+            }
+            
+            if (userMap.has(userId)) {
+                alert('用户ID已存在');
+                return;
+            }
+            
+            userMap.set(userId, { id: userId, name: userName, email: userEmail });
+            renderUserList();
+            // 清空输入
+            document.getElementById('user-id').value = '';
+            document.getElementById('user-name').value = '';
+            document.getElementById('user-email').value = '';
         });
-        
-        // 显示指定页面内容
-        const targetPage = document.getElementById(`${pageId}-page`);
-        if (targetPage) {
-            targetPage.classList.remove('hidden');
-        }
-        
-        // 更新导航链接状态
-        navLinks.forEach(link => {
-            if (link.getAttribute('data-page') === pageId) {
-                link.classList.add('bg-blue-700');
+
+        // 映射应用 - 查询用户
+        document.getElementById('search-user-btn').addEventListener('click', () => {
+            const userId = document.getElementById('search-user-id').value;
+            const userDetails = document.getElementById('user-details');
+            
+            if (!userId) {
+                alert('请输入用户ID');
+                return;
+            }
+            
+            if (userMap.has(userId)) {
+                const user = userMap.get(userId);
+                document.getElementById('detail-id').textContent = user.id;
+                document.getElementById('detail-name').textContent = user.name;
+                document.getElementById('detail-email').textContent = user.email;
+                userDetails.classList.remove('hidden');
             } else {
-                link.classList.remove('bg-blue-700');
+                alert('用户不存在');
+                userDetails.classList.add('hidden');
             }
         });
-    }
-</script>
 
-<!-- 隐藏代码展示区域 - 反射机制演示页面 -->
-<div id="reflection-page" class="page-content hidden">
-    <div class="bg-white rounded-lg shadow mb-6">
-        <div class="p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">反射机制演示</h2>
-            <p class="text-gray-600 mb-6">
-                反射机制允许程序在运行时动态地调用函数、访问属性或创建对象。在JavaScript中，可以通过eval()函数或Function构造函数实现这一功能。
-                以下演示了如何使用反射机制将字符串作为函数名进行调用。
-            </p>
-            
-            <div class="bg-gray-50 p-6 rounded-lg mb-6">
-                <h3 class="text-lg font-medium text-gray-800 mb-4">反射机制示例</h3>
-                <div class="mb-4">
-                    <label for="function-name" class="block text-sm font-medium text-gray-700 mb-1">函数名称</label>
-                    <div class="flex space-x-3">
-                        <input type="text" id="function-name" class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="例如: add, multiply, greet" value="greet">
-                        <label for="function-args" class="block text-sm font-medium text-gray-700 mb-1">参数</label>
-                        <input type="text" id="function-args" class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="例如: '参数1', 2, true" value="'班级管理系统'">
-                        <button id="invoke-function-btn" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            调用函数
-                        </button>
-                    </div>
-                    <div class="mt-4">
-                        <p class="text-sm font-medium text-gray-700 mb-2">可用函数:</p>
-                        <ul class="list-disc pl-5 text-sm text-gray-600">
-                            <li><code>add(a, b)</code> - 计算两个数的和</li>
-                            <li><code>multiply(a, b)</code> - 计算两个数的积</li>
-                            <li><code>greet(name)</code> - 向指定名称的人打招呼</li>
-                            <li><code>reverseString(str)</code> - 反转字符串</li>
-                            <li><code>getCurrentTime()</code> - 获取当前时间</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="mt-6 p-4 bg-white rounded-md border border-gray-200">
-                        <h4 class="text-sm font-medium text-gray-800 mb-2">结果:</h4>
-                        <pre id="reflection-result" class="text-sm text-gray-600 p-3 bg-gray-50 rounded-md overflow-x-auto">
-> greet('班级管理系统')
-欢迎使用班级管理系统!</pre>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 隐藏代码展示区域 -->
-            <div style="display: none;">
-                <h3 class="text-lg font-medium text-gray-800 mb-4">实现代码</h3>
-                <div class="bg-gray-900 rounded-lg p-6">
-                    <pre class="text-gray-300 overflow-x-auto">
-                    <!-- 代码内容已隐藏 -->
-                    </pre>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        // 映射应用 - 删除用户
+        document.getElementById('delete-user-btn').addEventListener('click', () => {
+            const userId = document.getElementById('detail-id').textContent;
+            if (confirm(`确定要删除用户 ${userId} 吗？`)) {
+                userMap.delete(userId);
+                renderUserList();
+                document.getElementById('user-details').classList.add('hidden');
+                document.getElementById('search-user-id').value = '';
+            }
+        });
 
-<!-- 隐藏代码展示区域 - 映射应用演示页面 -->
-<div id="map-page" class="page-content hidden">
-    <div class="bg-white rounded-lg shadow mb-6">
-        <div class="p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">映射应用演示</h2>
+        // 班级留言 - 发送消息
+        document.getElementById('send-message-btn').addEventListener('click', () => {
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
             
-            <p class="text-gray-600 mb-6">
-                映射（Map）是一种键值对数据结构，类似于对象，但具有更多的功能和灵活性。
-                在JavaScript中，Map对象可以使用任意类型作为键，并且提供了丰富的方法来操作数据。
-                以下演示了如何使用Map实现用户数据的管理功能。
-            </p>
+            if (!message) return;
             
-            <div class="bg-gray-50 p-6 rounded-lg mb-6">
-                <h3 class="text-lg font-medium text-gray-800 mb-4">用户数据管理系统</h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <!-- 添加用户表单 -->
-                    <!-- 内容保持不变 -->
-                </div>
-                
-                <div>
-                    <h4 class="text-md font-medium text-gray-800 mb-3">用户列表</h4>
-                    <!-- 用户列表表格 -->
-                    <!-- 内容保持不变 -->
-                </div>
-            </div>
+            const messagesList = document.getElementById('messages-list');
+            const now = new Date().toLocaleString();
             
-            <!-- 隐藏代码展示区域 -->
-            <div style="display: none;">
-                <h3 class="text-lg font-medium text-gray-800 mb-4">实现代码</h3>
-                <div class="bg-gray-900 rounded-lg p-6">
-                    <pre class="text-gray-300 overflow-x-auto">
-                    <!-- 代码内容已隐藏 -->
-                    </pre>
+            // 创建新留言元素
+            const messageEl = document.createElement('div');
+            messageEl.className = 'border-l-4 border-blue-500 pl-4 py-2';
+            messageEl.innerHTML = `
+                <div class="flex justify-between">
+                    <h4 class="font-medium text-gray-800">${currentUser.username}</h4>
+                    <p class="text-sm text-gray-500">${now}</p>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+                <p class="text-gray-600 mt-1">${message}</p>
+            `;
+            
+            messagesList.prepend(messageEl); // 添加到最前面
+            messageInput.value = ''; // 清空输入
+        });
 
-<!-- 隐藏代码展示区域 - Socket通信页面 -->
-<div id="socket-page" class="page-content hidden">
-    <div class="bg-white rounded-lg shadow mb-6">
-        <div class="p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Socket通信演示</h2>
-            <p class="text-gray-600 mb-6">
-                Socket通信允许在不同设备之间进行实时数据交换。在Web应用中，可以使用WebSocket API实现浏览器与服务器之间的全双工通信。
-                以下演示了如何使用WebSocket实现两个用户之间的在线聊天功能。
-            </p>
+        // Socket聊天 - 发送消息
+        document.getElementById('send-chat-btn').addEventListener('click', sendChatMessage);
+        document.getElementById('chat-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+
+        function sendChatMessage() {
+            const chatInput = document.getElementById('chat-input');
+            const message = chatInput.value.trim();
+            if (!message) return;
             
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- 聊天区域和在线用户列表 -->
-                <!-- 内容保持不变 -->
-            </div>
+            const chatMessages = document.getElementById('chat-messages');
+            const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
-            <!-- 隐藏代码展示区域 -->
-            <div style="display: none;">
-                <h3 class="text-lg font-medium text-gray-800 mb-4">实现代码</h3>
-                <div class="bg-gray-900 rounded-lg p-6">
-                    <pre class="text-gray-300 overflow-x-auto">
-                    <!-- 代码内容已隐藏 -->
-                    </pre>
+            // 创建消息元素
+            const messageEl = document.createElement('div');
+            messageEl.className = 'flex items-start justify-end';
+            messageEl.innerHTML = `
+                <div class="text-right">
+                    <div class="bg-blue-600 text-white rounded-lg rounded-tr-none px-4 py-2 text-sm">
+                        ${message}
+                    </div>
+                    <span class="text-xs text-gray-500 mr-2">${now}</span>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+                <span class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm ml-2">
+                    ${currentUser.username.charAt(0)}
+                </span>
+            `;
+            
+            chatMessages.appendChild(messageEl);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // 滚动到底部
+            chatInput.value = ''; // 清空输入
+            
+            // 模拟回复（2秒后）
+            setTimeout(() => {
+                const replyEl = document.createElement('div');
+                replyEl.className = 'flex items-start';
+                replyEl.innerHTML = `
+                    <span class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-sm mr-2">
+                        系
+                    </span>
+                    <div>
+                        <div class="bg-gray-200 rounded-lg rounded-tl-none px-4 py-2 text-sm">
+                            收到你的消息："${message}"
+                        </div>
+                        <span class="text-xs text-gray-500 ml-2">${now}</span>
+                    </div>
+                `;
+                chatMessages.appendChild(replyEl);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 2000);
+        }
+
+        // 移动端菜单切换
+        mobileMenuBtn.addEventListener('click', () => {
+            const sidebar = document.querySelector('aside');
+            sidebar.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
