@@ -77,55 +77,55 @@
                     </div>
                     <div class="category-content pl-4 pr-2 overflow-hidden max-h-0 transition-height">
                         <a href="#" data-page="dashboard" class="sidebar-link nav-item active block">
-                            <i class="fa fa-dashboard w-5 mr-3"></i>仪表盘
+                            仪表盘
                         </a>
                     </div>
                 </div>
-                
-                <!-- 人员管理 -->
+
+                <!-- 成员管理 -->
                 <div class="mb-2">
-                    <div class="sidebar-category" data-category="personnel">
-                        <span><i class="fa fa-users mr-2"></i>人员管理</span>
+                    <div class="sidebar-category" data-category="members">
+                        <span><i class="fa fa-users mr-2"></i>成员管理</span>
                         <i class="fa fa-chevron-down text-xs transition-transform duration-200"></i>
                     </div>
                     <div class="category-content pl-4 pr-2 overflow-hidden max-h-0 transition-height">
                         <a href="#" data-page="class-members" class="sidebar-link nav-item block">
-                            <i class="fa fa-user-circle w-5 mr-3"></i>班级成员
+                            班级成员
                         </a>
                         <a href="#" data-page="committee" class="sidebar-link nav-item block">
-                            <i class="fa fa-star w-5 mr-3"></i>班委会
+                            班委会
                         </a>
                     </div>
                 </div>
-                
-                <!-- 日常管理 -->
+
+                <!-- 班级事务 -->
                 <div class="mb-2">
-                    <div class="sidebar-category" data-category="daily">
-                        <span><i class="fa fa-calendar mr-2"></i>日常管理</span>
+                    <div class="sidebar-category" data-category="affairs">
+                        <span><i class="fa fa-calendar mr-2"></i>班级事务</span>
                         <i class="fa fa-chevron-down text-xs transition-transform duration-200"></i>
                     </div>
                     <div class="category-content pl-4 pr-2 overflow-hidden max-h-0 transition-height">
                         <a href="#" data-page="schedules" class="sidebar-link nav-item block">
-                            <i class="fa fa-list-alt w-5 mr-3"></i>值日安排
+                            值日安排
                         </a>
                         <a href="#" data-page="activities" class="sidebar-link nav-item block">
-                            <i class="fa fa-flag w-5 mr-3"></i>班级活动
+                            班级活动
                         </a>
                     </div>
                 </div>
-                
-                <!-- 互动交流 -->
+
+                <!-- 沟通交流 -->
                 <div class="mb-2">
                     <div class="sidebar-category" data-category="communication">
-                        <span><i class="fa fa-comments mr-2"></i>互动交流</span>
+                        <span><i class="fa fa-comments mr-2"></i>沟通交流</span>
                         <i class="fa fa-chevron-down text-xs transition-transform duration-200"></i>
                     </div>
                     <div class="category-content pl-4 pr-2 overflow-hidden max-h-0 transition-height">
                         <a href="#" data-page="messages" class="sidebar-link nav-item block">
-                            <i class="fa fa-envelope w-5 mr-3"></i>留言簿
+                            留言簿
                         </a>
                         <a href="#" data-page="chat" class="sidebar-link nav-item block">
-                            <i class="fa fa-comments-o w-5 mr-3"></i>实时聊天
+                            实时聊天
                         </a>
                     </div>
                 </div>
@@ -136,25 +136,21 @@
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- 顶部导航栏 -->
             <header class="bg-white shadow-sm px-6 py-3 flex justify-between items-center">
-                <h2 id="page-title" class="text-lg font-semibold text-gray-800">仪表盘</h2>
+                <h2 id="page-title" class="text-lg font-semibold">仪表盘</h2>
                 <div class="flex items-center">
-                    <span id="user-info" class="mr-4 text-gray-600"></span>
-                    <button id="logout-btn" class="text-red-500 hover:text-red-700 transition-colors">
+                    <span id="user-info" class="mr-4"></span>
+                    <button id="logout-btn" class="text-gray-600 hover:text-gray-900 transition-colors">
                         <i class="fa fa-sign-out mr-1"></i>退出
                     </button>
                 </div>
             </header>
 
-            <!-- 页面内容容器 -->
-            <main class="flex-1 overflow-y-auto bg-gray-50 p-4">
+            <!-- 页面内容 -->
+            <main class="flex-1 overflow-y-auto bg-gray-100 p-4">
                 <!-- 仪表盘页面 -->
                 <div id="dashboard-page" class="page-content">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                         <div class="stat-card border-blue-500">
-                            <div class="text-sm text-gray-500">当前用户</div>
-                            <div class="text-xl font-bold mt-1" id="stat-current-user">-</div>
-                        </div>
-                        <div class="stat-card border-green-500">
                             <div class="text-sm text-gray-500">班级总人数</div>
                             <div class="text-xl font-bold mt-1" id="stat-total-members">0</div>
                         </div>
@@ -462,7 +458,7 @@
         let currentUser = null;
         let ws = null;
 
-        // 页面加载完成后初始化
+        // 确保DOM完全加载后执行所有脚本
         document.addEventListener('DOMContentLoaded', () => {
             // 初始化侧边栏折叠/展开
             initSidebar();
@@ -487,9 +483,9 @@
 
         // 初始化侧边栏折叠/展开
         function initSidebar() {
-            document.querySelectorAll('.sidebar-category').forEach(category => {
+            const categories = document.querySelectorAll('.sidebar-category');
+            categories.forEach(category => {
                 category.addEventListener('click', () => {
-                    const categoryName = category.getAttribute('data-category');
                     const content = category.nextElementSibling;
                     const icon = category.querySelector('.fa-chevron-down');
                     
@@ -513,7 +509,8 @@
 
         // 初始化导航切换
         function initNavigation() {
-            document.querySelectorAll('.sidebar-link.nav-item').forEach(link => {
+            const navLinks = document.querySelectorAll('.sidebar-link.nav-item');
+            navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     
@@ -528,11 +525,17 @@
                     document.querySelectorAll('.page-content').forEach(page => {
                         page.classList.add('hidden');
                     });
-                    document.getElementById(`${targetPage}-page`).classList.remove('hidden');
+                    const targetElement = document.getElementById(`${targetPage}-page`);
+                    if (targetElement) {
+                        targetElement.classList.remove('hidden');
+                    }
                     
                     // 更新页面标题
                     const pageTitle = link.textContent.trim();
-                    document.getElementById('page-title').textContent = pageTitle;
+                    const titleElement = document.getElementById('page-title');
+                    if (titleElement) {
+                        titleElement.textContent = pageTitle;
+                    }
 
                     // 加载对应页面数据
                     if (targetPage === 'class-members') {
@@ -555,65 +558,92 @@
         // 初始化登录表单
         function initLoginForm() {
             const form = document.getElementById('login-form');
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-                const role = document.getElementById('user-role').value;
-                
-                try {
-                    const response = await fetch('http://101.35.129.174:3000/api/login', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username, password, role })
-                    });
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
                     
-                    const data = await response.json();
-                    if (data.success) {
-                        currentUser = data.user;
-                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                        showApp();
-                        loadDashboardData();
-                    } else {
-                        alert(data.message || '登录失败');
+                    const username = document.getElementById('username').value;
+                    const password = document.getElementById('password').value;
+                    const role = document.getElementById('user-role').value;
+                    
+                    try {
+                        const response = await fetch('http://101.35.129.174:3000/api/login', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ username, password, role })
+                        });
+                        
+                        const data = await response.json();
+                        if (data.success) {
+                            currentUser = data.user;
+                            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                            showApp();
+                            loadDashboardData();
+                        } else {
+                            alert(data.message || '登录失败');
+                        }
+                    } catch (err) {
+                        console.error('登录错误:', err);
+                        alert('登录失败，请重试');
                     }
-                } catch (err) {
-                    console.error('登录错误:', err);
-                    alert('登录失败，请重试');
-                }
-            });
+                });
+            }
         }
 
         // 初始化退出功能
         function initLogout() {
-            document.getElementById('logout-btn').addEventListener('click', () => {
-                localStorage.removeItem('currentUser');
-                currentUser = null;
-                // 关闭WebSocket连接
-                if (ws && ws.readyState === WebSocket.OPEN) {
-                    ws.close();
-                }
-                showLoginPage();
-            });
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    localStorage.removeItem('currentUser');
+                    currentUser = null;
+                    // 关闭WebSocket连接
+                    if (ws && ws.readyState === WebSocket.OPEN) {
+                        ws.close();
+                    }
+                    showLoginPage();
+                });
+            }
         }
 
         // 显示应用界面
         function showApp() {
-            document.getElementById('login-page').classList.add('hidden');
-            document.getElementById('app').classList.remove('hidden');
-            document.getElementById('user-info').textContent = `${currentUser.username} (${getRoleText(currentUser.role)})`;
-            document.getElementById('stat-current-user').textContent = `${currentUser.username} (${getRoleText(currentUser.role)})`;
+            const loginPage = document.getElementById('login-page');
+            const app = document.getElementById('app');
+            const userInfo = document.getElementById('user-info');
+            const statCurrentUser = document.getElementById('stat-current-user');
             
-            // 初始化功能按钮事件
-            initFeatureEvents();
+            if (loginPage && app) {
+                loginPage.classList.add('hidden');
+                app.classList.remove('hidden');
+                
+                if (userInfo && currentUser) {
+                    userInfo.textContent = `${currentUser.username} (${getRoleText(currentUser.role)})`;
+                }
+                
+                if (statCurrentUser && currentUser) {
+                    statCurrentUser.textContent = `${currentUser.username} (${getRoleText(currentUser.role)})`;
+                }
+                
+                // 初始化功能按钮事件
+                initFeatureEvents();
+            }
         }
 
         // 显示登录页面
         function showLoginPage() {
-            document.getElementById('app').classList.add('hidden');
-            document.getElementById('login-page').classList.remove('hidden');
-            document.getElementById('login-form').reset();
+            const app = document.getElementById('app');
+            const loginPage = document.getElementById('login-page');
+            const loginForm = document.getElementById('login-form');
+            
+            if (app && loginPage) {
+                app.classList.add('hidden');
+                loginPage.classList.remove('hidden');
+                
+                if (loginForm) {
+                    loginForm.reset();
+                }
+            }
         }
 
         // 转换角色文本
@@ -629,64 +659,106 @@
         // 初始化功能按钮事件
         function initFeatureEvents() {
             // 班级成员相关
-            document.getElementById('add-member-btn').addEventListener('click', () => {
-                document.getElementById('add-member-modal').classList.remove('hidden');
-                document.getElementById('add-member-form').reset();
-            });
-            
-            document.getElementById('cancel-add-member').addEventListener('click', () => {
-                document.getElementById('add-member-modal').classList.add('hidden');
-            });
-            
-            document.getElementById('add-member-form').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const memberData = {
-                    id: document.getElementById('member-id').value,
-                    name: document.getElementById('member-name').value,
-                    role: document.getElementById('member-role').value,
-                    phone: document.getElementById('member-phone').value,
-                    email: document.getElementById('member-email').value
-                };
-                
-                try {
-                    const response = await fetch('http://101.35.129.174:3000/api/class-members', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(memberData)
-                    });
-                    
-                    const data = await response.json();
-                    if (data.success) {
-                        document.getElementById('add-member-modal').classList.add('hidden');
-                        loadClassMembers(); // 重新加载成员列表
-                        loadDashboardData(); // 更新仪表盘统计
-                    } else {
-                        alert('添加失败: ' + (data.error || '未知错误'));
+            const addMemberBtn = document.getElementById('add-member-btn');
+            if (addMemberBtn) {
+                addMemberBtn.addEventListener('click', () => {
+                    const modal = document.getElementById('add-member-modal');
+                    const form = document.getElementById('add-member-form');
+                    if (modal && form) {
+                        modal.classList.remove('hidden');
+                        form.reset();
                     }
-                } catch (err) {
-                    console.error('添加成员错误:', err);
-                    alert('添加失败，请重试');
-                }
-            });
+                });
+            }
+            
+            const cancelAddMember = document.getElementById('cancel-add-member');
+            if (cancelAddMember) {
+                cancelAddMember.addEventListener('click', () => {
+                    const modal = document.getElementById('add-member-modal');
+                    if (modal) {
+                        modal.classList.add('hidden');
+                    }
+                });
+            }
+            
+            const addMemberForm = document.getElementById('add-member-form');
+            if (addMemberForm) {
+                addMemberForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const memberData = {
+                        id: document.getElementById('member-id').value,
+                        name: document.getElementById('member-name').value,
+                        role: document.getElementById('member-role').value,
+                        phone: document.getElementById('member-phone').value,
+                        email: document.getElementById('member-email').value
+                    };
+                    
+                    try {
+                        const response = await fetch('http://101.35.129.174:3000/api/class-members', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(memberData)
+                        });
+                        
+                        const data = await response.json();
+                        if (data.success) {
+                            const modal = document.getElementById('add-member-modal');
+                            if (modal) {
+                                modal.classList.add('hidden');
+                            }
+                            loadClassMembers(); // 重新加载成员列表
+                            loadDashboardData(); // 更新仪表盘统计
+                        } else {
+                            alert('添加失败: ' + (data.error || '未知错误'));
+                        }
+                    } catch (err) {
+                        console.error('添加成员错误:', err);
+                        alert('添加失败，请重试');
+                    }
+                });
+            }
 
             // 成员搜索和筛选
-            document.getElementById('member-search').addEventListener('input', debounce(loadClassMembers, 300));
-            document.getElementById('member-role-filter').addEventListener('change', loadClassMembers);
+            const memberSearch = document.getElementById('member-search');
+            if (memberSearch) {
+                memberSearch.addEventListener('input', debounce(loadClassMembers, 300));
+            }
+            
+            const memberRoleFilter = document.getElementById('member-role-filter');
+            if (memberRoleFilter) {
+                memberRoleFilter.addEventListener('change', loadClassMembers);
+            }
 
             // 值日安排筛选
-            document.getElementById('filter-schedules-btn').addEventListener('click', loadSchedules);
+            const filterSchedulesBtn = document.getElementById('filter-schedules-btn');
+            if (filterSchedulesBtn) {
+                filterSchedulesBtn.addEventListener('click', loadSchedules);
+            }
 
             // 班级活动筛选
-            document.getElementById('filter-activities-btn').addEventListener('click', loadActivities);
+            const filterActivitiesBtn = document.getElementById('filter-activities-btn');
+            if (filterActivitiesBtn) {
+                filterActivitiesBtn.addEventListener('click', loadActivities);
+            }
 
             // 发送留言
-            document.getElementById('send-message-btn').addEventListener('click', sendMessage);
+            const sendMessageBtn = document.getElementById('send-message-btn');
+            if (sendMessageBtn) {
+                sendMessageBtn.addEventListener('click', sendMessage);
+            }
 
             // 发送聊天消息
-            document.getElementById('send-chat-btn').addEventListener('click', sendChatMessage);
-            document.getElementById('chat-input').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') sendChatMessage();
-            });
+            const sendChatBtn = document.getElementById('send-chat-btn');
+            if (sendChatBtn) {
+                sendChatBtn.addEventListener('click', sendChatMessage);
+            }
+            
+            const chatInput = document.getElementById('chat-input');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') sendChatMessage();
+                });
+            }
         }
 
         // 加载仪表盘数据
@@ -695,19 +767,28 @@
                 // 加载班级成员总数
                 const membersResponse = await fetch('http://101.35.129.174:3000/api/class-members');
                 const membersData = await membersResponse.json();
-                document.getElementById('stat-total-members').textContent = membersData.length;
+                const statTotalMembers = document.getElementById('stat-total-members');
+                if (statTotalMembers) {
+                    statTotalMembers.textContent = membersData.length;
+                }
 
                 // 加载本月活动数
                 const today = new Date();
                 const monthStart = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-01`;
                 const activitiesResponse = await fetch(`http://101.35.129.174:3000/api/activities?startDate=${monthStart}`);
                 const activitiesData = await activitiesResponse.json();
-                document.getElementById('stat-monthly-activities').textContent = activitiesData.length;
+                const statMonthlyActivities = document.getElementById('stat-monthly-activities');
+                if (statMonthlyActivities) {
+                    statMonthlyActivities.textContent = activitiesData.length;
+                }
 
                 // 加载最新留言数
                 const messagesResponse = await fetch('http://101.35.129.174:3000/api/messages');
                 const messagesData = await messagesResponse.json();
-                document.getElementById('stat-recent-messages').textContent = messagesData.length;
+                const statRecentMessages = document.getElementById('stat-recent-messages');
+                if (statRecentMessages) {
+                    statRecentMessages.textContent = messagesData.length;
+                }
 
                 // 加载活动统计图表
                 loadActivitiesStats();
@@ -721,8 +802,13 @@
 
         // 加载班级成员列表
         async function loadClassMembers() {
-            const search = document.getElementById('member-search').value;
-            const role = document.getElementById('member-role-filter').value;
+            const searchInput = document.getElementById('member-search');
+            const roleFilter = document.getElementById('member-role-filter');
+            
+            if (!searchInput || !roleFilter) return;
+            
+            const search = searchInput.value;
+            const role = roleFilter.value;
             
             try {
                 let url = 'http://101.35.129.174:3000/api/class-members';
@@ -732,32 +818,36 @@
                 if (params.toString()) url += '?' + params.toString();
                 
                 const response = await fetch(url);
-                const members = await response.json();
+                const membersList = await response.json();
                 const tableBody = document.getElementById('members-table-body');
                 
-                if (members.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">没有找到成员数据</td></tr>';
-                    return;
+                if (tableBody) {
+                    if (memberList.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">没有找到成员数据</td></tr>';
+                        return;
+                    }
+                    
+                    tableBody.innerHTML = memberList.map(member => `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">${member.id}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${member.name}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${getRoleText(member.role)}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${member.phone || '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button class="text-red-500 hover:text-red-700 transition-colors" 
+                                    onclick="deleteClassMember('${member.id}')">
+                                    <i class="fa fa-trash"></i> 删除
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
                 }
-                
-                tableBody.innerHTML = members.map(member => `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">${member.id}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${member.name}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${getRoleText(member.role)}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${member.phone || '-'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <button class="text-red-500 hover:text-red-700 transition-colors" 
-                                onclick="deleteClassMember('${member.id}')">
-                                <i class="fa fa-trash"></i> 删除
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
             } catch (err) {
                 console.error('加载班级成员错误:', err);
-                document.getElementById('members-table-body').innerHTML = 
-                    '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">加载失败，请重试</td></tr>';
+                const tableBody = document.getElementById('members-table-body');
+                if (tableBody) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">加载失败，请重试</td></tr>';
+                }
             }
         }
 
@@ -787,32 +877,36 @@
         async function loadCommitteeMembers() {
             try {
                 const response = await fetch('http://101.35.129.174:3000/api/committee');
-                const members = await response.json();
+                const committeeMembers = await response.json();
                 const tableBody = document.getElementById('committee-table-body');
                 
-                if (members.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">没有班委会数据</td></tr>';
-                    return;
+                if (tableBody) {
+                    if (committeeMembers.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">没有班委会数据</td></tr>';
+                        return;
+                    }
+                    
+                    tableBody.innerHTML = committeeMembers.map(member => `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">${member.student_id}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${member.name || '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${member.position}</td>
+                            <td class="px-6 py-4">${member.responsibilities || '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button class="text-red-500 hover:text-red-700 transition-colors" 
+                                    onclick="deleteCommitteeMember(${member.id})">
+                                    <i class="fa fa-trash"></i> 删除
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
                 }
-                
-                tableBody.innerHTML = members.map(member => `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">${member.student_id}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${member.name || '-'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${member.position}</td>
-                        <td class="px-6 py-4">${member.responsibilities || '-'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <button class="text-red-500 hover:text-red-700 transition-colors" 
-                                onclick="deleteCommitteeMember(${member.id})">
-                                <i class="fa fa-trash"></i> 删除
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
             } catch (err) {
                 console.error('加载班委会成员错误:', err);
-                document.getElementById('committee-table-body').innerHTML = 
-                    '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">加载失败，请重试</td></tr>';
+                const tableBody = document.getElementById('committee-table-body');
+                if (tableBody) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">加载失败，请重试</td></tr>';
+                }
             }
         }
 
@@ -839,9 +933,15 @@
 
         // 加载值日安排
         async function loadSchedules() {
-            const startDate = document.getElementById('schedule-start-date').value;
-            const endDate = document.getElementById('schedule-end-date').value;
-            const status = document.getElementById('schedule-status-filter').value;
+            const startDateInput = document.getElementById('schedule-start-date');
+            const endDateInput = document.getElementById('schedule-end-date');
+            const statusFilter = document.getElementById('schedule-status-filter');
+            
+            if (!startDateInput || !endDateInput || !statusFilter) return;
+            
+            const startDate = startDateInput.value;
+            const endDate = endDateInput.value;
+            const status = statusFilter.value;
             
             try {
                 let url = 'http://101.35.129.174:3000/api/schedules';
@@ -855,27 +955,31 @@
                 const schedules = await response.json();
                 const tableBody = document.getElementById('schedules-table-body');
                 
-                if (schedules.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">没有找到值日数据</td></tr>';
-                    return;
+                if (tableBody) {
+                    if (schedules.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">没有找到值日数据</td></tr>';
+                        return;
+                    }
+                    
+                    tableBody.innerHTML = schedules.map(schedule => `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">${schedule.date}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${schedule.personnel}</td>
+                            <td class="px-6 py-4">${schedule.task}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 rounded text-xs ${getStatusClass(schedule.status)}">
+                                    ${schedule.status}
+                                </span>
+                            </td>
+                        </tr>
+                    `).join('');
                 }
-                
-                tableBody.innerHTML = schedules.map(schedule => `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">${schedule.date}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${schedule.personnel}</td>
-                        <td class="px-6 py-4">${schedule.task}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 py-1 rounded text-xs ${getStatusClass(schedule.status)}">
-                                ${schedule.status}
-                            </span>
-                        </td>
-                    </tr>
-                `).join('');
             } catch (err) {
                 console.error('加载值日安排错误:', err);
-                document.getElementById('schedules-table-body').innerHTML = 
-                    '<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">加载失败，请重试</td></tr>';
+                const tableBody = document.getElementById('schedules-table-body');
+                if (tableBody) {
+                    tableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">加载失败，请重试</td></tr>';
+                }
             }
         }
 
@@ -891,9 +995,15 @@
 
         // 加载班级活动
         async function loadActivities() {
-            const startDate = document.getElementById('activity-start-date').value;
-            const endDate = document.getElementById('activity-end-date').value;
-            const type = document.getElementById('activity-type-filter').value;
+            const startDateInput = document.getElementById('activity-start-date');
+            const endDateInput = document.getElementById('activity-end-date');
+            const typeFilter = document.getElementById('activity-type-filter');
+            
+            if (!startDateInput || !endDateInput || !typeFilter) return;
+            
+            const startDate = startDateInput.value;
+            const endDate = endDateInput.value;
+            const type = typeFilter.value;
             
             try {
                 let url = 'http://101.35.129.174:3000/api/activities';
@@ -907,24 +1017,28 @@
                 const activities = await response.json();
                 const tableBody = document.getElementById('activities-table-body');
                 
-                if (activities.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">没有找到活动数据</td></tr>';
-                    return;
+                if (tableBody) {
+                    if (activities.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">没有找到活动数据</td></tr>';
+                        return;
+                    }
+                    
+                    tableBody.innerHTML = activities.map(activity => `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">${activity.date}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${activity.name}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${activity.type}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${activity.creator || '-'}</td>
+                            <td class="px-6 py-4">${activity.description || '-'}</td>
+                        </tr>
+                    `).join('');
                 }
-                
-                tableBody.innerHTML = activities.map(activity => `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">${activity.date}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${activity.name}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${activity.type}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${activity.creator || '-'}</td>
-                        <td class="px-6 py-4">${activity.description || '-'}</td>
-                    </tr>
-                `).join('');
             } catch (err) {
                 console.error('加载班级活动错误:', err);
-                document.getElementById('activities-table-body').innerHTML = 
-                    '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">加载失败，请重试</td></tr>';
+                const tableBody = document.getElementById('activities-table-body');
+                if (tableBody) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">加载失败，请重试</td></tr>';
+                }
             }
         }
 
@@ -935,30 +1049,37 @@
                 const messages = await response.json();
                 const messagesList = document.getElementById('messages-list');
                 
-                if (messages.length === 0) {
-                    messagesList.innerHTML = '<p class="text-center text-gray-500 py-6">暂无留言</p>';
-                    return;
-                }
-                
-                messagesList.innerHTML = messages.map(msg => `
-                    <div class="message-item">
-                        <div class="flex justify-between items-start">
-                            <span class="font-medium">${msg.username}</span>
-                            <span class="text-xs text-gray-500">${formatDate(msg.created_at)}</span>
+                if (messagesList) {
+                    if (messages.length === 0) {
+                        messagesList.innerHTML = '<p class="text-center text-gray-500 py-6">暂无留言</p>';
+                        return;
+                    }
+                    
+                    messagesList.innerHTML = messages.map(msg => `
+                        <div class="message-item">
+                            <div class="flex justify-between items-start">
+                                <span class="font-medium">${msg.username}</span>
+                                <span class="text-xs text-gray-500">${formatDate(msg.created_at)}</span>
+                            </div>
+                            <p class="mt-1 text-gray-700">${msg.content}</p>
                         </div>
-                        <p class="mt-1 text-gray-700">${msg.content}</p>
-                    </div>
-                `).join('');
+                    `).join('');
+                }
             } catch (err) {
                 console.error('加载留言错误:', err);
-                document.getElementById('messages-list').innerHTML = 
-                    '<p class="text-center text-red-500 py-6">加载失败，请重试</p>';
+                const messagesList = document.getElementById('messages-list');
+                if (messagesList) {
+                    messagesList.innerHTML = '<p class="text-center text-red-500 py-6">加载失败，请重试</p>';
+                }
             }
         }
 
         // 发送留言
         async function sendMessage() {
-            const content = document.getElementById('new-message').value.trim();
+            const contentInput = document.getElementById('new-message');
+            if (!contentInput) return;
+            
+            const content = contentInput.value.trim();
             if (!content) return;
             
             try {
@@ -970,7 +1091,9 @@
                 
                 const data = await response.json();
                 if (data.success) {
-                    document.getElementById('new-message').value = '';
+                    if (contentInput) {
+                        contentInput.value = '';
+                    }
                     loadMessages();
                     loadDashboardData();
                 } else {
@@ -998,7 +1121,11 @@
                     userId: currentUser.id,
                     username: currentUser.username
                 }));
-                document.getElementById('chat-messages').innerHTML = '<p class="text-center text-green-500 py-6">已连接，可以开始聊天</p>';
+                
+                const chatMessages = document.getElementById('chat-messages');
+                if (chatMessages) {
+                    chatMessages.innerHTML = '<p class="text-center text-green-500 py-6">已连接，可以开始聊天</p>';
+                }
             };
             
             // 接收消息
@@ -1006,33 +1133,37 @@
                 try {
                     const data = JSON.parse(event.data);
                     const chatMessages = document.getElementById('chat-messages');
+                    const onlineUsersList = document.getElementById('online-users-list');
                     
                     // 处理在线用户列表
                     if (data.type === 'userList') {
-                        const onlineUsersList = document.getElementById('online-users-list');
-                        onlineUsersList.innerHTML = data.users.map(user => `
-                            <div class="flex items-center">
-                                <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                                <span>${user.username}</span>
-                            </div>
-                        `).join('');
+                        if (onlineUsersList) {
+                            onlineUsersList.innerHTML = data.users.map(user => `
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                                    <span>${user.username}</span>
+                                </div>
+                            `).join('');
+                        }
                         return;
                     }
                     
                     // 处理聊天消息
                     if (data.type === 'message') {
-                        const isCurrentUser = data.username === currentUser.username;
-                        const messageHtml = `
-                            <div class="flex ${isCurrentUser ? 'justify-end' : 'justify-start'}">
-                                <div class="${isCurrentUser ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'} px-4 py-2 rounded-md max-w-xs">
-                                    <div class="font-medium text-sm">${data.username}</div>
-                                    <div class="mt-1">${data.content}</div>
+                        if (chatMessages) {
+                            const isCurrentUser = data.username === currentUser.username;
+                            const messageHtml = `
+                                <div class="flex ${isCurrentUser ? 'justify-end' : 'justify-start'}">
+                                    <div class="${isCurrentUser ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'} px-4 py-2 rounded-md max-w-xs">
+                                        <div class="font-medium text-sm">${data.username}</div>
+                                        <div class="mt-1">${data.content}</div>
+                                    </div>
                                 </div>
-                            </div>
-                        `;
-                        chatMessages.innerHTML += messageHtml;
-                        // 滚动到底部
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                            `;
+                            chatMessages.innerHTML += messageHtml;
+                            // 滚动到底部
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
                     }
                 } catch (err) {
                     console.error('处理WebSocket消息错误:', err);
@@ -1042,20 +1173,34 @@
             // 连接关闭
             ws.onclose = () => {
                 console.log('WebSocket连接关闭');
-                document.getElementById('chat-messages').innerHTML = '<p class="text-center text-red-500 py-6">连接已关闭，请刷新页面重试</p>';
-                document.getElementById('online-users-list').innerHTML = '<p class="text-sm text-gray-500">已断开连接</p>';
+                const chatMessages = document.getElementById('chat-messages');
+                const onlineUsersList = document.getElementById('online-users-list');
+                
+                if (chatMessages) {
+                    chatMessages.innerHTML = '<p class="text-center text-red-500 py-6">连接已关闭，请刷新页面重试</p>';
+                }
+                
+                if (onlineUsersList) {
+                    onlineUsersList.innerHTML = '<p class="text-sm text-gray-500">已断开连接</p>';
+                }
             };
             
             // 连接错误
             ws.onerror = (err) => {
                 console.error('WebSocket错误:', err);
-                document.getElementById('chat-messages').innerHTML = '<p class="text-center text-red-500 py-6">连接错误，请重试</p>';
+                const chatMessages = document.getElementById('chat-messages');
+                if (chatMessages) {
+                    chatMessages.innerHTML = '<p class="text-center text-red-500 py-6">连接错误，请重试</p>';
+                }
             };
         }
 
         // 发送聊天消息
         function sendChatMessage() {
-            const content = document.getElementById('chat-input').value.trim();
+            const contentInput = document.getElementById('chat-input');
+            if (!contentInput) return;
+            
+            const content = contentInput.value.trim();
             if (!content || !ws || ws.readyState !== WebSocket.OPEN) return;
             
             // 发送消息
@@ -1066,7 +1211,7 @@
             }));
             
             // 清空输入框
-            document.getElementById('chat-input').value = '';
+            contentInput.value = '';
         }
 
         // 加载活动统计图表
@@ -1076,32 +1221,37 @@
                 const stats = await response.json();
                 const chartContainer = document.getElementById('activities-chart');
                 
-                if (stats.length === 0) {
-                    chartContainer.innerHTML = '<p class="text-gray-500">暂无活动数据</p>';
-                    return;
+                if (chartContainer) {
+                    if (stats.length === 0) {
+                        chartContainer.innerHTML = '<p class="text-gray-500">暂无活动数据</p>';
+                        return;
+                    }
+                    
+                    // 简单的文本图表展示
+                    let chartHtml = '<div class="space-y-2">';
+                    stats.forEach(item => {
+                        const barWidth = Math.min(item.count * 50, 400); // 最大宽度400px
+                        chartHtml += `
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm">${item.month}</span>
+                                    <span class="text-sm font-medium">${item.count}个活动</span>
+                                </div>
+                                <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="h-full bg-blue-500" style="width: ${barWidth}px"></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    chartHtml += '</div>';
+                    chartContainer.innerHTML = chartHtml;
                 }
-                
-                // 简单的文本图表展示
-                let chartHtml = '<div class="space-y-2">';
-                stats.forEach(item => {
-                    const barWidth = Math.min(item.count * 50, 400); // 最大宽度400px
-                    chartHtml += `
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <span class="text-sm">${item.month}</span>
-                                <span class="text-sm font-medium">${item.count}个活动</span>
-                            </div>
-                            <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
-                                <div class="h-full bg-blue-500" style="width: ${barWidth}px"></div>
-                            </div>
-                        </div>
-                    `;
-                });
-                chartHtml += '</div>';
-                chartContainer.innerHTML = chartHtml;
             } catch (err) {
                 console.error('加载活动统计错误:', err);
-                document.getElementById('activities-chart').innerHTML = '<p class="text-red-500">加载统计失败</p>';
+                const chartContainer = document.getElementById('activities-chart');
+                if (chartContainer) {
+                    chartContainer.innerHTML = '<p class="text-red-500">加载统计失败</p>';
+                }
             }
         }
 
@@ -1112,35 +1262,40 @@
                 const stats = await response.json();
                 const chartContainer = document.getElementById('schedules-chart');
                 
-                // 简单的文本图表展示
-                chartContainer.innerHTML = `
-                    <div class="grid grid-cols-3 gap-4 text-center">
-                        <div>
-                            <div class="text-3xl font-bold text-green-500 mb-1">${stats.completedPercentage}%</div>
-                            <div class="text-sm text-gray-600">已完成</div>
-                            <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                <div class="h-full bg-green-500" style="width: ${stats.completedPercentage}%"></div>
+                if (chartContainer) {
+                    // 简单的文本图表展示
+                    chartContainer.innerHTML = `
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div>
+                                <div class="text-3xl font-bold text-green-500 mb-1">${stats.completedPercentage}%</div>
+                                <div class="text-sm text-gray-600">已完成</div>
+                                <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="h-full bg-green-500" style="width: ${stats.completedPercentage}%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-3xl font-bold text-blue-500 mb-1">${stats.inProgressPercentage}%</div>
+                                <div class="text-sm text-gray-600">进行中</div>
+                                <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="h-full bg-blue-500" style="width: ${stats.inProgressPercentage}%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-3xl font-bold text-yellow-500 mb-1">${stats.notStartedPercentage}%</div>
+                                <div class="text-sm text-gray-600">未开始</div>
+                                <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="h-full bg-yellow-500" style="width: ${stats.notStartedPercentage}%"></div>
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <div class="text-3xl font-bold text-blue-500 mb-1">${stats.inProgressPercentage}%</div>
-                            <div class="text-sm text-gray-600">进行中</div>
-                            <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                <div class="h-full bg-blue-500" style="width: ${stats.inProgressPercentage}%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="text-3xl font-bold text-yellow-500 mb-1">${stats.notStartedPercentage}%</div>
-                            <div class="text-sm text-gray-600">未开始</div>
-                            <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                <div class="h-full bg-yellow-500" style="width: ${stats.notStartedPercentage}%"></div>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                    `;
+                }
             } catch (err) {
                 console.error('加载值日统计错误:', err);
-                document.getElementById('schedules-chart').innerHTML = '<p class="text-red-500">加载统计失败</p>';
+                const chartContainer = document.getElementById('schedules-chart');
+                if (chartContainer) {
+                    chartContainer.innerHTML = '<p class="text-red-500">加载统计失败</p>';
+                }
             }
         }
 
