@@ -205,7 +205,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="members-table-body" class="bg-white divide-y divide-gray-200">
-                                    <!-- 成员数据将通过JS动态加载 -->
                                     <tr>
                                         <td colspan="5" class="px-6 py-4 text-center text-gray-500">加载成员数据中...</td>
                                     </tr>
@@ -237,7 +236,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="committee-table-body" class="bg-white divide-y divide-gray-200">
-                                    <!-- 班委会数据将通过JS动态加载 -->
                                     <tr>
                                         <td colspan="5" class="px-6 py-4 text-center text-gray-500">加载班委会数据中...</td>
                                     </tr>
@@ -281,7 +279,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="schedules-table-body" class="bg-white divide-y divide-gray-200">
-                                    <!-- 值日数据将通过JS动态加载 -->
                                     <tr>
                                         <td colspan="4" class="px-6 py-4 text-center text-gray-500">加载值日数据中...</td>
                                     </tr>
@@ -327,7 +324,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="activities-table-body" class="bg-white divide-y divide-gray-200">
-                                    <!-- 活动数据将通过JS动态加载 -->
                                     <tr>
                                         <td colspan="5" class="px-6 py-4 text-center text-gray-500">加载活动数据中...</td>
                                     </tr>
@@ -353,7 +349,6 @@
                         </div>
 
                         <div id="messages-list">
-                            <!-- 留言数据将通过JS动态加载 -->
                             <p class="text-center text-gray-500 py-6">加载留言数据中...</p>
                         </div>
                     </div>
@@ -367,7 +362,6 @@
                             <div class="w-64 border-r border-gray-200 p-4">
                                 <h4 class="font-medium mb-3">在线用户</h4>
                                 <div id="online-users-list" class="space-y-2">
-                                    <!-- 在线用户将通过WebSocket动态加载 -->
                                     <p class="text-sm text-gray-500">加载在线用户中...</p>
                                 </div>
                             </div>
@@ -375,7 +369,6 @@
                             <!-- 聊天内容 -->
                             <div class="flex-1 flex flex-col">
                                 <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4">
-                                    <!-- 聊天消息将通过WebSocket动态加载 -->
                                     <p class="text-center text-gray-500 py-6">等待连接...</p>
                                 </div>
                                 
@@ -397,7 +390,7 @@
         </div>
     </div>
 
-    <!-- 添加成员模态框 -->
+    <!-- 添加班级成员模态框 -->
     <div id="add-member-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg w-full max-w-md p-6">
             <h3 class="text-lg font-semibold mb-4">添加班级成员</h3>
@@ -425,7 +418,7 @@
                     <input type="text" id="member-phone"
                         class="w-full px-4 py-2 border border-gray-300 rounded-md">
                 </div>
-                <div>
+                                <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">邮箱</label>
                     <input type="email" id="member-email"
                         class="w-full px-4 py-2 border border-gray-300 rounded-md">
@@ -442,516 +435,230 @@
         </div>
     </div>
 
+    <!-- 班委会成员添加模态框 -->
+    <div id="add-committee-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-md p-6">
+            <h3 class="text-lg font-semibold mb-4">添加班委会成员</h3>
+            <form id="add-committee-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">学号</label>
+                    <input type="text" id="committee-student-id" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">姓名</label>
+                    <input type="text" id="committee-name" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">职务</label>
+                    <input type="text" id="committee-position" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md" placeholder="如：班长、学习委员">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">职责</label>
+                    <textarea id="committee-responsibilities" rows="2"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md" placeholder="描述职责范围"></textarea>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" id="cancel-add-committee" class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
+                        取消
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors">
+                        保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // 配置与常量定义
+        // 配置信息
         const CONFIG = {
-            API_BASE_URL: 'http://101.35.129.174:3000/api',
-            WS_BASE_URL: 'ws://101.35.129.174:3000',
-            DEFAULT_EMPTY_TEXT: '暂无数据',
-            LOADING_TEXT: '加载中...',
-            ERROR_TEXT: '加载失败，请重试'
+            API_BASE_URL: 'http://localhost:3000/api', // 后端API地址
+            WS_BASE_URL: 'ws://localhost:3000' // WebSocket地址
         };
 
-        // 接口路径常量
-        const API_PATHS = {
-            login: '/login',
-            classMembers: '/class-members',
-            committee: '/committee',
-            activities: '/activities',
-            schedules: '/schedules',
-            messages: '/messages',
-            activitiesStats: '/activities/stats',
-            schedulesStats: '/schedules/stats'
-        };
-
-        // 全局变量
+        // 当前登录用户信息
         let currentUser = null;
+        // WebSocket连接
         let ws = null;
 
-        // 通用HTTP请求工具
-        const Http = {
-            async get(url, params = {}) {
-                // 处理查询参数
-                const queryParams = new URLSearchParams();
-                Object.entries(params).forEach(([key, value]) => {
-                    if (value) queryParams.append(key, value);
-                });
-                
-                const fullUrl = queryParams.toString() 
-                    ? `${url}?${queryParams.toString()}` 
-                    : url;
-                    
-                try {
-                    const response = await fetch(fullUrl);
-                    if (!response.ok) throw new Error('请求失败');
-                    return await response.json();
-                } catch (err) {
-                    console.error('GET请求错误:', err);
-                    throw err;
-                }
-            },
-            
-            async post(url, data = {}) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data)
-                    });
-                    if (!response.ok) throw new Error('请求失败');
-                    return await response.json();
-                } catch (err) {
-                    console.error('POST请求错误:', err);
-                    throw err;
-                }
-            },
-            
-            async delete(url) {
-                try {
-                    const response = await fetch(url, { method: 'DELETE' });
-                    if (!response.ok) throw new Error('请求失败');
-                    return await response.json();
-                } catch (err) {
-                    console.error('DELETE请求错误:', err);
-                    throw err;
-                }
-            }
-        };
-
-        // 表格渲染工具
-        const TableRenderer = {
-            // 渲染加载状态
-            renderLoading(containerId, colSpan = 5) {
-                const container = document.getElementById(containerId);
-                if (container) {
-                    container.innerHTML = `<tr><td colspan="${colSpan}" class="px-6 py-4 text-center text-gray-500">${CONFIG.LOADING_TEXT}</td></tr>`;
-                }
-            },
-            
-            // 渲染空状态
-            renderEmpty(containerId, colSpan = 5, text = CONFIG.DEFAULT_EMPTY_TEXT) {
-                const container = document.getElementById(containerId);
-                if (container) {
-                    container.innerHTML = `<tr><td colspan="${colSpan}" class="px-6 py-4 text-center text-gray-500">${text}</td></tr>`;
-                }
-            },
-            
-            // 渲染错误状态
-            renderError(containerId, colSpan = 5) {
-                const container = document.getElementById(containerId);
-                if (container) {
-                    container.innerHTML = `<tr><td colspan="${colSpan}" class="px-6 py-4 text-center text-red-500">${CONFIG.ERROR_TEXT}</td></tr>`;
-                }
-            },
-            
-            // 渲染表格数据
-            renderData(containerId, data, renderRow) {
-                const container = document.getElementById(containerId);
-                if (!container) return;
-                
-                if (data.length === 0) {
-                    this.renderEmpty(containerId);
-                    return;
-                }
-                
-                container.innerHTML = data.map(renderRow).join('');
-            }
-        };
-
-        // WebSocket模块
-        const ChatSocket = {
-            socket: null,
-            
-            init() {
-                if (this.socket && this.socket.readyState === WebSocket.OPEN) return;
-                
-                this.socket = new WebSocket(CONFIG.WS_BASE_URL);
-                
-                this.socket.onopen = () => {
-                    console.log('WebSocket连接成功');
-                    this.sendLoginInfo();
-                };
-                
-                this.socket.onmessage = (event) => {
-                    this.handleMessage(event.data);
-                };
-                
-                this.socket.onerror = (err) => {
-                    console.error('WebSocket错误:', err);
-                    this.showError('连接错误，请重试');
-                };
-                
-                this.socket.onclose = () => {
-                    console.log('WebSocket连接关闭');
-                    this.updateOnlineUsers('已断开连接');
-                };
-            },
-            
-            sendLoginInfo() {
-                if (currentUser && this.socket.readyState === WebSocket.OPEN) {
-                    this.socket.send(JSON.stringify({
-                        type: 'login',
-                        userId: currentUser.id,
-                        username: currentUser.username
-                    }));
-                }
-            },
-            
-            sendMessage(content) {
-                if (!content || !this.socket || this.socket.readyState !== WebSocket.OPEN) return;
-                
-                this.socket.send(JSON.stringify({
-                    type: 'message',
-                    username: currentUser.username,
-                    content: content
-                }));
-            },
-            
-            handleMessage(data) {
-                try {
-                    const message = JSON.parse(data);
-                    switch (message.type) {
-                        case 'userList':
-                            this.updateOnlineUsers(message.users);
-                            break;
-                        case 'message':
-                            this.appendChatMessage(message);
-                            break;
-                        default:
-                            console.log('未知消息类型:', message);
-                    }
-                } catch (err) {
-                    console.error('处理WebSocket消息错误:', err);
-                }
-            },
-            
-            updateOnlineUsers(users) {
-                const onlineUsersList = document.getElementById('online-users-list');
-                if (!onlineUsersList) return;
-                
-                if (typeof users === 'string') {
-                    onlineUsersList.innerHTML = `<p class="text-sm text-gray-500">${users}</p>`;
-                    return;
-                }
-                
-                onlineUsersList.innerHTML = users.map(user => `
-                    <p class="text-sm">${user.username}</p>
-                `).join('');
-            },
-            
-            appendChatMessage(message) {
-                const chatMessages = document.getElementById('chat-messages');
-                if (!chatMessages) return;
-                
-                const isCurrentUser = message.username === currentUser.username;
-                const messageHtml = `
-                    <div class="flex ${isCurrentUser ? 'justify-end' : 'justify-start'}">
-                        <div class="${isCurrentUser ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'} px-4 py-2 rounded-md max-w-xs">
-                            <div class="font-medium text-sm">${message.username}</div>
-                            <div class="mt-1">${message.content}</div>
-                        </div>
-                    </div>
-                `;
-                
-                chatMessages.innerHTML += messageHtml;
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            },
-            
-            showError(message) {
-                const chatMessages = document.getElementById('chat-messages');
-                if (chatMessages) {
-                    chatMessages.innerHTML = `<p class="text-center text-red-500 py-6">${message}</p>`;
-                }
-            }
-        };
-
-        // 确保DOM完全加载后执行所有脚本
+        // DOM加载完成后初始化
         document.addEventListener('DOMContentLoaded', () => {
-            // 初始化所有功能
-            initSidebar();
-            initNavigation();
-            initLoginForm();
-            initLogout();
-            initFeatureEvents();
-
-            // 检查本地存储中的登录状态
-            const savedUser = localStorage.getItem('currentUser');
+            // 初始化事件绑定
+            initEventListeners();
+            
+            // 检查本地存储的登录状态
+            const savedUser = localStorage.getItem('classSystemUser');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
                 showApp();
-                loadDashboardData();
             }
         });
 
-        // 初始化侧边栏折叠/展开
-        function initSidebar() {
-            const categories = document.querySelectorAll('.sidebar-category');
+        // 初始化所有事件监听
+        function initEventListeners() {
+            // 登录表单提交
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
             
-            categories.forEach(category => {
-                category.addEventListener('click', () => {
-                    const content = category.nextElementSibling;
-                    const icon = category.querySelector('.fa-chevron-down');
-                    
-                    // 切换内容高度
-                    if (content.style.maxHeight) {
-                        content.style.maxHeight = null;
-                        icon.style.transform = 'rotate(0deg)';
-                    } else {
-                        content.style.maxHeight = content.scrollHeight + 'px';
-                        icon.style.transform = 'rotate(180deg)';
-                    }
-                });
+            // 退出登录
+            document.getElementById('logout-btn').addEventListener('click', handleLogout);
+            
+            // 侧边栏分类展开/折叠
+            document.querySelectorAll('.sidebar-category').forEach(item => {
+                item.addEventListener('click', toggleSidebarCategory);
             });
-
-            // 默认展开第一个分类
-            const firstCategory = document.querySelector('.sidebar-category');
-            if (firstCategory) {
-                firstCategory.click();
-            }
-        }
-
-        // 初始化导航切换
-        function initNavigation() {
-            const navLinks = document.querySelectorAll('.sidebar-link.nav-item');
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    
-                    // 更新活跃状态
-                    document.querySelectorAll('.sidebar-link.nav-item').forEach(item => {
-                        item.classList.remove('active');
-                    });
-                    link.classList.add('active');
-                    
-                    // 切换页面
-                    const targetPage = link.getAttribute('data-page');
-                    document.querySelectorAll('.page-content').forEach(page => {
-                        page.classList.add('hidden');
-                    });
-                    const targetElement = document.getElementById(`${targetPage}-page`);
-                    if (targetElement) {
-                        targetElement.classList.remove('hidden');
-                    }
-                    
-                    // 更新页面标题
-                    const pageTitle = link.textContent.trim();
-                    const titleElement = document.getElementById('page-title');
-                    if (titleElement) {
-                        titleElement.textContent = pageTitle;
-                    }
-
-                    // 加载对应页面数据
-                    if (targetPage === 'class-members') {
-                        loadClassMembers();
-                    } else if (targetPage === 'committee') {
-                        loadCommitteeMembers();
-                    } else if (targetPage === 'schedules') {
-                        loadSchedules();
-                    } else if (targetPage === 'activities') {
-                        loadActivities();
-                    } else if (targetPage === 'messages') {
-                        loadMessages();
-                    } else if (targetPage === 'chat') {
-                        ChatSocket.init();
-                    }
-                });
+            
+            // 页面导航切换
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', switchPage);
             });
-        }
-
-        // 初始化功能按钮事件
-        function initFeatureEvents() {
-            // 班级成员相关
+            
+            // 班级成员相关事件
             initMemberEvents();
             
-            // 值日安排筛选
-            const filterSchedulesBtn = document.getElementById('filter-schedules-btn');
-            if (filterSchedulesBtn) {
-                filterSchedulesBtn.addEventListener('click', loadSchedules);
-            }
-
-            // 班级活动筛选
-            const filterActivitiesBtn = document.getElementById('filter-activities-btn');
-            if (filterActivitiesBtn) {
-                filterActivitiesBtn.addEventListener('click', loadActivities);
-            }
-
-            // 发送留言
-            const sendMessageBtn = document.getElementById('send-message-btn');
-            if (sendMessageBtn) {
-                sendMessageBtn.addEventListener('click', sendMessage);
-            }
-
-            // 发送聊天消息
-            const sendChatBtn = document.getElementById('send-chat-btn');
-            if (sendChatBtn) {
-                sendChatBtn.addEventListener('click', sendChatMessage);
-            }
+            // 班委会相关事件
+            initCommitteeEvents();
             
-            const chatInput = document.getElementById('chat-input');
-            if (chatInput) {
-                chatInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') sendChatMessage();
+            // 值日安排相关事件
+            initScheduleEvents();
+            
+            // 班级活动相关事件
+            initActivityEvents();
+            
+            // 留言簿相关事件
+            initMessageEvents();
+            
+            // 实时聊天相关事件
+            initChatEvents();
+        }
+
+        // 1. 登录相关
+        async function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('user-role').value;
+
+            try {
+                const response = await fetch(`${CONFIG.API_BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, role })
                 });
+
+                const data = await response.json();
+                if (data.success) {
+                    currentUser = data.user;
+                    localStorage.setItem('classSystemUser', JSON.stringify(currentUser));
+                    showApp();
+                } else {
+                    alert(data.error || '登录失败');
+                }
+            } catch (err) {
+                console.error('登录错误:', err);
+                alert('网络错误，登录失败');
             }
         }
 
-        // 成员相关事件
-        function initMemberEvents() {
-            const addMemberBtn = document.getElementById('add-member-btn');
-            if (addMemberBtn) {
-                addMemberBtn.addEventListener('click', () => openModal('add-member-modal'));
+        function handleLogout() {
+            localStorage.removeItem('classSystemUser');
+            currentUser = null;
+            // 关闭WebSocket连接
+            if (ws) {
+                ws.close();
+                ws = null;
             }
-            
-            const cancelAddMember = document.getElementById('cancel-add-member');
-            if (cancelAddMember) {
-                cancelAddMember.addEventListener('click', () => closeModal('add-member-modal'));
-            }
-            
-            const addMemberForm = document.getElementById('add-member-form');
-            if (addMemberForm) {
-                addMemberForm.addEventListener('submit', handleAddMember);
-            }
-            
-            // 搜索和筛选
-            const memberSearch = document.getElementById('member-search');
-            if (memberSearch) {
-                memberSearch.addEventListener('input', debounce(loadClassMembers, 300));
-            }
-            
-            const memberRoleFilter = document.getElementById('member-role-filter');
-            if (memberRoleFilter) {
-                memberRoleFilter.addEventListener('change', loadClassMembers);
-            }
+            document.getElementById('login-page').classList.remove('hidden');
+            document.getElementById('app').classList.add('hidden');
         }
 
-        // 初始化登录表单
-        function initLoginForm() {
-            const form = document.getElementById('login-form');
-            if (form) {
-                form.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    
-                    const username = document.getElementById('username').value;
-                    const password = document.getElementById('password').value;
-                    const role = document.getElementById('user-role').value;
-                    
-                    try {
-                        const response = await Http.post(`${CONFIG.API_BASE_URL}${API_PATHS.login}`, { 
-                            username, 
-                            password, 
-                            role 
-                        });
-                        
-                        if (response.success) {
-                            currentUser = response.user;
-                            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                            showApp();
-                            loadDashboardData();
-                        } else {
-                            alert(response.message || '登录失败');
-                        }
-                    } catch (err) {
-                        console.error('登录错误:', err);
-                        alert('登录失败，请重试');
-                    }
-                });
-            }
-        }
-
-        // 初始化退出功能
-        function initLogout() {
-            const logoutBtn = document.getElementById('logout-btn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', () => {
-                    localStorage.removeItem('currentUser');
-                    currentUser = null;
-                    // 关闭WebSocket连接
-                    if (ChatSocket.socket && ChatSocket.socket.readyState === WebSocket.OPEN) {
-                        ChatSocket.socket.close();
-                    }
-                    showLoginPage();
-                });
-            }
-        }
-
-        // 显示应用界面
         function showApp() {
-            const loginPage = document.getElementById('login-page');
-            const app = document.getElementById('app');
-            const userInfo = document.getElementById('user-info');
-            const statCurrentUser = document.getElementById('stat-current-user');
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            document.getElementById('user-info').textContent = `${currentUser.username} (${
+                currentUser.role === 'admin' ? '管理员' : currentUser.role === 'teacher' ? '教师' : '学生'
+            })`;
             
-            if (loginPage && app) {
-                loginPage.classList.add('hidden');
-                app.classList.remove('hidden');
-                
-                if (userInfo && currentUser) {
-                    userInfo.textContent = `${currentUser.username} (${getRoleText(currentUser.role)})`;
-                }
-                
-                if (statCurrentUser && currentUser) {
-                    statCurrentUser.textContent = `${currentUser.username} (${getRoleText(currentUser.role)})`;
-                }
+            // 加载默认页面数据
+            loadDashboardData();
+        }
+
+        // 2. 页面导航
+        function toggleSidebarCategory(e) {
+            const category = e.currentTarget.getAttribute('data-category');
+            const content = e.currentTarget.nextElementSibling;
+            const icon = e.currentTarget.querySelector('.fa-chevron-down');
+            
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
             }
         }
 
-        // 显示登录页面
-        function showLoginPage() {
-            const app = document.getElementById('app');
-            const loginPage = document.getElementById('login-page');
-            const loginForm = document.getElementById('login-form');
+        function switchPage(e) {
+            e.preventDefault();
+            const pageId = e.currentTarget.getAttribute('data-page');
             
-            if (app && loginPage) {
-                app.classList.add('hidden');
-                loginPage.classList.remove('hidden');
-                
-                if (loginForm) {
-                    loginForm.reset();
-                }
+            // 更新活跃导航项
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            e.currentTarget.classList.add('active');
+            
+            // 显示选中页面，隐藏其他页面
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.add('hidden');
+            });
+            document.getElementById(`${pageId}-page`).classList.remove('hidden');
+            
+            // 更新页面标题
+            const pageTitle = e.currentTarget.textContent.trim();
+            document.getElementById('page-title').textContent = pageTitle;
+            
+            // 加载对应页面数据
+            switch (pageId) {
+                case 'dashboard':
+                    loadDashboardData();
+                    break;
+                case 'class-members':
+                    loadClassMembers();
+                    break;
+                case 'committee':
+                    loadCommitteeMembers();
+                    break;
+                case 'schedules':
+                    loadSchedules();
+                    break;
+                case 'activities':
+                    loadActivities();
+                    break;
+                case 'messages':
+                    loadMessages();
+                    break;
+                case 'chat':
+                    initWebSocket();
+                    break;
             }
         }
 
-        // 转换角色文本
-        function getRoleText(role) {
-            const roleMap = {
-                'admin': '管理员',
-                'teacher': '教师',
-                'student': '学生'
-            };
-            return roleMap[role] || role;
-        }
-
-        // 加载仪表盘数据
+        // 3. 仪表盘数据
         async function loadDashboardData() {
             try {
-                // 加载班级成员总数
-                const membersData = await Http.get(`${CONFIG.API_BASE_URL}${API_PATHS.classMembers}`);
-                const statTotalMembers = document.getElementById('stat-total-members');
-                if (statTotalMembers) {
-                    statTotalMembers.textContent = membersData.length;
-                }
-
-                // 加载本月活动数
-                const today = new Date();
-                const monthStart = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-01`;
-                const activitiesData = await Http.get(`${CONFIG.API_BASE_URL}${API_PATHS.activities}`, {
-                    startDate: monthStart
-                });
-                const statMonthlyActivities = document.getElementById('stat-monthly-activities');
-                if (statMonthlyActivities) {
-                    statMonthlyActivities.textContent = activitiesData.length;
-                }
-
-                // 加载最新留言数
-                const messagesData = await Http.get(`${CONFIG.API_BASE_URL}${API_PATHS.messages}`);
-                const statRecentMessages = document.getElementById('stat-recent-messages');
-                if (statRecentMessages) {
-                    statRecentMessages.textContent = messagesData.length;
-                }
-
+                const response = await fetch(`${CONFIG.API_BASE_URL}/dashboard`);
+                const data = await response.json();
+                
+                // 更新统计数据
+                document.getElementById('stat-total-members').textContent = data.totalMembers;
+                document.getElementById('stat-monthly-activities').textContent = data.monthlyActivities;
+                document.getElementById('stat-recent-messages').textContent = data.recentMessages;
+                
                 // 加载活动统计图表
                 loadActivitiesStats();
-
                 // 加载值日统计图表
                 loadSchedulesStats();
             } catch (err) {
@@ -959,65 +666,137 @@
             }
         }
 
-        // 加载班级成员列表
+        async function loadActivitiesStats() {
+            try {
+                const response = await fetch(`${CONFIG.API_BASE_URL}/activities/stats`);
+                const stats = await response.json();
+                
+                const container = document.getElementById('activities-chart');
+                if (stats.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500">暂无活动数据</p>';
+                    return;
+                }
+                
+                // 简单文本图表展示（实际项目可用Chart.js）
+                let chartHtml = '<div class="space-y-2">';
+                stats.forEach(item => {
+                    chartHtml += `
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>${item.month}</span>
+                                <span>${item.count} 次活动</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: ${Math.min(item.count * 10, 100)}%"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+                chartHtml += '</div>';
+                container.innerHTML = chartHtml;
+            } catch (err) {
+                console.error('加载活动统计错误:', err);
+            }
+        }
+
+        async function loadSchedulesStats() {
+            try {
+                const response = await fetch(`${CONFIG.API_BASE_URL}/schedules/stats`);
+                const stats = await response.json();
+                
+                const container = document.getElementById('schedules-chart');
+                container.innerHTML = `
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                            <div class="text-sm text-gray-500">已完成</div>
+                            <div class="text-2xl font-bold text-green-500 mt-1">${stats.completedPercentage}%</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">进行中</div>
+                            <div class="text-2xl font-bold text-yellow-500 mt-1">${stats.inProgressPercentage}%</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">未开始</div>
+                            <div class="text-2xl font-bold text-red-500 mt-1">${stats.notStartedPercentage}%</div>
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                console.error('加载值日统计错误:', err);
+            }
+        }
+
+        // 4. 班级成员管理
+        function initMemberEvents() {
+            // 打开添加成员模态框
+            document.getElementById('add-member-btn').addEventListener('click', () => {
+                openModal('add-member-modal');
+            });
+            
+            // 关闭添加成员模态框
+            document.getElementById('cancel-add-member').addEventListener('click', () => {
+                closeModal('add-member-modal');
+            });
+            
+            // 提交添加成员表单
+            document.getElementById('add-member-form').addEventListener('submit', handleAddMember);
+            
+            // 搜索和筛选
+            document.getElementById('member-search').addEventListener('input', debounce(loadClassMembers, 500));
+            document.getElementById('member-role-filter').addEventListener('change', loadClassMembers);
+        }
+
         async function loadClassMembers() {
-            const searchInput = document.getElementById('member-search');
-            const roleFilter = document.getElementById('member-role-filter');
-            
-            if (!searchInput || !roleFilter) return;
-            
-            const containerId = 'members-table-body';
-            TableRenderer.renderLoading(containerId);
+            const search = document.getElementById('member-search').value;
+            const role = document.getElementById('member-role-filter').value;
+            const tableBody = document.getElementById('members-table-body');
             
             try {
-                const membersList = await Http.get(`${CONFIG.API_BASE_URL}${API_PATHS.classMembers}`, {
-                    search: searchInput.value,
-                    role: roleFilter.value
-                });
+                let url = `${CONFIG.API_BASE_URL}/class-members`;
+                const params = new URLSearchParams();
+                if (search) params.append('search', search);
+                if (role) params.append('role', role);
+                if (params.toString()) url += `?${params.toString()}`;
                 
-                TableRenderer.renderData(containerId, membersList, member => `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">${member.id}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${member.name || '-'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${getRoleText(member.role)}</td>
-                        <td class="px-6 py-4">${member.phone || '-'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <button class="text-red-500 hover:text-red-700 transition-colors" 
-                                onclick="deleteClassMember(${member.id})">
-                                <i class="fa fa-trash"></i> 删除
-                            </button>
-                        </td>
-                    </tr>
-                `);
+                const response = await fetch(url);
+                const members = await response.json();
+                
+                if (members.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">暂无成员数据</td></tr>';
+                    return;
+                }
+                
+                let html = '';
+                members.forEach(member => {
+                    html += `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">${member.id}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${member.name}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    ${member.role === 'teacher' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}">
+                                    ${member.role === 'teacher' ? '教师' : '学生'}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">${member.phone || '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button onclick="deleteClassMember('${member.id}')" 
+                                    class="text-red-500 hover:text-red-700 transition-colors">
+                                    <i class="fa fa-trash"></i> 删除
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tableBody.innerHTML = html;
             } catch (err) {
                 console.error('加载班级成员错误:', err);
-                TableRenderer.renderError(containerId);
+                tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">加载失败</td></tr>';
             }
         }
 
-        // 删除班级成员
-        async function deleteClassMember(memberId) {
-            if (!confirm('确定要删除这个成员吗？')) return;
-            
-            try {
-                const data = await Http.delete(`${CONFIG.API_BASE_URL}${API_PATHS.classMembers}/${memberId}`);
-                
-                if (data.success) {
-                    loadClassMembers();
-                    loadDashboardData();
-                } else {
-                    alert('删除失败: ' + (data.error || '未知错误'));
-                }
-            } catch (err) {
-                console.error('删除成员错误:', err);
-                alert('删除失败，请重试');
-            }
-        }
-
-        // 处理添加成员
         async function handleAddMember(e) {
             e.preventDefault();
-            
             const memberData = {
                 id: document.getElementById('member-id').value,
                 name: document.getElementById('member-name').value,
@@ -1025,336 +804,449 @@
                 phone: document.getElementById('member-phone').value,
                 email: document.getElementById('member-email').value
             };
-            
+
             try {
-                const data = await Http.post(`${CONFIG.API_BASE_URL}${API_PATHS.classMembers}`, memberData);
-                
+                const response = await fetch(`${CONFIG.API_BASE_URL}/class-members`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(memberData)
+                });
+
+                const data = await response.json();
                 if (data.success) {
                     closeModal('add-member-modal');
-                    loadClassMembers(); // 重新加载成员列表
-                    loadDashboardData(); // 更新仪表盘统计
+                    document.getElementById('add-member-form').reset();
+                    loadClassMembers(); // 刷新列表
+                    alert('添加成功');
                 } else {
-                    alert('添加失败: ' + (data.error || '未知错误'));
+                    alert(data.error || '添加失败');
                 }
             } catch (err) {
-                console.error('添加成员错误:', err);
-                alert('添加失败，请重试');
+                console.error('添加班级成员错误:', err);
+                alert('网络错误，添加失败');
             }
         }
 
-        // 加载班委会成员
+        async function deleteClassMember(id) {
+            if (!confirm('确定要删除该成员吗？')) return;
+
+            try {
+                const response = await fetch(`${CONFIG.API_BASE_URL}/class-members/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    loadClassMembers(); // 刷新列表
+                    alert('删除成功');
+                } else {
+                    alert(data.error || '删除失败');
+                }
+            } catch (err) {
+                console.error('删除班级成员错误:', err);
+                alert('网络错误，删除失败');
+            }
+        }
+
+        // 5. 班委会管理
+        function initCommitteeEvents() {
+            // 打开添加模态框
+            document.getElementById('add-committee-btn').addEventListener('click', () => {
+                openModal('add-committee-modal');
+            });
+            
+            // 关闭添加模态框
+            document.getElementById('cancel-add-committee').addEventListener('click', () => {
+                closeModal('add-committee-modal');
+            });
+            
+            // 提交添加表单
+            document.getElementById('add-committee-form').addEventListener('submit', handleAddCommitteeMember);
+        }
+
         async function loadCommitteeMembers() {
-            const containerId = 'committee-table-body';
-            TableRenderer.renderLoading(containerId);
+            const tableBody = document.getElementById('committee-table-body');
             
             try {
-                const committeeMembers = await Http.get(`${CONFIG.API_BASE_URL}${API_PATHS.committee}`);
+                const response = await fetch(`${CONFIG.API_BASE_URL}/committee`);
+                const members = await response.json();
                 
-                TableRenderer.renderData(containerId, committeeMembers, member => `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">${member.student_id}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${member.name}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${member.position}</td>
-                        <td class="px-6 py-4">${member.responsibilities || '-'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <button class="text-red-500 hover:text-red-700 transition-colors" 
-                                onclick="deleteCommitteeMember(${member.id})">
-                                <i class="fa fa-trash"></i> 删除
-                            </button>
-                        </td>
-                    </tr>
-                `);
+                if (members.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">暂无数据</td></tr>';
+                    return;
+                }
+                
+                let html = '';
+                members.forEach(member => {
+                    html += `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">${member.student_id}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${member.name}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${member.position}</td>
+                            <td class="px-6 py-4">${member.responsibilities || '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button onclick="deleteCommitteeMember(${member.id})" 
+                                    class="text-red-500 hover:text-red-700 transition-colors">
+                                    <i class="fa fa-trash"></i> 删除
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tableBody.innerHTML = html;
             } catch (err) {
                 console.error('加载班委会成员错误:', err);
-                TableRenderer.renderError(containerId);
+                tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">加载失败</td></tr>';
             }
         }
 
-        // 删除班委会成员
-        async function deleteCommitteeMember(id) {
-            if (!confirm('确定要删除这个班委会成员吗？')) return;
-            
+        async function handleAddCommitteeMember(e) {
+            e.preventDefault();
+            const committeeData = {
+                student_id: document.getElementById('committee-student-id').value,
+                name: document.getElementById('committee-name').value,
+                position: document.getElementById('committee-position').value,
+                responsibilities: document.getElementById('committee-responsibilities').value
+            };
+
             try {
-                const data = await Http.delete(`${CONFIG.API_BASE_URL}${API_PATHS.committee}/${id}`);
-                
+                const response = await fetch(`${CONFIG.API_BASE_URL}/committee`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(committeeData)
+                });
+
+                const data = await response.json();
                 if (data.success) {
-                    loadCommitteeMembers();
+                    closeModal('add-committee-modal');
+                    document.getElementById('add-committee-form').reset();
+                    loadCommitteeMembers(); // 刷新列表
+                    alert('添加成功');
                 } else {
-                    alert('删除失败: ' + (data.error || '未知错误'));
+                    alert(data.error || '添加失败');
+                }
+            } catch (err) {
+                console.error('添加班委会成员错误:', err);
+                alert('网络错误，添加失败');
+            }
+        }
+
+        async function deleteCommitteeMember(id) {
+            if (!confirm('确定要删除该班委会成员吗？')) return;
+
+            try {
+                const response = await fetch(`${CONFIG.API_BASE_URL}/committee/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    loadCommitteeMembers(); // 刷新列表
+                    alert('删除成功');
+                } else {
+                    alert(data.error || '删除失败');
                 }
             } catch (err) {
                 console.error('删除班委会成员错误:', err);
-                alert('删除失败，请重试');
+                alert('网络错误，删除失败');
             }
         }
 
-        // 加载值日安排
+        // 6. 值日安排管理
+        function initScheduleEvents() {
+            document.getElementById('filter-schedules-btn').addEventListener('click', loadSchedules);
+        }
+
         async function loadSchedules() {
-            const startDateInput = document.getElementById('schedule-start-date');
-            const endDateInput = document.getElementById('schedule-end-date');
-            const statusFilter = document.getElementById('schedule-status-filter');
-            
-            if (!startDateInput || !endDateInput || !statusFilter) return;
-            
-            const containerId = 'schedules-table-body';
-            TableRenderer.renderLoading(containerId, 4);
+            const startDate = document.getElementById('schedule-start-date').value;
+            const endDate = document.getElementById('schedule-end-date').value;
+            const status = document.getElementById('schedule-status-filter').value;
+            const tableBody = document.getElementById('schedules-table-body');
             
             try {
-                const schedules = await Http.get(`${CONFIG.API_BASE_URL}${API_PATHS.schedules}`, {
-                    startDate: startDateInput.value,
-                    endDate: endDateInput.value,
-                    status: statusFilter.value
-                });
+                let url = `${CONFIG.API_BASE_URL}/schedules`;
+                const params = new URLSearchParams();
+                if (startDate) params.append('startDate', startDate);
+                if (endDate) params.append('endDate', endDate);
+                if (status) params.append('status', status);
+                if (params.toString()) url += `?${params.toString()}`;
                 
-                TableRenderer.renderData(containerId, schedules, schedule => `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">${schedule.date}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${schedule.personnel}</td>
-                        <td class="px-6 py-4">${schedule.task}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 py-1 rounded text-xs ${getStatusClass(schedule.status)}">
-                                ${schedule.status}
-                            </span>
-                        </td>
-                    </tr>
-                `, 4);
+                const response = await fetch(url);
+                const schedules = await response.json();
+                
+                if (schedules.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">暂无值日数据</td></tr>';
+                    return;
+                }
+                
+                let html = '';
+                schedules.forEach(schedule => {
+                    html += `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">${schedule.date}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${schedule.personnel}</td>
+                            <td class="px-6 py-4">${schedule.task || '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    ${schedule.status === '已完成' ? 'bg-green-100 text-green-800' : 
+                                      schedule.status === '进行中' ? 'bg-yellow-100 text-yellow-800' : 
+                                      'bg-red-100 text-red-800'}">
+                                    ${schedule.status}
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tableBody.innerHTML = html;
             } catch (err) {
                 console.error('加载值日安排错误:', err);
-                TableRenderer.renderError(containerId, 4);
+                tableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-red-500">加载失败</td></tr>';
             }
         }
 
-        // 获取状态样式
-        function getStatusClass(status) {
-            const statusMap = {
-                '未开始': 'bg-yellow-100 text-yellow-800',
-                '进行中': 'bg-blue-100 text-blue-800',
-                '已完成': 'bg-green-100 text-green-800'
-            };
-            return statusMap[status] || 'bg-gray-100 text-gray-800';
+        // 7. 班级活动管理
+        function initActivityEvents() {
+            document.getElementById('filter-activities-btn').addEventListener('click', loadActivities);
         }
 
-        // 加载班级活动
         async function loadActivities() {
-            const startDateInput = document.getElementById('activity-start-date');
-            const endDateInput = document.getElementById('activity-end-date');
-            const typeFilter = document.getElementById('activity-type-filter');
-            
-            if (!startDateInput || !endDateInput || !typeFilter) return;
-            
-            const containerId = 'activities-table-body';
-            TableRenderer.renderLoading(containerId);
+            const startDate = document.getElementById('activity-start-date').value;
+            const endDate = document.getElementById('activity-end-date').value;
+            const type = document.getElementById('activity-type-filter').value;
+            const tableBody = document.getElementById('activities-table-body');
             
             try {
-                const activities = await Http.get(`${CONFIG.API_BASE_URL}${API_PATHS.activities}`, {
-                    startDate: startDateInput.value,
-                    endDate: endDateInput.value,
-                    type: typeFilter.value
-                });
+                let url = `${CONFIG.API_BASE_URL}/activities`;
+                const params = new URLSearchParams();
+                if (startDate) params.append('startDate', startDate);
+                if (endDate) params.append('endDate', endDate);
+                if (type) params.append('type', type);
+                if (params.toString()) url += `?${params.toString()}`;
                 
-                TableRenderer.renderData(containerId, activities, activity => `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">${activity.date}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${activity.name}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${activity.type}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${activity.creator || '-'}</td>
-                        <td class="px-6 py-4">${activity.description || '-'}</td>
-                    </tr>
-                `);
+                const response = await fetch(url);
+                const activities = await response.json();
+                
+                if (activities.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">暂无活动数据</td></tr>';
+                    return;
+                }
+                
+                let html = '';
+                activities.forEach(activity => {
+                    html += `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">${activity.date}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${activity.name}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                                    ${activity.type}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">${activity.creator || '-'}</td>
+                            <td class="px-6 py-4">${activity.description || '-'}</td>
+                        </tr>
+                    `;
+                });
+                tableBody.innerHTML = html;
             } catch (err) {
                 console.error('加载班级活动错误:', err);
-                TableRenderer.renderError(containerId);
+                tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">加载失败</td></tr>';
             }
         }
 
-        // 加载留言
+        // 8. 留言簿管理
+        function initMessageEvents() {
+            document.getElementById('send-message-btn').addEventListener('click', sendMessage);
+            document.getElementById('new-message').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+        }
+
         async function loadMessages() {
-            const containerId = 'messages-list';
-            const container = document.getElementById(containerId);
-            
-            if (container) {
-                container.innerHTML = `<p class="text-center text-gray-500 py-6">${CONFIG.LOADING_TEXT}</p>`;
-            }
+            const messagesList = document.getElementById('messages-list');
             
             try {
-                const messages = await Http.get(`${CONFIG.API_BASE_URL}${API_PATHS.messages}`);
+                const response = await fetch(`${CONFIG.API_BASE_URL}/messages`);
+                const messages = await response.json();
                 
-                if (container) {
-                    if (messages.length === 0) {
-                        container.innerHTML = `<p class="text-center text-gray-500 py-6">${CONFIG.DEFAULT_EMPTY_TEXT}</p>`;
-                        return;
-                    }
-                    
-                    container.innerHTML = messages.map(msg => `
-                        <div class="message-item">
-                            <div class="flex justify-between items-start">
-                                <span class="font-medium">${msg.username}</span>
-                                <span class="text-xs text-gray-500">${formatDate(msg.created_at)}</span>
-                            </div>
-                            <p class="mt-1 text-gray-700">${msg.content}</p>
-                        </div>
-                    `).join('');
+                if (messages.length === 0) {
+                    messagesList.innerHTML = '<p class="text-center text-gray-500 py-6">暂无留言</p>';
+                    return;
                 }
+                
+                let html = '';
+                messages.forEach(msg => {
+                    html += `
+                        <div class="message-item">
+                            <div class="flex justify-between">
+                                <span class="font-medium">${msg.username}</span>
+                                <span class="text-sm text-gray-500">${formatDateTime(msg.created_at)}</span>
+                            </div>
+                            <div class="mt-1 text-gray-700">${msg.content}</div>
+                        </div>
+                    `;
+                });
+                messagesList.innerHTML = html;
             } catch (err) {
                 console.error('加载留言错误:', err);
-                if (container) {
-                    container.innerHTML = `<p class="text-center text-red-500 py-6">${CONFIG.ERROR_TEXT}</p>`;
-                }
+                messagesList.innerHTML = '<p class="text-center text-red-500 py-6">加载失败</p>';
             }
         }
 
-        // 发送留言
         async function sendMessage() {
-            const contentInput = document.getElementById('new-message');
-            if (!contentInput) return;
-            
-            const content = contentInput.value.trim();
+            const content = document.getElementById('new-message').value.trim();
             if (!content) return;
             
             try {
-                const data = await Http.post(`${CONFIG.API_BASE_URL}${API_PATHS.messages}`, {
-                    content, 
-                    userId: currentUser.id
+                const response = await fetch(`${CONFIG.API_BASE_URL}/messages`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content, userId: currentUser.id })
                 });
-                
+
+                const data = await response.json();
                 if (data.success) {
-                    contentInput.value = '';
-                    loadMessages();
-                    loadDashboardData();
+                    document.getElementById('new-message').value = '';
+                    loadMessages(); // 刷新留言列表
                 } else {
-                    alert('发送失败: ' + (data.error || '未知错误'));
+                    alert(data.error || '发送失败');
                 }
             } catch (err) {
                 console.error('发送留言错误:', err);
-                alert('发送失败，请重试');
+                alert('网络错误，发送失败');
             }
         }
 
-        // 发送聊天消息
-        function sendChatMessage() {
-            const contentInput = document.getElementById('chat-input');
-            if (!contentInput) return;
-            
-            const content = contentInput.value.trim();
-            if (!content) return;
-            
-            ChatSocket.sendMessage(content);
-            
-            // 清空输入框
-            contentInput.value = '';
+        // 9. 实时聊天
+        function initChatEvents() {
+            document.getElementById('send-chat-btn').addEventListener('click', sendChatMessage);
+            document.getElementById('chat-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendChatMessage();
+            });
         }
 
-        // 加载活动统计图表
-        async function loadActivitiesStats() {
-            try {
-                const stats = await Http.get(`${CONFIG.API_BASE_URL}${API_PATHS.activitiesStats}`);
-                const chartContainer = document.getElementById('activities-chart');
-                
-                if (chartContainer) {
-                    if (stats.length === 0) {
-                        chartContainer.innerHTML = `<p class="text-gray-500">${CONFIG.DEFAULT_EMPTY_TEXT}</p>`;
-                        return;
+        function initWebSocket() {
+            if (ws) return;
+            
+            // 连接WebSocket服务器
+            ws = new WebSocket(CONFIG.WS_BASE_URL);
+            
+            // 连接成功
+            ws.onopen = () => {
+                console.log('WebSocket连接成功');
+                // 发送登录信息
+                ws.send(JSON.stringify({
+                    type: 'login',
+                    userId: currentUser.id,
+                    username: currentUser.username
+                }));
+                document.getElementById('chat-messages').innerHTML = '<p class="text-center text-green-500">已连接到聊天服务器</p>';
+            };
+            
+            // 接收消息
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    handleWebSocketMessage(data);
+                } catch (err) {
+                    console.error('解析WebSocket消息错误:', err);
+                }
+            };
+            
+            // 连接关闭
+            ws.onclose = () => {
+                console.log('WebSocket连接关闭');
+                document.getElementById('chat-messages').innerHTML += '<p class="text-center text-red-500">已断开连接</p>';
+                ws = null;
+            };
+            
+            // 连接错误
+            ws.onerror = (err) => {
+                console.error('WebSocket错误:', err);
+                document.getElementById('chat-messages').innerHTML += '<p class="text-center text-red-500">连接错误</p>';
+            };
+        }
+
+        function handleWebSocketMessage(data) {
+            const chatMessages = document.getElementById('chat-messages');
+            const onlineUsersList = document.getElementById('online-users-list');
+            
+            switch (data.type) {
+                case 'userList':
+                    // 更新在线用户列表
+                    if (data.users.length === 0) {
+                        onlineUsersList.innerHTML = '<p class="text-sm text-gray-500">暂无在线用户</p>';
+                    } else {
+                        let html = '';
+                        data.users.forEach(user => {
+                            html += `<div class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                <span>${user.username}</span>
+                            </div>`;
+                        });
+                        onlineUsersList.innerHTML = html;
                     }
+                    break;
                     
-                    // 简单的文本图表展示
-                    let chartHtml = '<div class="space-y-2">';
-                    stats.forEach(item => {
-                        const barWidth = Math.min(item.count * 50, 400); // 最大宽度400px
-                        chartHtml += `
-                            <div>
-                                <div class="flex justify-between mb-1">
-                                    <span class="text-sm">${item.month}</span>
-                                    <span class="text-sm font-medium">${item.count}个活动</span>
+                case 'message':
+                    // 添加聊天消息
+                    const messageHtml = `
+                        <div class="flex ${data.username === currentUser.username ? 'justify-end' : 'justify-start'}">
+                            <div class="${data.username === currentUser.username ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'} px-4 py-2 rounded-lg max-w-xs">
+                                <div class="text-xs ${data.username === currentUser.username ? 'text-blue-100' : 'text-gray-500'}">
+                                    ${data.username === currentUser.username ? '我' : data.username} ${data.time}
                                 </div>
-                                <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
-                                    <div class="h-full bg-blue-500" style="width: ${barWidth}px"></div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    chartHtml += '</div>';
-                    chartContainer.innerHTML = chartHtml;
-                }
-            } catch (err) {
-                console.error('加载活动统计错误:', err);
-                const chartContainer = document.getElementById('activities-chart');
-                if (chartContainer) {
-                    chartContainer.innerHTML = `<p class="text-red-500">${CONFIG.ERROR_TEXT}</p>`;
-                }
-            }
-        }
-
-        // 加载值日统计图表
-        async function loadSchedulesStats() {
-            try {
-                const stats = await Http.get(`${CONFIG.API_BASE_URL}${API_PATHS.schedulesStats}`);
-                const chartContainer = document.getElementById('schedules-chart');
-                
-                if (chartContainer) {
-                    // 简单的文本图表展示
-                    chartContainer.innerHTML = `
-                        <div class="grid grid-cols-3 gap-4 text-center">
-                            <div>
-                                <div class="text-3xl font-bold text-green-500 mb-1">${stats.completedPercentage}%</div>
-                                <div class="text-sm text-gray-600">已完成</div>
-                                <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                    <div class="h-full bg-green-500" style="width: ${stats.completedPercentage}%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="text-3xl font-bold text-blue-500 mb-1">${stats.inProgressPercentage}%</div>
-                                <div class="text-sm text-gray-600">进行中</div>
-                                <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                    <div class="h-full bg-blue-500" style="width: ${stats.inProgressPercentage}%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="text-3xl font-bold text-yellow-500 mb-1">${stats.notStartedPercentage}%</div>
-                                <div class="text-sm text-gray-600">未开始</div>
-                                <div class="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                    <div class="h-full bg-yellow-500" style="width: ${stats.notStartedPercentage}%"></div>
-                                </div>
+                                <div>${data.content}</div>
                             </div>
                         </div>
                     `;
-                }
-            } catch (err) {
-                console.error('加载值日统计错误:', err);
-                const chartContainer = document.getElementById('schedules-chart');
-                if (chartContainer) {
-                    chartContainer.innerHTML = `<p class="text-red-500">${CONFIG.ERROR_TEXT}</p>`;
-                }
+                    chatMessages.innerHTML += messageHtml;
+                    // 滚动到底部
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    break;
             }
         }
 
-        // 通用模态框操作
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('hidden');
-                const form = modal.querySelector('form');
-                if (form) form.reset();
+        function sendChatMessage() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                alert('未连接到聊天服务器');
+                return;
             }
+            
+            const content = document.getElementById('chat-input').value.trim();
+            if (!content) return;
+            
+            // 发送消息
+            ws.send(JSON.stringify({
+                type: 'message',
+                username: currentUser.username,
+                content: content
+            }));
+            
+            // 清空输入框
+            document.getElementById('chat-input').value = '';
+        }
+
+        // 工具函数
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
         }
 
         function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) modal.classList.add('hidden');
+            document.getElementById(modalId).classList.add('hidden');
         }
 
-        // 工具函数：日期格式化
-        function formatDate(dateString) {
+        function formatDateTime(dateString) {
             const date = new Date(dateString);
             return date.toLocaleString('zh-CN', { 
                 year: 'numeric', 
                 month: '2-digit', 
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit'
+                day: '2-digit', 
+                hour: '2-digit', 
+                minute: '2-digit' 
             });
         }
 
-        // 工具函数：防抖
         function debounce(func, wait) {
             let timeout;
             return function(...args) {
@@ -1362,6 +1254,10 @@
                 timeout = setTimeout(() => func.apply(this, args), wait);
             };
         }
+
+        // 暴露全局函数（用于HTML中直接调用）
+        window.deleteClassMember = deleteClassMember;
+        window.deleteCommitteeMember = deleteCommitteeMember;
     </script>
 </body>
 </html>
