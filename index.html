@@ -18,7 +18,7 @@
             min-height: 100vh;
             background-color: #f5f5f5;
         }
-        .hidden { display: none; }
+        .hidden { display: none !important; } /* 强制隐藏 */
         .container { flex: 1; padding: 20px; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .btn {
@@ -135,7 +135,7 @@
     </style>
 </head>
 <body>
-    <!-- 登录页 -->
+    <!-- 登录页（初始显示） -->
     <div id="login-page" class="login-container">
         <div class="login-box">
             <h2>班级管理平台登录</h2>
@@ -161,7 +161,7 @@
         </div>
     </div>
 
-    <!-- 主页面 -->
+    <!-- 主页面（初始隐藏） -->
     <div id="main-page" class="hidden">
         <!-- 侧边栏 -->
         <div class="sidebar">
@@ -293,7 +293,7 @@
         </div>
     </div>
 
-    <!-- 添加班级成员模态框 -->
+    <!-- 添加班级成员模态框（初始隐藏） -->
     <div id="add-member-modal" class="modal-overlay hidden">
         <div class="modal">
             <h3>添加班级成员</h3>
@@ -325,7 +325,7 @@
         </div>
     </div>
 
-    <!-- 添加班委会成员模态框 -->
+    <!-- 添加班委会成员模态框（初始隐藏） -->
     <div id="add-committee-modal" class="modal-overlay hidden">
         <div class="modal">
             <h3>添加班委会成员</h3>
@@ -361,47 +361,20 @@
 
         // 初始化页面
         document.addEventListener('DOMContentLoaded', () => {
+            // 强制隐藏所有模态框（关键修复：防止初始显示）
+            document.getElementById('add-member-modal').classList.add('hidden');
+            document.getElementById('add-committee-modal').classList.add('hidden');
+
             // 检查登录状态
             const savedUser = localStorage.getItem('classUser');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
                 showMainPage();
             } else {
+                // 确保登录页显示，主页面隐藏
                 document.getElementById('login-page').classList.remove('hidden');
+                document.getElementById('main-page').classList.add('hidden');
             }
-
-            // 登录表单提交
-            document.getElementById('login-form').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const username = document.getElementById('login-username').value.trim();
-                const password = document.getElementById('login-password').value.trim();
-                const role = document.getElementById('login-role').value;
-
-                if (!username || !password) {
-                    alert('请输入用户名和密码');
-                    return;
-                }
-
-                try {
-                    const response = await fetch('http://localhost:3000/api/login', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username, password, role })
-                    });
-                    const data = await response.json();
-
-                    if (response.ok && data.success) {
-                        currentUser = { username, role };
-                        localStorage.setItem('classUser', JSON.stringify(currentUser));
-                        showMainPage();
-                    } else {
-                        alert('登录失败：' + (data.error || '用户名或密码错误'));
-                    }
-                } catch (err) {
-                    console.error('登录错误:', err);
-                    alert('登录失败，请检查服务器是否启动');
-                }
-            });
 
             // 初始化功能事件
             initFeatureEvents();
@@ -457,7 +430,7 @@
                 window.location.reload();
             });
 
-            // 班级成员相关
+            // 班级成员添加
             document.getElementById('add-member-btn').addEventListener('click', () => {
                 document.getElementById('add-member-modal').classList.remove('hidden');
                 document.getElementById('add-member-form').reset();
@@ -503,10 +476,13 @@
                 }
             });
 
-            // 班委会相关
+            // 班委会添加（关键修复：仅在主页面显示时可触发）
             document.getElementById('add-committee-btn').addEventListener('click', () => {
-                document.getElementById('add-committee-modal').classList.remove('hidden');
-                document.getElementById('add-committee-form').reset();
+                // 验证主页面是否显示（已登录）
+                if (!document.getElementById('main-page').classList.contains('hidden')) {
+                    document.getElementById('add-committee-modal').classList.remove('hidden');
+                    document.getElementById('add-committee-form').reset();
+                }
             });
 
             document.getElementById('cancel-add-committee').addEventListener('click', () => {
@@ -549,7 +525,7 @@
                 }
             });
 
-            // 聊天相关
+            // 聊天功能
             document.getElementById('send-chat').addEventListener('click', sendChatMessage);
             document.getElementById('chat-input').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') sendChatMessage();
@@ -574,7 +550,7 @@
 
         // 加载班级成员
         async function loadClassMembers() {
-            const tableBody = document.getElementById('members-table-body');
+            const tableBody = document.getElementById('membersst-table-body');
             tableBody.innerHTML = '<tr><td colspan="5" class="text-center">加载中...</td></tr>';
 
             const search = document.getElementById('member-search').value.trim();
@@ -708,7 +684,6 @@
             ws = new WebSocket('ws://localhost:3000');
             ws.onopen = () => {
                 console.log('WebSocket连接成功');
-                // 发送登录信息
                 ws.send(JSON.stringify({
                     type: 'login',
                     user: currentUser.username
@@ -718,12 +693,10 @@
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 if (data.type === 'onlineUsers') {
-                    // 更新在线用户列表
                     document.getElementById('online-users').innerHTML = data.users.map(user => `
                         <div style="padding: 5px; border-bottom: 1px solid #eee;">${user}</div>
                     `).join('');
                 } else if (data.type === 'message') {
-                    // 显示聊天消息
                     const messagesDiv = document.getElementById('chat-messages');
                     messagesDiv.innerHTML += `
                         <div style="margin: 5px 0; padding: 8px; background: #f1f1f1; border-radius: 4px;">
@@ -731,13 +704,13 @@
                             <div style="font-size: 12px; color: #666; margin-top: 3px;">${data.time}</div>
                         </div>
                     `;
-                    messagesDiv.scrollTop = messagesDiv.scrollHeight; // 滚动到底部
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
                 }
             };
 
             ws.onclose = () => {
                 console.log('WebSocket连接关闭，尝试重连...');
-                setTimeout(initWebSocket, 3000); // 3秒后重连
+                setTimeout(initWebSocket, 3000);
             };
 
             ws.onerror = (err) => {
