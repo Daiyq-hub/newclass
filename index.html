@@ -237,7 +237,7 @@
                                 </thead>
                                 <tbody id="committee-table-body" class="bg-white divide-y divide-gray-200">
                                     <tr>
-                                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">加载班委会数据中...</td>
+                                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">加载数据中...</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -274,7 +274,7 @@
                                     <tr>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日期</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">值日人员</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">任务描述</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">任务</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
                                     </tr>
                                 </thead>
@@ -319,8 +319,8 @@
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日期</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">活动名称</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">类型</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">负责人</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">详情</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">创建人</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">描述</th>
                                     </tr>
                                 </thead>
                                 <tbody id="activities-table-body" class="bg-white divide-y divide-gray-200">
@@ -418,7 +418,7 @@
                     <input type="text" id="member-phone"
                         class="w-full px-4 py-2 border border-gray-300 rounded-md">
                 </div>
-                                <div>
+                <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">邮箱</label>
                     <input type="email" id="member-email"
                         class="w-full px-4 py-2 border border-gray-300 rounded-md">
@@ -475,8 +475,8 @@
     <script>
         // 配置信息
         const CONFIG = {
-            API_BASE_URL: 'http://localhost:3001/api', // 后端API地址
-            WS_BASE_URL: 'ws://localhost:3001' // WebSocket地址
+            API_BASE_URL: 'http://localhost:3001/api',
+            WS_BASE_URL: 'ws://localhost:3001'
         };
 
         // 当前登录用户信息
@@ -548,6 +548,10 @@
                     body: JSON.stringify({ username, password, role })
                 });
 
+                if (!response.ok) {
+                    throw new Error(`HTTP错误: ${response.status}`);
+                }
+
                 const data = await response.json();
                 if (data.success) {
                     currentUser = data.user;
@@ -558,7 +562,7 @@
                 }
             } catch (err) {
                 console.error('登录错误:', err);
-                alert('网络错误，登录失败');
+                alert('网络错误或服务器未启动，请检查后端服务');
             }
         }
 
@@ -650,6 +654,8 @@
         async function loadDashboardData() {
             try {
                 const response = await fetch(`${CONFIG.API_BASE_URL}/dashboard`);
+                if (!response.ok) throw new Error('获取仪表盘数据失败');
+                
                 const data = await response.json();
                 
                 // 更新统计数据
@@ -663,21 +669,24 @@
                 loadSchedulesStats();
             } catch (err) {
                 console.error('加载仪表盘数据错误:', err);
+                alert('加载仪表盘数据失败');
             }
         }
 
         async function loadActivitiesStats() {
             try {
                 const response = await fetch(`${CONFIG.API_BASE_URL}/activities/stats`);
-                const stats = await response.json();
+                if (!response.ok) throw new Error('获取活动统计失败');
                 
+                const stats = await response.json();
                 const container = document.getElementById('activities-chart');
+                
                 if (stats.length === 0) {
                     container.innerHTML = '<p class="text-gray-500">暂无活动数据</p>';
                     return;
                 }
                 
-                // 简单文本图表展示（实际项目可用Chart.js）
+                // 简单文本图表展示
                 let chartHtml = '<div class="space-y-2">';
                 stats.forEach(item => {
                     chartHtml += `
@@ -696,15 +705,18 @@
                 container.innerHTML = chartHtml;
             } catch (err) {
                 console.error('加载活动统计错误:', err);
+                document.getElementById('activities-chart').innerHTML = '<p class="text-red-500">加载活动统计失败</p>';
             }
         }
 
         async function loadSchedulesStats() {
             try {
                 const response = await fetch(`${CONFIG.API_BASE_URL}/schedules/stats`);
-                const stats = await response.json();
+                if (!response.ok) throw new Error('获取值日统计失败');
                 
+                const stats = await response.json();
                 const container = document.getElementById('schedules-chart');
+                
                 container.innerHTML = `
                     <div class="grid grid-cols-3 gap-4 text-center">
                         <div>
@@ -723,6 +735,7 @@
                 `;
             } catch (err) {
                 console.error('加载值日统计错误:', err);
+                document.getElementById('schedules-chart').innerHTML = '<p class="text-red-500">加载值日统计失败</p>';
             }
         }
 
@@ -759,6 +772,8 @@
                 if (params.toString()) url += `?${params.toString()}`;
                 
                 const response = await fetch(url);
+                if (!response.ok) throw new Error('获取成员列表失败');
+                
                 const members = await response.json();
                 
                 if (members.length === 0) {
@@ -812,6 +827,8 @@
                     body: JSON.stringify(memberData)
                 });
 
+                if (!response.ok) throw new Error('添加成员失败');
+                
                 const data = await response.json();
                 if (data.success) {
                     closeModal('add-member-modal');
@@ -835,6 +852,8 @@
                     method: 'DELETE'
                 });
 
+                if (!response.ok) throw new Error('删除成员失败');
+                
                 const data = await response.json();
                 if (data.success) {
                     loadClassMembers(); // 刷新列表
@@ -869,6 +888,8 @@
             
             try {
                 const response = await fetch(`${CONFIG.API_BASE_URL}/committee`);
+                if (!response.ok) throw new Error('获取班委会成员失败');
+                
                 const members = await response.json();
                 
                 if (members.length === 0) {
@@ -916,6 +937,8 @@
                     body: JSON.stringify(committeeData)
                 });
 
+                if (!response.ok) throw new Error('添加班委会成员失败');
+                
                 const data = await response.json();
                 if (data.success) {
                     closeModal('add-committee-modal');
@@ -939,6 +962,8 @@
                     method: 'DELETE'
                 });
 
+                if (!response.ok) throw new Error('删除班委会成员失败');
+                
                 const data = await response.json();
                 if (data.success) {
                     loadCommitteeMembers(); // 刷新列表
@@ -972,6 +997,8 @@
                 if (params.toString()) url += `?${params.toString()}`;
                 
                 const response = await fetch(url);
+                if (!response.ok) throw new Error('获取值日安排失败');
+                
                 const schedules = await response.json();
                 
                 if (schedules.length === 0) {
@@ -1024,6 +1051,8 @@
                 if (params.toString()) url += `?${params.toString()}`;
                 
                 const response = await fetch(url);
+                if (!response.ok) throw new Error('获取班级活动失败');
+                
                 const activities = await response.json();
                 
                 if (activities.length === 0) {
@@ -1067,6 +1096,8 @@
             
             try {
                 const response = await fetch(`${CONFIG.API_BASE_URL}/messages`);
+                if (!response.ok) throw new Error('获取留言失败');
+                
                 const messages = await response.json();
                 
                 if (messages.length === 0) {
@@ -1104,6 +1135,8 @@
                     body: JSON.stringify({ content, userId: currentUser.id })
                 });
 
+                if (!response.ok) throw new Error('发送留言失败');
+                
                 const data = await response.json();
                 if (data.success) {
                     document.getElementById('new-message').value = '';
@@ -1134,13 +1167,13 @@
             // 连接成功
             ws.onopen = () => {
                 console.log('WebSocket连接成功');
+                document.getElementById('chat-messages').innerHTML = '<p class="text-center text-green-500">已连接到聊天服务器</p>';
                 // 发送登录信息
                 ws.send(JSON.stringify({
                     type: 'login',
                     userId: currentUser.id,
                     username: currentUser.username
                 }));
-                document.getElementById('chat-messages').innerHTML = '<p class="text-center text-green-500">已连接到聊天服务器</p>';
             };
             
             // 接收消息
@@ -1156,8 +1189,10 @@
             // 连接关闭
             ws.onclose = () => {
                 console.log('WebSocket连接关闭');
-                document.getElementById('chat-messages').innerHTML += '<p class="text-center text-red-500">已断开连接</p>';
+                document.getElementById('chat-messages').innerHTML += '<p class="text-center text-red-500">已断开连接，正在尝试重连...</p>';
                 ws = null;
+                // 自动重连
+                setTimeout(initWebSocket, 3000);
             };
             
             // 连接错误
